@@ -1,0 +1,118 @@
+.sys-app,
+.sys-error-page,
+.sys-full-page{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+.sys-page{
+    position: absolute;
+    top: 48px;
+    bottom: 0;
+    min-width: 1300px;
+    width: 100%;
+    // padding: 0 40px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+.el-message-box__message p {
+  word-break: break-all;
+}
+.el-dialog__header {
+  text-align: left;
+  background: #F4F6F9;
+  box-shadow: 0 1px 0 0 #F0F3F7;
+  box-sizing: border-box;
+  height: 50px;
+  padding: 0;
+  padding-left: 40px;
+  padding-top: 14px;
+}
+.el-date-table td span {
+    border-radius: 0 !important;
+}
+.el-table__body {
+    width: 100% !important;
+  }
+.el-range__close-icon {
+    display: none !important;
+}
+
+.el-table__body-wrapper {
+    overflow-x: hidden !important;
+}
+.tableStyle .el-table__body-wrapper {
+  overflow-x: visible !important;
+
+}
+
+.el-checkbox__label {
+  color: #000 !important;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner {
+  background-color: #0062ff !important;
+  border-color: #0062ff !important;
+}
+.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner {
+  background-color: #F2F6FC !important;
+  border-color: #DCDFE6 !important;
+}
+ /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/  
+ ::-webkit-scrollbar  
+ {  
+     width: 6px;
+    height: 10px;
+     background-color: #fff;  
+ }  
+ /*定义滑块 内阴影+圆角*/  
+ ::-webkit-scrollbar-thumb {  
+    position: relative;
+    display: block;
+    width: 0;
+    height: 0;
+    cursor: pointer;
+    background-color: rgba(144,147,153,.3);
+    -webkit-transition: .3s background-color;
+    transition: .3s background-color;
+    border-radius: 10px;
+    /* -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: #535353; */
+    }
+.sys-content{
+    position: absolute;
+    top: $headerHeight;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    // padding-top: 53px;
+    &.left{
+        left: $leftNavWidth;
+    }
+    &.top{
+        left: 0
+    }
+}
+.el-table__row {
+    padding: 9px !important;
+}
+.sys-page .el-input__inner {
+    // background-color:rgb(250, 251, 252) !important
+}
+.block-pagination{
+    .block{
+        .el-pager{
+            li.active{
+              color:#000;
+            }
+            li{
+              color:#909399;
+            }
+          }
+    }
+}
+// .el-table__header {
+//     display: none;
+// }

@@ -1,0 +1,179 @@
+  .trail-container {
+    height: 100%;
+    width: 100%;
+  }
+
+  .map-container {
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .map-satellite {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .map-traffic {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 10px;
+    right: 100px;
+  }
+
+  // 新加工具 和 缩放
+  .mapZoom {
+    width: 40px;
+    height: 82px;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    margin-top: -45px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+
+    span {
+      width: 40px;
+      height: 40px;
+      display: inline-block;
+      cursor: pointer;
+    }
+  }
+
+  .icon-zoom_up {
+    background: url("../../../assets/images/zoom_up@3x.png");
+    background-size: 100% 100%;
+  }
+
+  .icon-zoom_down {
+    background: url("../../../assets/images/zoom_down@3x.png");
+    background-size: 100% 100%;
+  }
+
+  .Map-tools1 {
+    width: 190px;
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    top: 20px;
+    right: 20px;
+    z-index: 9;
+  }
+  .trailActionsContainer {
+    width: 640px;
+    height: 36px;
+    background-color: #fff;
+    color: #000;
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    top: 20px;
+    right: 222px;
+    z-index: 9;
+    padding: 0px 10px;
+    font-family: PingFangSC-Medium;
+    border: 1px solid #dcdfe6;
+    box-sizing: border-box;
+    box-shadow: 0px 1px 1px #e4e1e1;
+  }
+
+  .tool1 {
+    font-family: PingFangSC-Medium;
+    color: #020202;
+    font-size: 14px;
+    width: 90px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid #dcdfe6;
+    box-sizing: border-box;
+    box-shadow: 0px 1px 1px #e4e1e1;
+    position: relative;
+    justify-content: center;
+    span {
+      width: 24px;
+      height: 24px;
+      margin-right: 6px;
+      display: inline-block;
+    }
+    .tool-checkbox {
+      width: 80px;
+      height: 30px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: #fff;
+      border: 1px solid #dcdfe6;
+      border-radius: 5px;
+      position: absolute;
+      top: 42px;
+      right: 0;
+    }
+  }
+  .tool-traffic {
+    &:hover {
+      color: #3d4dda;
+      span {
+        display: inline-block;
+        background: url("../../../assets/images/ic_traffic_light@3x.png");
+        background-size: 100% 100%;
+      }
+    }
+  }
+  .tool-traffic-active {
+    color: #3d4dda;
+    span {
+      display: inline-block;
+      background: url("../../../assets/images/ic_traffic_light@3x.png");
+      background-size: 100% 100%;
+    }
+  }
+  .icon-ic_traffic {
+    background: url("../../../assets/images/ic_traffic@3x.png");
+    background-size: 100% 100%;
+  }
+  .icon-ic_satellite {
+    background: url("../../../assets/images/ic_satellite@3x.png");
+    background-size: 100% 100%;
+  }
+  .tool-satellite {
+    &:hover {
+      color: #3d4dda;
+      span {
+        display: inline-block;
+        background: url("../../../assets/images/ic_satellite_on@3x.png");
+        background-size: 100% 100%;
+      }
+    }
+  }
+  .tool-satellite-active {
+    color: #3d4dda;
+    span {
+      display: inline-block;
+      background: url("../../../assets/images/ic_satellite_on@3x.png");
+      background-size: 100% 100%;
+    }
+  }
+  .icon-action {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    margin: 0 2px;
+    background-size: 100% 100%;
+  }
+  .cBox {
+    display: flex;
+    vertical-align: middle
+  }

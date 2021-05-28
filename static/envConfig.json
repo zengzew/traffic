@@ -1,0 +1,11 @@
+{
+  "type": "pubNet",
+  "privNet": {
+    "mapUrl": "//gl-priv.sparta.html5.qq.com",
+    "satelliteUrl": "http://9.22.15.25/sateTiles"
+  },
+  "pubNet": {
+    "mapUrl": "//map.qq.com"
+  },
+  "baseURL": "//49.232.95.234:9999"
+}
