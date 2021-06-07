@@ -2,7 +2,7 @@
   <div class="sys-login">
     <div class="login-area">
       <div class="logo">
-        <h1>车辆轨迹管理平台</h1>
+        <h1>AI计算平台</h1>
         <!-- <img src="https://lbs.qq.com/web/img/homepage/banner_13new.png" alt=""> -->
       </div>
       <div class="form-group">
@@ -87,7 +87,7 @@ export default {
               const dbInitRes = await this.$API.Auth.dbInitByUser();
               //if (perRes.status === 0 && getUserRes.status === 0 && dbInitRes.status === 0) {
               if (0 === 0) {
-                this.$router.push('/home');
+                this.$router.push('/select');
               } else {
                 this.$message.error(
                   perRes.status !== 0 ? perRes.message : getUserRes !== 0 ? getUserRes.message : dbInitRes.message,

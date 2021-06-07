@@ -17,10 +17,23 @@ const defaultNavList = [
          name: '轨迹热力分析',
      }*/
 ];
+
+const AiCalPlatformNavList = [
+  {
+    path:'/dangerAnalyze',
+    name:'安全隐患分析',
+  },
+  {
+    path:'/dangerHistory',
+    name:"历史统计分析",
+  }
+]
+
 const state = {
   token: '',
   navList: defaultNavList.slice(),
   defaultNavList,
+  AiCalPlatformNavList,
   currentPagePermission: [],
   allPagePermission: [],
 };
