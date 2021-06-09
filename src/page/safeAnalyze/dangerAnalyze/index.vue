@@ -1,13 +1,17 @@
 <template>
-  <div>安全隐患分析界面</div>
+  <div>
+    <test></test>
+  </div>
 </template>
 
 <script>
+import Test from "../dangerHistory/test.vue";
 export default {
-
-}
+  components: {
+    Test,
+  },
+  methods: {},
+};
 </script>
-
 <style>
-
 </style>
