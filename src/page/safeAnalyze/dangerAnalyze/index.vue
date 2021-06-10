@@ -1,17 +1,7 @@
-<template>
-  <div>
-    <test></test>
-  </div>
-</template>
+<template></template>
 
 <script>
-import Test from "../dangerHistory/test.vue";
-export default {
-  components: {
-    Test,
-  },
-  methods: {},
-};
+export default {};
 </script>
 <style>
 </style>

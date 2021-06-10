@@ -11,31 +11,113 @@
       >
       </el-date-picker>
     </div>
-    <div id="chart"></div>
-    <el-table
-      :data="tableHistorySituation"
-      style="width: 100%"
-      :border="true"
-      size="medium"
-      height="13.8rem"
-    >
-      <el-table-column type="index"> </el-table-column>
-      <el-table-column prop="type" label="路段类型"> </el-table-column>
-      <el-table-column prop="volume" label="积累数量（条）"> </el-table-column>
-    </el-table>
+    <div class="chartcontainer">
+      <div id="chart"></div>
+    </div>
+    <div class="tablecontainer">
+      <div id="tabletitle">历史路段累计数量</div>
+      <div id="deadline">统计时间截止： {{ deadlinedate }}</div>
+      <el-table
+        :data="tableHistorySituation"
+        style="width: 100%"
+        :border="true"
+        size="medium"
+        height="13.8rem"
+      >
+        <el-table-column type="index"> </el-table-column>
+        <el-table-column prop="type" label="路段类型"> </el-table-column>
+        <el-table-column prop="volume" label="积累数量（条）">
+        </el-table-column>
+      </el-table>
+    </div>
     <div class="cardContainer">
       <el-row type="flex" justify="space-around">
         <el-col :span="5">
-          <el-card shadow="hover"> 1 </el-card>
+          <el-card shadow="hover">
+            <div slot="header" class="clearfix">
+              <span>急刹路段数</span>
+              <i style="float: right; padding: 0 3rem" class="el-icon-info"></i>
+            </div>
+            <div>{{ brakenum }}</div>
+            <div>
+              日同比 <i class="el-icon-caret-top" v-if="turnover > 0"></i>
+              <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
+              <i class="el-icon-minus" v-if="turnover == 0"> </i
+              >{{ brakeover | percent }}
+            </div>
+            <div>
+              日环比 <i class="el-icon-caret-bottom" v-if="turnover > 0"></i>
+              <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
+              <i class="el-icon-minus" v-if="turnover == 0"> </i
+              >{{ brakeon | percent }}
+            </div>
+          </el-card>
         </el-col>
         <el-col :span="5">
-          <el-card shadow="hover"> 2 </el-card>
+          <el-card shadow="hover">
+            <div slot="header" class="clearfix">
+              <span>急转弯路段数</span>
+              <i style="float: right; padding: 0 3rem" class="el-icon-info"></i>
+            </div>
+            <div>{{ turnnum }}</div>
+            <div>
+              日同比
+              <i class="el-icon-caret-top" v-if="turnover > 0"></i>
+              <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
+              <i class="el-icon-minus" v-if="turnover == 0"> </i
+              >{{ turnover | percent }}
+            </div>
+            <div>
+              日环比 <i class="el-icon-caret-bottom" v-if="turnover > 0"></i>
+              <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
+              <i class="el-icon-minus" v-if="turnover == 0"> </i
+              >{{ turnon | percent }}
+            </div>
+          </el-card>
         </el-col>
         <el-col :span="5">
-          <el-card shadow="hover"> 3 </el-card>
+          <el-card shadow="hover">
+            <div slot="header" class="clearfix">
+              <span>急加速路段数</span>
+              <i style="float: right; padding: 0 3rem" class="el-icon-info"></i>
+            </div>
+            <div>{{ acceleratenum }}</div>
+            <div>
+              日同比 <i class="el-icon-caret-top" v-if="turnover > 0"></i>
+              <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
+              <i class="el-icon-minus" v-if="turnover == 0"> </i
+              >{{ accelerateover | percent }}
+            </div>
+            <div>
+              日环比 <i class="el-icon-caret-bottom" v-if="turnover > 0"></i>
+              <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
+              <i class="el-icon-minus" v-if="turnover == 0"> </i
+              >{{ accelerateon | percent }}
+            </div>
+          </el-card>
         </el-col>
         <el-col :span="5">
-          <el-card shadow="hover"> 4 </el-card>
+          <el-card shadow="hover">
+            <div slot="header" class="clearfix">
+              <span>超速路段数</span>
+              <i style="float: right; padding: 0 3rem" class="el-icon-info"></i>
+            </div>
+            <div>{{ overspeednum }}</div>
+            <div>
+              <div>
+                日同比 <i class="el-icon-caret-top" v-if="turnover > 0"></i>
+                <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
+                <i class="el-icon-minus" v-if="turnover == 0"> </i
+                >{{ overspeedover | percent }}
+              </div>
+              <div>
+                日环比 <i class="el-icon-caret-bottom" v-if="turnover > 0"></i>
+                <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
+                <i class="el-icon-minus" v-if="turnover == 0"> </i
+                >{{ overspeedon | percent }}
+              </div>
+            </div>
+          </el-card>
         </el-col>
       </el-row>
     </div>
@@ -48,6 +130,21 @@ export default {
   data() {
     return {
       situationDate: "",
+      turnnum: 341,
+      brakenum: 226,
+      acceleratenum: 166,
+      overspeednum: 432,
+      deadlinedate: "2021年6月9日",
+      //同比：以上周同期数据比较 day-over-day
+      //环比：与前一天数据比较 day-on-day
+      brakeover: 0,
+      brakeon: 0,
+      turnover: 0,
+      turnon: 0,
+      accelerateover: 0,
+      accelerateon: 0,
+      overspeedover: 0,
+      overspeedon: 0,
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now();
@@ -100,13 +197,17 @@ export default {
       ],
     };
   },
-
   mounted() {
     this.drawChart();
   },
   watch: {
     situationDate: function () {
       console.log(this.situationDate);
+    },
+  },
+  filters: {
+    percent: function (value) {
+      return value.toFixed(2) + "%";
     },
   },
   methods: {
@@ -124,12 +225,14 @@ export default {
         legend: {
           orient: "vertical",
           right: 0,
+          top: 160,
         },
         series: [
           {
             name: "路段数量对比",
             type: "pie",
-            radius: ["40%", "70%"],
+            radius: ["40%", "75%"],
+            center: ["30%", "60%"],
             avoidLabelOverlap: false,
             label: {
               show: false,
@@ -146,10 +249,10 @@ export default {
               show: false,
             },
             data: [
-              { value: 1433, name: "急转弯路段" },
-              { value: 2653, name: "急加速路段" },
-              { value: 1762, name: "急刹路段" },
-              { value: 4236, name: "超速路段" },
+              { value: this.turnnum, name: "急转弯路段" },
+              { value: this.acceleratenum, name: "急加速路段" },
+              { value: this.brakenum, name: "急刹路段" },
+              { value: this.acceleratenum, name: "超速路段" },
             ],
           },
         ],
@@ -160,19 +263,35 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 #chart {
-  width: 30rem;
-  height: 30rem;
-  margin: 5rem 15rem;
+  width: 600px;
+  height: 400px;
+  margin: 100px 300px;
+}
+#tabletitle {
+  margin-top: 100px;
+  font-weight: bold;
+  font-size: 20px;
+  padding-left: 100px;
+}
+#deadline {
+  padding-left: 100px;
+  color: red;
+}
+.chartcontainer {
+  width: 50%;
+}
+.tablecontainer {
+  width: 30%;
 }
 .timepicker {
   flex-basis: 100%;
-  margin-left: 20rem;
-  margin-top: 5rem;
+  margin-left: 400px;
+  margin-top: 100px;
 }
 .el-table {
-  margin: 5rem 15rem;
+  margin: 50px 100px;
 }
 .main {
   display: flex;
@@ -181,9 +300,17 @@ export default {
 }
 .cardContainer {
   width: 100%;
-  background: cadetblue;
+  height: 300px;
+  padding: 0 130px;
 }
 .el-card {
-  padding: 2rem 0;
+  padding: 20px 20px;
+  height: 200px;
+}
+.el-icon-caret-top {
+  color: red;
+}
+.el-icon-caret-bottom {
+  color: green;
 }
 </style>
