@@ -39,15 +39,15 @@
             </div>
             <div>{{ brakenum }}</div>
             <div>
-              日同比 <i class="el-icon-caret-top" v-if="turnover > 0"></i>
-              <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
-              <i class="el-icon-minus" v-if="turnover == 0"> </i
+              日同比 <i class="el-icon-caret-top" v-if="brakeover > 0"></i>
+              <i class="el-icon-caret-bottom" v-if="brakeover < 0"></i>
+              <i class="el-icon-minus" v-if="brakeover == 0"> </i
               >{{ brakeover | percent }}
             </div>
             <div>
-              日环比 <i class="el-icon-caret-bottom" v-if="turnover > 0"></i>
-              <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
-              <i class="el-icon-minus" v-if="turnover == 0"> </i
+              日环比 <i class="el-icon-caret-bottom" v-if="brakeon > 0"></i>
+              <i class="el-icon-caret-bottom" v-if="brakeon < 0"></i>
+              <i class="el-icon-minus" v-if="brakeon == 0"> </i
               >{{ brakeon | percent }}
             </div>
           </el-card>
@@ -67,9 +67,9 @@
               >{{ turnover | percent }}
             </div>
             <div>
-              日环比 <i class="el-icon-caret-bottom" v-if="turnover > 0"></i>
-              <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
-              <i class="el-icon-minus" v-if="turnover == 0"> </i
+              日环比 <i class="el-icon-caret-bottom" v-if="turnon > 0"></i>
+              <i class="el-icon-caret-bottom" v-if="turnon < 0"></i>
+              <i class="el-icon-minus" v-if="turnon == 0"> </i
               >{{ turnon | percent }}
             </div>
           </el-card>
@@ -82,15 +82,16 @@
             </div>
             <div>{{ acceleratenum }}</div>
             <div>
-              日同比 <i class="el-icon-caret-top" v-if="turnover > 0"></i>
-              <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
-              <i class="el-icon-minus" v-if="turnover == 0"> </i
+              日同比 <i class="el-icon-caret-top" v-if="accelerateover > 0"></i>
+              <i class="el-icon-caret-bottom" v-if="accelerateover < 0"></i>
+              <i class="el-icon-minus" v-if="accelerateover == 0"> </i
               >{{ accelerateover | percent }}
             </div>
             <div>
-              日环比 <i class="el-icon-caret-bottom" v-if="turnover > 0"></i>
-              <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
-              <i class="el-icon-minus" v-if="turnover == 0"> </i
+              日环比
+              <i class="el-icon-caret-bottom" v-if="accelerateon > 0"></i>
+              <i class="el-icon-caret-bottom" v-if="accelerateon < 0"></i>
+              <i class="el-icon-minus" v-if="accelerateon == 0"> </i
               >{{ accelerateon | percent }}
             </div>
           </el-card>
@@ -104,15 +105,17 @@
             <div>{{ overspeednum }}</div>
             <div>
               <div>
-                日同比 <i class="el-icon-caret-top" v-if="turnover > 0"></i>
-                <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
-                <i class="el-icon-minus" v-if="turnover == 0"> </i
+                日同比
+                <i class="el-icon-caret-top" v-if="overspeedover > 0"></i>
+                <i class="el-icon-caret-bottom" v-if="overspeedover < 0"></i>
+                <i class="el-icon-minus" v-if="overspeedover == 0"> </i
                 >{{ overspeedover | percent }}
               </div>
               <div>
-                日环比 <i class="el-icon-caret-bottom" v-if="turnover > 0"></i>
-                <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
-                <i class="el-icon-minus" v-if="turnover == 0"> </i
+                日环比
+                <i class="el-icon-caret-bottom" v-if="overspeedon > 0"></i>
+                <i class="el-icon-caret-bottom" v-if="overspeedon < 0"></i>
+                <i class="el-icon-minus" v-if="overspeedon == 0"> </i
                 >{{ overspeedon | percent }}
               </div>
             </div>
