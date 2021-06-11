@@ -445,5 +445,11 @@ export default {
 <style lang="less">
 .eventsContainer {
   margin: 0 200px;
+  height: 1080px;
+  position: relative;
+  .el-pagination {
+    position: absolute;
+    bottom: 0;
+  }
 }
 </style>

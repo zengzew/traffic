@@ -22,7 +22,6 @@
         style="width: 100%"
         :border="true"
         size="medium"
-        height="13.8rem"
       >
         <el-table-column type="index"> </el-table-column>
         <el-table-column prop="type" label="路段类型"> </el-table-column>
@@ -124,16 +123,21 @@
   </div>
 </template>
 <script>
+import API from "../../../util/apiV1";
 import echarts from "echarts";
 import "@/util/echarts.theme.default";
 export default {
   data() {
     return {
       situationDate: "",
-      turnnum: 341,
-      brakenum: 226,
-      acceleratenum: 166,
-      overspeednum: 432,
+      turnnum: 0,
+      brakenum: 0,
+      acceleratenum: 0,
+      overspeednum: 0,
+      turnsum: 0,
+      brakesum: 0,
+      acceleratesum: 0,
+      overspeedsum: 0,
       deadlinedate: "2021年6月9日",
       //同比：以上周同期数据比较 day-over-day
       //环比：与前一天数据比较 day-on-day
@@ -180,7 +184,7 @@ export default {
       tableHistorySituation: [
         {
           type: "急转弯路段",
-          volume: "1433",
+          volume: this.turnsum,
         },
         {
           type: "急加速路段",
@@ -198,11 +202,15 @@ export default {
     };
   },
   mounted() {
+    this.historySituationGet();
+    this.historySumGet();
+  },
+  updated() {
     this.drawChart();
   },
   watch: {
     situationDate: function () {
-      console.log(this.situationDate);
+      //console.log(this.situationDate);
     },
   },
   filters: {
@@ -212,7 +220,7 @@ export default {
   },
   methods: {
     showDate() {
-      console.log(this.situationDate);
+      //console.log(this.situationDate);
     },
     drawChart() {
       var chartDom = document.getElementById("chart");
@@ -258,6 +266,146 @@ export default {
         ],
       };
       myChart.setOption(option);
+    },
+    historySituationGet() {
+      API.SafeAnalyze.brakeNumGet()
+        .then((res) => {
+          if (res.status === 200) {
+            this.brakenum = res.data.brake_num;
+          } else {
+            this.$message({
+              message: "数据更新失败，请稍后重试",
+              type: "error",
+            });
+          }
+        })
+        .catch((error) => {
+          this.$message({
+            message: "数据更新失败，请稍后重试",
+            type: "error",
+          });
+        });
+      API.SafeAnalyze.turnNumGet()
+        .then((res) => {
+          if (res.status === 200) {
+            this.turnnum = res.data.turn_num;
+          } else {
+            this.$message({
+              message: "数据更新失败，请稍后重试",
+              type: "error",
+            });
+          }
+        })
+        .catch((error) => {
+          this.$message({
+            message: "数据更新失败，请稍后重试",
+            type: "error",
+          });
+        });
+      API.SafeAnalyze.accelerateNumGet()
+        .then((res) => {
+          if (res.status === 200) {
+            this.acceleratenum = res.data.accelerate_num;
+          } else {
+            this.$message({
+              message: "数据更新失败，请稍后重试",
+              type: "error",
+            });
+          }
+        })
+        .catch((error) => {
+          this.$message({
+            message: "数据更新失败，请稍后重试",
+            type: "error",
+          });
+        });
+      API.SafeAnalyze.overspeedNumGet()
+        .then((res) => {
+          if (res.status === 200) {
+            this.overspeednum = res.data.overspeed_num;
+          } else {
+            this.$message({
+              message: "数据更新失败，请稍后重试",
+              type: "error",
+            });
+          }
+        })
+        .catch((error) => {
+          this.$message({
+            message: "数据更新失败，请稍后重试",
+            type: "error",
+          });
+        });
+    },
+    historySumGet() {
+      API.SafeAnalyze.turnHistoryGet()
+        .then((res) => {
+          if (res.status === 200) {
+            this.turnsum = res.data.turn_sum;
+          } else {
+            this.$message({
+              message: "数据更新失败，请稍后重试",
+              type: "error",
+            });
+          }
+        })
+        .catch((error) => {
+          this.$message({
+            message: "数据更新失败，请稍后重试",
+            type: "error",
+          });
+        });
+      API.SafeAnalyze.brakeHistoryGet()
+        .then((res) => {
+          if (res.status === 200) {
+            this.brakesum = res.data.brake_sum;
+          } else {
+            this.$message({
+              message: "数据更新失败，请稍后重试",
+              type: "error",
+            });
+          }
+        })
+        .catch((error) => {
+          this.$message({
+            message: "数据更新失败，请稍后重试",
+            type: "error",
+          });
+        });
+      API.SafeAnalyze.accelerateHistoryGet()
+        .then((res) => {
+          if (res.status === 200) {
+            this.acceleratesum = res.data.accelerate_sum;
+          } else {
+            this.$message({
+              message: "数据更新失败，请稍后重试",
+              type: "error",
+            });
+          }
+        })
+        .catch((error) => {
+          this.$message({
+            message: "数据更新失败，请稍后重试",
+            type: "error",
+          });
+        });
+      API.SafeAnalyze.overspeedHistoryGet()
+        .then((res) => {
+          if (res.status === 200) {
+            this.overspeedsum = res.data.overspeed_sum;
+          } else {
+            this.$message({
+              message: "数据更新失败，请稍后重试",
+              type: "error",
+            });
+          }
+        })
+        .catch((error) => {
+          this.$message({
+            message: "数据更新失败，请稍后重试",
+            type: "error",
+          });
+        });
     },
   },
 };
