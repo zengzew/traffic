@@ -2,7 +2,7 @@
     <div class="wrapper">
         <template v-if="layout == 'left'">
             <header-bar v-once>
-                <p slot="logo">车辆轨迹管理</p>
+                <p slot="logo">{{ headerName }}</p>
             </header-bar>
             <nav-bar :layout="layout"></nav-bar>
         </template>
