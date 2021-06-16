@@ -17,7 +17,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :picker-options="pickerOptions"
-          value-format="timestamp"
+          value-format="yyyyMMdd"
         >
         </el-date-picker>
       </el-form-item>

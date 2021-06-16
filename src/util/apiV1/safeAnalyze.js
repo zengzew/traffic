@@ -50,6 +50,9 @@ const safeAnalyze = {
                 url: `https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/brakenum`,
                 type: "get",
                 withCredentials: false,
+                params: {
+                    date: "1623168000000",
+                },
             })
         ),
     //急转弯路段数量单日查询
