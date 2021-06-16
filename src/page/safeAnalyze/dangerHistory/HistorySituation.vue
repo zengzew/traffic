@@ -12,6 +12,7 @@
       </el-date-picker>
     </div>
     <div class="chartcontainer">
+      <div id="charttitle">路段数量对比情况</div>
       <div id="chart"></div>
     </div>
     <div class="tablecontainer">
@@ -198,6 +199,8 @@ export default {
     this.calculateData();
   },
   updated() {
+    this.totalnum =
+      this.turnnum + this.brakenum + this.acceleratenum + this.overspeednum;
     this.drawChart();
   },
   watch: {
@@ -229,7 +232,12 @@ export default {
       var chartDom = document.getElementById("chart");
       var myChart = echarts.init(chartDom);
       var option = {
-        title: { text: "路段数量对比情况", left: "center" },
+        title: {
+          zlevel: 0,
+          text: ["路段数（条): " + this.totalnum],
+          top: 220,
+          left: 100,
+        },
         tooltip: {
           trigger: "item",
         },
@@ -507,13 +515,19 @@ export default {
 #chart {
   width: 600px;
   height: 400px;
-  margin: 100px 300px;
+  margin: 40px 300px;
 }
 #tabletitle {
   margin-top: 100px;
   font-weight: bold;
   font-size: 20px;
   padding-left: 100px;
+}
+#charttitle {
+  margin-top: 100px;
+  font-weight: bold;
+  font-size: 20px;
+  padding-left: 400px;
 }
 #deadline {
   padding-left: 100px;
@@ -531,7 +545,7 @@ export default {
   margin-top: 100px;
 }
 .el-table {
-  margin: 50px 100px;
+  margin: 60px 100px;
 }
 .main {
   display: flex;
