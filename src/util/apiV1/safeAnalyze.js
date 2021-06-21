@@ -44,22 +44,19 @@ const safeAnalyze = {
             })
         ),
     //急刹路段数量单日查询
-    brakeNumGet: () =>
+    brakeNumGet: (params) =>
         promiseAxios(
             axios({
-                url: `https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/brakenum`,
+                url: `http://82.156.230.142:10900/track/v1/brake/getnum?date=${params}`,
                 type: "get",
                 withCredentials: false,
-                params: {
-                    date: "1623168000000",
-                },
             })
         ),
     //急转弯路段数量单日查询
     turnNumGet: (params) =>
         promiseAxios(
             axios({
-                url: `https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/turnnum`,
+                url: `http://82.156.230.142:10900/track/v1/turn/getnum?date=${params}`,
                 type: "get",
                 withCredentials: false,
             })
@@ -68,7 +65,7 @@ const safeAnalyze = {
     accelerateNumGet: (params) =>
         promiseAxios(
             axios({
-                url: `https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/acceleratenum`,
+                url: `http://82.156.230.142:10900/track/v1/accelerate/getnum?date=${params}`,
                 type: "get",
                 withCredentials: false,
             })
@@ -77,43 +74,43 @@ const safeAnalyze = {
     overspeedNumGet: (params) =>
         promiseAxios(
             axios({
-                url: `https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/overspeednum`,
+                url: `http://82.156.230.142:10900/track/v1/overspeed/getnum?date=${params}`,
                 type: "get",
                 withCredentials: false,
             })
         ),
     //急刹路段数量历史查询
-    brakeHistoryGet: (params) =>
+    brakeHistoryGet: () =>
         promiseAxios(
             axios({
-                url: `https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/brakesum`,
+                url: `http://82.156.230.142:10900/track/v1/brake/getsum`,
                 type: "get",
                 withCredentials: false,
             })
         ),
     //急加速路段数量历史查询
-    accelerateHistoryGet: (params) =>
+    accelerateHistoryGet: () =>
         promiseAxios(
             axios({
-                url: `https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/acceleratesum`,
+                url: `http://82.156.230.142:10900/track/v1/accelerate/getsum`,
                 type: "get",
                 withCredentials: false,
             })
         ),
     //急转弯路段数量历史查询
-    turnHistoryGet: (params) =>
+    turnHistoryGet: () =>
         promiseAxios(
             axios({
-                url: `https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/turnsum`,
+                url: `http://82.156.230.142:10900/track/v1/turn/getsum`,
                 type: "get",
                 withCredentials: false,
             })
         ),
     //超速路段数量历史查询
-    overspeedHistoryGet: (params) =>
+    overspeedHistoryGet: () =>
         promiseAxios(
             axios({
-                url: `https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/overspeedsum`,
+                url: `http://82.156.230.142:10900/track/v1/overspeed/getsum`,
                 type: "get",
                 withCredentials: false,
             })

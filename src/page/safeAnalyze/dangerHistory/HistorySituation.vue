@@ -3,11 +3,11 @@
     <div class="timepicker">
       <span class="demonstration">当前时间范围</span>
       <el-date-picker
-        v-model="situationDate"
+        v-model="timestamp"
         type="date"
         placeholder="选择日期"
         :picker-options="pickerOptions"
-        value-format="yyyyMMdd"
+        value-format="timestamp"
       >
       </el-date-picker>
     </div>
@@ -46,7 +46,7 @@
               >{{ brakeover | percent }}
             </div>
             <div>
-              日环比 <i class="el-icon-caret-bottom" v-if="brakeon > 0"></i>
+              日环比 <i class="el-icon-caret-top" v-if="brakeon > 0"></i>
               <i class="el-icon-caret-bottom" v-if="brakeon < 0"></i>
               <i class="el-icon-minus" v-if="brakeon == 0"> </i
               >{{ brakeon | percent }}
@@ -68,7 +68,7 @@
               >{{ turnover | percent }}
             </div>
             <div>
-              日环比 <i class="el-icon-caret-bottom" v-if="turnon > 0"></i>
+              日环比 <i class="el-icon-caret-top" v-if="turnon > 0"></i>
               <i class="el-icon-caret-bottom" v-if="turnon < 0"></i>
               <i class="el-icon-minus" v-if="turnon == 0"> </i
               >{{ turnon | percent }}
@@ -90,7 +90,7 @@
             </div>
             <div>
               日环比
-              <i class="el-icon-caret-bottom" v-if="accelerateon > 0"></i>
+              <i class="el-icon-caret-top" v-if="accelerateon > 0"></i>
               <i class="el-icon-caret-bottom" v-if="accelerateon < 0"></i>
               <i class="el-icon-minus" v-if="accelerateon == 0"> </i
               >{{ accelerateon | percent }}
@@ -114,7 +114,7 @@
               </div>
               <div>
                 日环比
-                <i class="el-icon-caret-bottom" v-if="overspeedon > 0"></i>
+                <i class="el-icon-caret-top" v-if="overspeedon > 0"></i>
                 <i class="el-icon-caret-bottom" v-if="overspeedon < 0"></i>
                 <i class="el-icon-minus" v-if="overspeedon == 0"> </i
                 >{{ overspeedon | percent }}
@@ -134,6 +134,7 @@ export default {
   data() {
     return {
       situationDate: "",
+      timestamp: 0,
       turnnum: 0,
       brakenum: 0,
       acceleratenum: 0,
@@ -185,18 +186,18 @@ export default {
           },
         ],
       },
-      situationDate: new Date(),
+      timestamp: new Date(),
       tableHistorySituation: [],
     };
   },
   mounted() {
-    this.showDate();
-    this.historySituationGet();
-    this.historySumGet().then((res) => {
-      console.log(res);
+    //this.timestampToTime(this.timestamp);
+    //this.historySituationGet(this.situationDate);
+    this.historySituationGet(this.timestamp);
+    this.historySumGet().then(() => {
       this.updateData();
     });
-    this.calculateData();
+    //this.calculateData();
   },
   updated() {
     this.totalnum =
@@ -204,8 +205,9 @@ export default {
     this.drawChart();
   },
   watch: {
-    situationDate: function () {
-      console.log(this.situationDate);
+    timestamp: function () {
+      this.updateChart(this.timestamp);
+      this.calculateData(this.timestamp);
     },
   },
   filters: {
@@ -225,9 +227,6 @@ export default {
   },
 
   methods: {
-    showDate() {
-      console.log(this.situationDate);
-    },
     drawChart() {
       var chartDom = document.getElementById("chart");
       var myChart = echarts.init(chartDom);
@@ -279,79 +278,77 @@ export default {
       myChart.setOption(option);
     },
     //历史路段数量
-    historySituationGet(date) {
-      var historySituation = new Array(4);
-      API.SafeAnalyze.brakeNumGet({ date: date })
+    async historySituationGet(timestamp) {
+      let date = this.timestampToTime(timestamp);
+      console.log(date);
+      var historySituation = new Array();
+      await API.SafeAnalyze.brakeNumGet(date)
         .then((res) => {
-          if (res.status === 200) {
-            console.log(res);
-            this.brakenum = res.data.brake_num;
-            return (historySituation[0] = res.data.brake_num);
+          if (res.status === 0) {
+            historySituation[0] = res.brake_num;
           } else {
             this.$message({
               message: "数据更新失败，请稍后重试",
               type: "error",
             });
+            date;
           }
         })
         .catch((error) => {
           this.$message({
             message: "数据更新失败，请稍后重试",
-            type: "error",
+            type: error,
           });
         });
-      API.SafeAnalyze.turnNumGet({ date: date })
+      await API.SafeAnalyze.turnNumGet(date)
         .then((res) => {
-          if (res.status === 200) {
-            this.turnnum = res.data.turn_num;
-            return (historySituation[1] = res.data.turn_num);
+          if (res.status === 0) {
+            historySituation[1] = res.turn_num;
           } else {
             this.$message({
               message: "数据更新失败，请稍后重试",
-              type: "error",
+              type: error,
             });
           }
         })
         .catch((error) => {
           this.$message({
             message: "数据更新失败，请稍后重试",
-            type: "error",
+            type: error,
           });
         });
-      API.SafeAnalyze.accelerateNumGet({ date: date })
+      await API.SafeAnalyze.accelerateNumGet(date)
         .then((res) => {
-          if (res.status === 200) {
-            this.acceleratenum = res.data.accelerate_num;
-            return (historySituation[2] = res.data.accelerate_num);
+          if (res.status === 0) {
+            historySituation[2] = res.accelerate_num;
           } else {
             this.$message({
               message: "数据更新失败，请稍后重试",
-              type: "error",
+              type: error,
             });
           }
         })
         .catch((error) => {
           this.$message({
             message: "数据更新失败，请稍后重试",
-            type: "error",
+            type: error,
           });
         });
-      API.SafeAnalyze.overspeedNumGet({ date: date })
+      await API.SafeAnalyze.overspeedNumGet(date)
         .then((res) => {
-          if (res.status === 200) {
-            this.overspeednum = res.data.overspeed_num;
-            return (historySituation[3] = res.data.overspeed_num);
+          if (res.status === 0) {
+            historySituation[3] = res.overspeed_num;
           } else {
             this.$message({
               message: "数据更新失败，请稍后重试",
-              type: "error",
+              type: error,
             });
           }
         })
         .catch((error) => {
           this.$message({
             message: "数据更新失败，请稍后重试",
-            type: "error",
+            type: error,
           });
         });
       return historySituation;
@@ -363,8 +360,8 @@ export default {
         new Promise((resolve, reject) => {
           API.SafeAnalyze.turnHistoryGet()
             .then((res) => {
-              if (res.status === 200) {
-                this.turnsum = res.data.turn_sum;
+              if (res.status === 0) {
+                this.turnsum = res.turn_num;
                 resolve();
               } else {
                 this.$message({
@@ -377,7 +374,7 @@ export default {
             .catch((error) => {
               this.$message({
                 message: "数据更新失败，请稍后重试",
-                type: "error",
+                type: error,
               });
               reject(error);
             });
@@ -387,13 +384,13 @@ export default {
         new Promise((resolve, reject) => {
           API.SafeAnalyze.brakeHistoryGet()
             .then((res) => {
-              if (res.status === 200) {
-                this.brakesum = res.data.brake_sum;
+              if (res.status === 0) {
+                this.brakesum = res.brake_num;
                 resolve();
               } else {
                 this.$message({
                   message: "数据更新失败，请稍后重试",
-                  type: "error",
+                  type: error,
                 });
                 resolve();
               }
@@ -401,7 +398,7 @@ export default {
             .catch((error) => {
               this.$message({
                 message: "数据更新失败，请稍后重试",
-                type: "error",
+                type: error,
               });
               reject(error);
             });
@@ -411,13 +408,13 @@ export default {
         new Promise((resolve, reject) => {
           API.SafeAnalyze.accelerateHistoryGet()
             .then((res) => {
-              if (res.status === 200) {
-                this.acceleratesum = res.data.accelerate_sum;
+              if (res.status === 0) {
+                this.acceleratesum = res.accelerate_num;
                 resolve();
               } else {
                 this.$message({
                   message: "数据更新失败，请稍后重试",
-                  type: "error",
+                  type: error,
                 });
                 resolve();
               }
@@ -425,7 +422,7 @@ export default {
             .catch((error) => {
               this.$message({
                 message: "数据更新失败，请稍后重试",
-                type: "error",
+                type: error,
               });
               reject(error);
             });
@@ -435,13 +432,13 @@ export default {
         new Promise((resolve, reject) => {
           API.SafeAnalyze.overspeedHistoryGet()
             .then((res) => {
-              if (res.status === 200) {
-                this.overspeedsum = res.data.overspeed_sum;
+              if (res.status === 0) {
+                this.overspeedsum = res.overspeed_num;
                 resolve();
               } else {
                 this.$message({
                   message: "数据更新失败，请稍后重试",
-                  type: "error",
+                  type: error,
                 });
                 resolve();
               }
@@ -449,7 +446,7 @@ export default {
             .catch((error) => {
               this.$message({
                 message: "数据更新失败，请稍后重试",
-                type: "error",
+                type: error,
               });
               reject(error);
             });
@@ -477,35 +474,61 @@ export default {
         }
       );
     },
-    calculateData() {
+    calculateData(timestamp) {
       //前一天的数据
-      var yesterdaybrake = this.historySituationGet(this.situationDate - 1)[0];
-      var yesterdayturn = this.historySituationGet(this.situationDate - 1)[1];
-      var yesterdayaccelerate = this.historySituationGet(
-        this.situationDate - 1
-      )[2];
-      var yesterdayoverspeed = this.historySituationGet(
-        this.situationDate - 1
-      )[3];
-      //前一周的数据
-      var weekbrake = this.historySituationGet(this.situationDate - 7)[0];
-      var weekturn = this.historySituationGet(this.situationDate - 7)[1];
-      var weekaccelerate = this.historySituationGet(this.situationDate - 7)[2];
-      var weekoverspeed = this.historySituationGet(this.situationDate - 7)[3];
-      //环比
-      this.brakeon = (this.brakenum - yesterdaybrake) / this.yesterdaybrake;
-      this.turnon = (this.turnnum - yesterdayturn) / this.yesterdayturn;
-      this.accelerateon =
-        (this.acceleratenum - yesterdayaccelerate) / this.yesterdayaccelerate;
-      this.overspeedon =
-        (this.overspeednum - yesterdayoverspeed) / this.yesterdayoverspeed;
+      this.historySituationGet(timestamp - 86400000).then((res) => {
+        let yesterdayData = res;
+        let yesterdaybrake = yesterdayData[0];
+        let yesterdayturn = yesterdayData[1];
+        let yesterdayaccelerate = yesterdayData[2];
+        let yesterdayoverspeed = yesterdayData[3];
+        this.brakeon = (this.brakenum - yesterdaybrake) / yesterdaybrake;
+        this.turnon = (this.turnnum - yesterdayturn) / yesterdayturn;
+        this.accelerateon =
+          (this.acceleratenum - yesterdayaccelerate) / yesterdayaccelerate;
+        this.overspeedon =
+          (this.overspeednum - yesterdayoverspeed) / yesterdayoverspeed;
+      });
+
       //同比
-      this.brakeover = (this.brakenum - weekbrake) / this.weekbrake;
-      this.turnover = (this.turnnum - weekturn) / this.weekturn;
-      this.accelerateover =
-        (this.acceleratenum - weekaccelerate) / this.weekaccelerate;
-      this.overspeedover =
-        (this.overspeednum - weekoverspeed) / this.weekoverspeed;
+      this.historySituationGet(timestamp - 604800000).then((res) => {
+        let weekData = res;
+        let weekbrake = weekData[0];
+        let weekturn = weekData[1];
+        let weekaccelerate = weekData[2];
+        let weekoverspeed = weekData[3];
+        this.brakeover = (this.brakenum - weekbrake) / weekbrake;
+        this.turnover = (this.turnnum - weekturn) / weekturn;
+        this.accelerateover =
+          (this.acceleratenum - weekaccelerate) / weekaccelerate;
+        this.overspeedover =
+          (this.overspeednum - weekoverspeed) / weekoverspeed;
+      });
+    },
+    timestampToTime(timestamp) {
+      {
+        var date = new Date(timestamp);
+        let Y = date.getFullYear() + "-";
+        let M =
+          (date.getMonth() + 1 < 10
+            ? "0" + (date.getMonth() + 1)
+            : date.getMonth() + 1) + "-";
+        let D =
+          (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " ";
+        //console.log(Y + M + D);
+        return Y + M + D;
+      }
+    },
+    updateChart(timestamp) {
+      this.historySituationGet(timestamp).then((res) => {
+        let historyNumber;
+        historyNumber = res;
+        this.brakenum = historyNumber[0];
+        console.log("第一步", historyNumber);
+        this.turnnum = historyNumber[1];
+        this.acceleratenum = historyNumber[2];
+        this.overspeednum = historyNumber[3];
+      });
     },
   },
 };
