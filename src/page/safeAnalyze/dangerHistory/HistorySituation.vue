@@ -40,13 +40,21 @@
             </div>
             <div>{{ brakenum }}</div>
             <div>
-              日同比 <i class="el-icon-caret-top" v-if="brakeover > 0"></i>
+              日同比
+              <i
+                class="el-icon-caret-top"
+                v-if="(brakeover > 0) & (brakeover !== Infinity)"
+              ></i>
               <i class="el-icon-caret-bottom" v-if="brakeover < 0"></i>
               <i class="el-icon-minus" v-if="brakeover == 0"> </i
               >{{ brakeover | percent }}
             </div>
             <div>
-              日环比 <i class="el-icon-caret-top" v-if="brakeon > 0"></i>
+              日环比
+              <i
+                class="el-icon-caret-top"
+                v-if="(brakeon > 0) & (brakeon !== Infinity)"
+              ></i>
               <i class="el-icon-caret-bottom" v-if="brakeon < 0"></i>
               <i class="el-icon-minus" v-if="brakeon == 0"> </i
               >{{ brakeon | percent }}
@@ -62,13 +70,20 @@
             <div>{{ turnnum }}</div>
             <div>
               日同比
-              <i class="el-icon-caret-top" v-if="turnover > 0"></i>
+              <i
+                class="el-icon-caret-top"
+                v-if="(turnover > 0) & (turnover !== Infinity)"
+              ></i>
               <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
               <i class="el-icon-minus" v-if="turnover == 0"> </i
               >{{ turnover | percent }}
             </div>
             <div>
-              日环比 <i class="el-icon-caret-top" v-if="turnon > 0"></i>
+              日环比
+              <i
+                class="el-icon-caret-top"
+                v-if="(turnon > 0) & (turnon !== Infinity)"
+              ></i>
               <i class="el-icon-caret-bottom" v-if="turnon < 0"></i>
               <i class="el-icon-minus" v-if="turnon == 0"> </i
               >{{ turnon | percent }}
@@ -83,14 +98,21 @@
             </div>
             <div>{{ acceleratenum }}</div>
             <div>
-              日同比 <i class="el-icon-caret-top" v-if="accelerateover > 0"></i>
+              日同比
+              <i
+                class="el-icon-caret-top"
+                v-if="(accelerateover > 0) & (accelerateover !== Infinity)"
+              ></i>
               <i class="el-icon-caret-bottom" v-if="accelerateover < 0"></i>
               <i class="el-icon-minus" v-if="accelerateover == 0"> </i
               >{{ accelerateover | percent }}
             </div>
             <div>
               日环比
-              <i class="el-icon-caret-top" v-if="accelerateon > 0"></i>
+              <i
+                class="el-icon-caret-top"
+                v-if="(accelerateon > 0) & (accelerateon !== Infinity)"
+              ></i>
               <i class="el-icon-caret-bottom" v-if="accelerateon < 0"></i>
               <i class="el-icon-minus" v-if="accelerateon == 0"> </i
               >{{ accelerateon | percent }}
@@ -107,14 +129,20 @@
             <div>
               <div>
                 日同比
-                <i class="el-icon-caret-top" v-if="overspeedover > 0"></i>
+                <i
+                  class="el-icon-caret-top"
+                  v-if="(overspeedover > 0) & (overspeedover !== Infinity)"
+                ></i>
                 <i class="el-icon-caret-bottom" v-if="overspeedover < 0"></i>
                 <i class="el-icon-minus" v-if="overspeedover == 0"> </i
                 >{{ overspeedover | percent }}
               </div>
               <div>
                 日环比
-                <i class="el-icon-caret-top" v-if="overspeedon > 0"></i>
+                <i
+                  class="el-icon-caret-top"
+                  v-if="(overspeedon > 0) & (overspeedon !== Infinity)"
+                ></i>
                 <i class="el-icon-caret-bottom" v-if="overspeedon < 0"></i>
                 <i class="el-icon-minus" v-if="overspeedon == 0"> </i
                 >{{ overspeedon | percent }}
@@ -144,7 +172,7 @@ export default {
       brakesum: 0,
       acceleratesum: 0,
       overspeedsum: 0,
-      deadlinedate: "20210615",
+      deadlinedate: "2021-00-00",
       //同比：以上周同期数据比较 day-over-day
       //环比：与前一天数据比较 day-on-day
       brakeover: 0,
@@ -191,42 +219,50 @@ export default {
     };
   },
   mounted() {
-    //this.timestampToTime(this.timestamp);
-    //this.historySituationGet(this.situationDate);
+    //取今天的数据
     this.historySituationGet(this.timestamp);
+    //刷新表格中历史累计数据
     this.historySumGet().then(() => {
       this.updateData();
     });
-    //this.calculateData();
   },
   updated() {
+    //计算当日所有路段的总数并显示在饼图中
     this.totalnum =
       this.turnnum + this.brakenum + this.acceleratenum + this.overspeednum;
     this.drawChart();
   },
   watch: {
+    //监听日期选择器的变化
     timestamp: function () {
       this.updateChart(this.timestamp);
       this.calculateData(this.timestamp);
     },
   },
   filters: {
+    //所有数字后加上百分号
     percent: function (value) {
-      return value.toFixed(2) + "%";
+      if (isNaN(value)) {
+        return "暂无数据";
+      } else if (value === Infinity) {
+        return "暂无数据";
+      } else return value.toFixed(2) + "%";
     },
+    //格式化日期
     dateformat: function (value) {
       return (
         value.substr(0, 4) +
         "年" +
-        value.substr(4, 2) +
+        value.substr(5, 2) +
         "月" +
-        value.substr(6, 2) +
+        value.substr(8, 2) +
         "日"
       );
     },
   },
 
   methods: {
+    //绘制饼图，自定义饼图格式
     drawChart() {
       var chartDom = document.getElementById("chart");
       var myChart = echarts.init(chartDom);
@@ -249,6 +285,7 @@ export default {
           {
             name: "路段数量对比",
             type: "pie",
+            //图的位置
             radius: ["60%", "80%"],
             center: ["30%", "50%"],
             avoidLabelOverlap: false,
@@ -280,8 +317,8 @@ export default {
     //历史路段数量
     async historySituationGet(timestamp) {
       let date = this.timestampToTime(timestamp);
-      console.log(date);
       var historySituation = new Array();
+      //查询刹车路段
       await API.SafeAnalyze.brakeNumGet(date)
         .then((res) => {
           if (res.status === 0) {
@@ -300,6 +337,7 @@ export default {
             type: error,
           });
         });
+      //查询急转弯路段
       await API.SafeAnalyze.turnNumGet(date)
         .then((res) => {
           if (res.status === 0) {
@@ -317,6 +355,7 @@ export default {
             type: error,
           });
         });
+      // 查询急加速路段
       await API.SafeAnalyze.accelerateNumGet(date)
         .then((res) => {
           if (res.status === 0) {
@@ -334,6 +373,7 @@ export default {
             type: error,
           });
         });
+      // 查询超速路段
       await API.SafeAnalyze.overspeedNumGet(date)
         .then((res) => {
           if (res.status === 0) {
@@ -358,10 +398,13 @@ export default {
       let promises = [];
       promises.push(
         new Promise((resolve, reject) => {
+          // 查询累计急转弯路段
           API.SafeAnalyze.turnHistoryGet()
             .then((res) => {
               if (res.status === 0) {
                 this.turnsum = res.turn_num;
+                // 更新update日期
+                this.deadlinedate = res.update_time;
                 resolve();
               } else {
                 this.$message({
@@ -382,6 +425,7 @@ export default {
       );
       promises.push(
         new Promise((resolve, reject) => {
+          // 查询累计急刹车路段
           API.SafeAnalyze.brakeHistoryGet()
             .then((res) => {
               if (res.status === 0) {
@@ -406,6 +450,7 @@ export default {
       );
       promises.push(
         new Promise((resolve, reject) => {
+          // 查询急加速累计路段
           API.SafeAnalyze.accelerateHistoryGet()
             .then((res) => {
               if (res.status === 0) {
@@ -430,6 +475,7 @@ export default {
       );
       promises.push(
         new Promise((resolve, reject) => {
+          // 查询超速累计路段
           API.SafeAnalyze.overspeedHistoryGet()
             .then((res) => {
               if (res.status === 0) {
@@ -475,7 +521,8 @@ export default {
       );
     },
     calculateData(timestamp) {
-      //前一天的数据
+      // 计算同比环比
+      //前一天的数据，环比
       this.historySituationGet(timestamp - 86400000).then((res) => {
         let yesterdayData = res;
         let yesterdaybrake = yesterdayData[0];
@@ -505,6 +552,7 @@ export default {
           (this.overspeednum - weekoverspeed) / weekoverspeed;
       });
     },
+    // 讲时间戳转为yyyy-mm-dd的格式
     timestampToTime(timestamp) {
       {
         var date = new Date(timestamp);
@@ -515,7 +563,6 @@ export default {
             : date.getMonth() + 1) + "-";
         let D =
           (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " ";
-        //console.log(Y + M + D);
         return Y + M + D;
       }
     },
@@ -524,7 +571,6 @@ export default {
         let historyNumber;
         historyNumber = res;
         this.brakenum = historyNumber[0];
-        console.log("第一步", historyNumber);
         this.turnnum = historyNumber[1];
         this.acceleratenum = historyNumber[2];
         this.overspeednum = historyNumber[3];
