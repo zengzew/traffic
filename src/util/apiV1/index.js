@@ -3,21 +3,21 @@
  * @date 2020/9/1
  */
 
-import heatAnalysis from "./heatAnalysis";
-import device from "./device";
-import GeoUtil from "./geoUtil";
-import Trail from "./trail";
-import Auth from "./auth";
-import MultiOrder from "./multiOrder";
-import CommonConfig from "./commonConfig";
-import SafeAnalyze from "./safeAnalyze";
+import heatAnalysis from './heatAnalysis';
+import device from './device';
+import safeAnalyze from "./safeAnalyze"
+import GeoUtil from './geoUtil';
+import Trail from './trail';
+import Auth from './auth';
+import MultiOrder from './multiOrder';
+import CommonConfig from './commonConfig';
 export default {
-    Trail,
-    device,
-    heatAnalysis,
-    GeoUtil,
-    Auth,
-    MultiOrder,
-    CommonConfig,
-    SafeAnalyze,
+  Trail,
+  device,
+  safeAnalyze,
+  heatAnalysis,
+  GeoUtil,
+  Auth,
+  MultiOrder,
+  CommonConfig,
 };

@@ -6,6 +6,7 @@ import tableData from './tableData'
 import trailReplayChart from './trailReplayChart'
 // import heatAnalysis from "./heatAnalysis";
 import multiOrder from './multiOrder'
+import safeAnalysis from "./safeAnalysis"
 
 export default {
     user: user,
@@ -15,5 +16,6 @@ export default {
     tableData: tableData,
     trailReplayChart: trailReplayChart,
     // heatAnalysis,
-    multiOrder
+    multiOrder,
+    safeAnalysis
 }
