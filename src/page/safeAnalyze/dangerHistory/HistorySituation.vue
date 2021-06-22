@@ -319,7 +319,7 @@ export default {
       let date = this.timestampToTime(timestamp);
       var historySituation = new Array();
       //查询刹车路段
-      await API.SafeAnalyze.brakeNumGet(date)
+      await API.safeAnalyze.brakeNumGet(date)
         .then((res) => {
           if (res.status === 0) {
             historySituation[0] = res.brake_num;
@@ -338,7 +338,7 @@ export default {
           });
         });
       //查询急转弯路段
-      await API.SafeAnalyze.turnNumGet(date)
+      await API.safeAnalyze.turnNumGet(date)
         .then((res) => {
           if (res.status === 0) {
             historySituation[1] = res.turn_num;
@@ -356,7 +356,7 @@ export default {
           });
         });
       // 查询急加速路段
-      await API.SafeAnalyze.accelerateNumGet(date)
+      await API.safeAnalyze.accelerateNumGet(date)
         .then((res) => {
           if (res.status === 0) {
             historySituation[2] = res.accelerate_num;
@@ -374,7 +374,7 @@ export default {
           });
         });
       // 查询超速路段
-      await API.SafeAnalyze.overspeedNumGet(date)
+      await API.safeAnalyze.overspeedNumGet(date)
         .then((res) => {
           if (res.status === 0) {
             historySituation[3] = res.overspeed_num;
@@ -399,7 +399,7 @@ export default {
       promises.push(
         new Promise((resolve, reject) => {
           // 查询累计急转弯路段
-          API.SafeAnalyze.turnHistoryGet()
+          API.safeAnalyze.turnHistoryGet()
             .then((res) => {
               if (res.status === 0) {
                 this.turnsum = res.turn_num;
@@ -426,7 +426,7 @@ export default {
       promises.push(
         new Promise((resolve, reject) => {
           // 查询累计急刹车路段
-          API.SafeAnalyze.brakeHistoryGet()
+          API.safeAnalyze.brakeHistoryGet()
             .then((res) => {
               if (res.status === 0) {
                 this.brakesum = res.brake_num;
@@ -451,7 +451,7 @@ export default {
       promises.push(
         new Promise((resolve, reject) => {
           // 查询急加速累计路段
-          API.SafeAnalyze.accelerateHistoryGet()
+          API.safeAnalyze.accelerateHistoryGet()
             .then((res) => {
               if (res.status === 0) {
                 this.acceleratesum = res.accelerate_num;
@@ -476,7 +476,7 @@ export default {
       promises.push(
         new Promise((resolve, reject) => {
           // 查询超速累计路段
-          API.SafeAnalyze.overspeedHistoryGet()
+          API.safeAnalyze.overspeedHistoryGet()
             .then((res) => {
               if (res.status === 0) {
                 this.overspeedsum = res.overspeed_num;

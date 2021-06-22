@@ -43,7 +43,7 @@ const safeAnalyze = {
     overspeedDataGet: (params) =>
         promiseAxios(
             axios({
-                url: `https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/api/overspeed`,
+                url: `http://82.156.230.142:10900/track/v1/accelerate/gettop?rank_num=${params}`,
                 type: "get",
                 withCredentials: false,
             })
