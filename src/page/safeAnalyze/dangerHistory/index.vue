@@ -13,11 +13,11 @@
   </div>
 </template>
 <script>
-import HistoryEvents from "./HistoryEvents.vue";
+//import HistoryEvents from "./HistoryEvents.vue";
 import HistorySituation from "./HistorySituation.vue";
 
 export default {
-  components: { HistorySituation, HistoryEvents },
+  components: { HistorySituation },
   data() {
     return {
       activeName: "first",
