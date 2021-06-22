@@ -72,6 +72,7 @@ export default {
 
             // 初始化 Line
             this.initLine();
+
         },
         // 实时路况图层
         trailSetPath() {
