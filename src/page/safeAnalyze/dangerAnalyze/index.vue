@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-<template></template>
-
-<script>
-export default {};
-</script>
-<style>
-</style>
-=======
 <template>
     <div id="container">
         <map2></map2>
@@ -38,4 +29,3 @@ export default {
 }
 
 </style>
->>>>>>> origin/zihao
