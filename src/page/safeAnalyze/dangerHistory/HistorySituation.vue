@@ -2,7 +2,6 @@
   <div class="main">
     <div class="centerbox" ref="tablecontainer">
       <div class="chartcontainer">
-        <div id="charttitle">路段数量对比情况</div>
         <div class="timepicker">
           <span class="demonstration">当前时间范围</span>
           <el-date-picker
@@ -14,6 +13,8 @@
           >
           </el-date-picker>
         </div>
+        <div id="charttitle">路段数量对比情况</div>
+
         <div id="chart"></div>
       </div>
       <div class="tablecontainer">
@@ -298,6 +299,7 @@ export default {
           x: "center",
           y: "60%",
           textAlign: "left",
+          textStyle: { fontSize: 15 },
         },
         tooltip: {
           trigger: "item",
@@ -631,6 +633,8 @@ export default {
 }
 #charttitle {
   font-weight: bold;
+  position: relative;
+  margin-top: 5%;
 }
 #deadline {
   padding-left: 100px;
@@ -639,22 +643,26 @@ export default {
 .chartcontainer {
   width: 45%;
   height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .tablecontainer {
   width: 45%;
   height: 90%;
   display: flex;
+  justify-content: center;
   flex-direction: column;
 }
 
 .tableContent {
-  margin-top: 15%;
+  //   margin-top: 15%;
 }
 
 .timepicker {
-  // position: absolute;
-  left: 25%;
-  // transform: translateX(-50%);
+  //   position: relative;
+  //   left: 100%;
+  //   transform: translateX(-50%);
 }
 
 .main {
@@ -665,6 +673,7 @@ export default {
 }
 .cardContainer {
   margin-top: 3%;
+  margin-bottom: 5%;
   width: 100%;
   display: flex;
   justify-content: space-evenly;
