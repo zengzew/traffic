@@ -74,7 +74,7 @@ export default {
             loading: false,
             tableData: [],
             scrollTop: "",
-            rank_num: 20, //请求排行榜前20
+            rank_num: 30, //请求排行榜前20
         };
     },
     computed: {
@@ -196,7 +196,7 @@ export default {
         },
         getHeight() {
             this.tableHeight = window.innerHeight - 100;
-            this.tableHeight1 = window.innerHeight - 380;
+            this.tableHeight1 = window.innerHeight-200;
         },
         questData() {
             this.loading = true;
