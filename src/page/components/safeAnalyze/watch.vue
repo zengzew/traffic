@@ -73,8 +73,8 @@ export default {
             tableHeight: "",
             loading: false,
             tableData: [],
-            scrollTop:"",
-            rank_num:20 //请求排行榜前20
+            scrollTop: "",
+            rank_num: 20, //请求排行榜前20
         };
     },
     computed: {
@@ -194,39 +194,51 @@ export default {
                     );
                 });
         },
+        getHeight() {
+            this.tableHeight = window.innerHeight - 100;
+            this.tableHeight1 = window.innerHeight - 380;
+        },
         questData() {
             this.loading = true;
             switch (this.tabIndex) {
                 case "1": {
-                    this.$API.safeAnalyze.brakeDataGet(this.rank_num).then((res) => {
-                        this.tableData = res.data;
-                        this.loading = false;
-                        this.drawLine(res.data, "brake");
-                    });
+                    this.$API.safeAnalyze
+                        .brakeDataGet(this.rank_num)
+                        .then((res) => {
+                            this.tableData = res.data;
+                            this.loading = false;
+                            this.drawLine(res.data, "brake");
+                        });
                     break;
                 }
                 case "2": {
-                    this.$API.safeAnalyze.turnDataGet(this.rank_num).then((res) => {
-                        this.tableData = res.data;
-                        this.loading = false;
-                        this.drawLine(res.data, "turn");
-                    });
+                    this.$API.safeAnalyze
+                        .turnDataGet(this.rank_num)
+                        .then((res) => {
+                            this.tableData = res.data;
+                            this.loading = false;
+                            this.drawLine(res.data, "turn");
+                        });
                     break;
                 }
                 case "3": {
-                    this.$API.safeAnalyze.accelerateDataGet(this.rank_num).then((res) => {
-                        this.tableData = res.data;
-                        this.loading = false;
-                        this.drawLine(res.data, "accelerate");
-                    });
+                    this.$API.safeAnalyze
+                        .accelerateDataGet(this.rank_num)
+                        .then((res) => {
+                            this.tableData = res.data;
+                            this.loading = false;
+                            this.drawLine(res.data, "accelerate");
+                        });
                     break;
                 }
                 case "4": {
-                    this.$API.safeAnalyze.overspeedDataGet(this.rank_num).then((res) => {
-                        this.tableData = res.data;
-                        this.loading = false;
-                        this.drawLine(res.data, "overspeed");
-                    });
+                    this.$API.safeAnalyze
+                        .overspeedDataGet(this.rank_num)
+                        .then((res) => {
+                            this.tableData = res.data;
+                            this.loading = false;
+                            this.drawLine(res.data, "overspeed");
+                        });
                     break;
                 }
             }
@@ -263,7 +275,10 @@ export default {
                         var scrollTop = this.$el.querySelector(
                             ".el-table__body-wrapper"
                         );
-                        scrollTop.scrollTop = (scrollTop.scrollHeight - scrollTop.clientHeight) / this.rank_num * evt.geometry.row
+                        scrollTop.scrollTop =
+                            ((scrollTop.scrollHeight - scrollTop.clientHeight) /
+                                this.rank_num) *
+                            evt.geometry.row;
                     }, 13);
                 });
             });
@@ -272,8 +287,14 @@ export default {
     mounted() {
         this.questData();
         this.lineClick();
+        setTimeout(() => {
+            this.getHeight();
+        }, 300);
+        window.addEventListener("resize", this.getHeight);
     },
-
+    destroyed() {
+        window.removeEventListener("resize", this.getHeight);
+    },
 };
 </script>
 

@@ -29,3 +29,14 @@ export default {
   },
 };
 </script>
+
+<style>
+/* .el-tabs__content {
+    height: 100%;
+    position: absolute;
+}
+
+.el-tab-pane{
+  height: 100%;
+} */
+</style>

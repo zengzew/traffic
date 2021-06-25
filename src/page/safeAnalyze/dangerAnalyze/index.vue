@@ -23,7 +23,7 @@ export default {
 #watch {
     /* transition: .3s; */
     position: absolute;
-    top: 10px;
+    top: 48px;
     bottom: 20px;
     transition: 0.3s;
 }

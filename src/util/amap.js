@@ -9,9 +9,12 @@ const tmap = {
       callback = callback || function () {};
       // 添加script属性，并添加到head中  ,`${axios.seiyaUrl}/static/vplugin/seiya.js`
       const urls = [
+        // `${
+        //   mapEnv.type === 'pubNet' ? mapEnv.pubNet.mapUrl : mapEnv.privNet.mapUrl
+        // }/api/gljs?v=1.exp&libraries=model,visualization&callback=initAmap`,
         `${
           mapEnv.type === 'pubNet' ? mapEnv.pubNet.mapUrl : mapEnv.privNet.mapUrl
-        }/api/gljs?v=1.exp&libraries=model,visualization&callback=initAmap`,
+        }/api/gljs?v=1.exp&libraries=model,visualization&callback=initAmap&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77`,
       ];
       const loader = function (src, handler) {
         const script = document.createElement('script');

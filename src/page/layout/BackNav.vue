@@ -5,13 +5,14 @@
       <span class="backText" @click="goRouterBack">返回</span>
       <!--业务名称组件-->
       <span class="configText" v-if="$route.name === 'configuration'">业务配置 / </span>
-      <span class="back-nav-title" v-if="!orderSelectList.includes($route.name)">
+      <span class="back-nav-title">
         <el-select
           v-model="currentOrder"
           value-key="serviceid"
           class="orderSelect"
           size="medium"
           placeholder="请选择业务"
+          v-if="!selectOrderList.includes($route.name)"
         >
           <el-option v-for="item in orderList" :key="item.serviceid" :label="item.servicename" :value="item">
           </el-option>
@@ -21,7 +22,7 @@
     <!--行政区域选择组件-->
     <div class="citySelects" >
       <DistrictSelects v-if="citySelectList.includes($route.name)"></DistrictSelects>
-      <div v-if="!!this.managePerms" class="manageText" @click="gotoManange">
+      <div v-if="!!this.managePerms & !selectOrderList.includes($route.name) " class="manageText" @click="gotoManange">
         <span><img src="../../../src/assets/images/icon_datamanagement@2x.png" />数据管理</span>
       </div>
     </div>
@@ -30,7 +31,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import DistrictSelects from './DistrictSelects';
-import { backRouterWhiteList, citySelectList, orderSelectList } from '../../router/whiteList';
+import { backRouterWhiteList, citySelectList, orderSelectList,selectOrderList } from '../../router/whiteList';
 
 export default {
   components: {
@@ -41,6 +42,7 @@ export default {
       backRouterWhiteList,
       citySelectList,
       orderSelectList,
+      selectOrderList,
       defaultPage: '首页',
       value: '北京市',
       cityValue: '北京市',
@@ -85,7 +87,8 @@ export default {
     },
     goRouterBack() {
 
-      this.$router.push({name: 'multiOrder'});
+      // this.$router.push({name: 'multiOrder'});
+      this.$router.push({name: 'select'});
       // this.$store.state.tagNav.activePage = '首页';
     },
   },
