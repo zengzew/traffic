@@ -225,6 +225,7 @@ export default {
                     this.$API.safeAnalyze
                         .accelerateDataGet(this.rank_num)
                         .then((res) => {
+                            console.log("急加速排行返回的数据",res.data)
                             this.tableData = res.data;
                             this.loading = false;
                             this.drawLine(res.data, "accelerate");
@@ -235,6 +236,7 @@ export default {
                     this.$API.safeAnalyze
                         .overspeedDataGet(this.rank_num)
                         .then((res) => {
+                            console.log("超速排行返回的数据",res.data)
                             this.tableData = res.data;
                             this.loading = false;
                             this.drawLine(res.data, "overspeed");
