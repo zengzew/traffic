@@ -18,6 +18,17 @@
         <div id="chart"></div>
       </div>
       <div class="tablecontainer">
+        <div class="timepickerFake">
+          <span class="demonstration"></span>
+          <el-date-picker
+            v-model="timestamp"
+            type="date"
+            placeholder="选择日期"
+            :picker-options="pickerOptions"
+            value-format="timestamp"
+          >
+          </el-date-picker>
+        </div>
         <div id="tabletitle">历史路段累计数量</div>
         <div class="tableContent">
           <div id="deadline">
@@ -324,7 +335,7 @@ export default {
             emphasis: {
               label: {
                 show: true,
-                fontSize: "25",
+                fontSize: this.fontSize(0.2),
                 fontWeight: "bold",
               },
             },
@@ -618,6 +629,17 @@ export default {
         });
       });
     },
+    //echart字体大小换算
+    fontSize(res) {
+      let docEl = document.documentElement,
+        clientHeight =
+          window.innerHeihgt ||
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      if (!clientHeight) return;
+      let fontSize = 100 * (clientHeight / 1080);
+      return res * fontSize;
+    },
   },
 };
 </script>
@@ -631,6 +653,7 @@ export default {
 #tabletitle {
   font-weight: bold;
   font-size: 1.5rem;
+  margin-top: 5%;
 }
 #charttitle {
   font-weight: bold;
@@ -653,19 +676,16 @@ export default {
   width: 45%;
   height: 90%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column;
 }
 
-.tableContent {
-  //   margin-top: 15%;
-}
-
 .timepicker {
-  padding-top: 6%;
-  //   position: relative;
-  //   left: 100%;
-  //   transform: translateX(-50%);
+  padding-top: 2rem;
+}
+.timepickerFake {
+  visibility: hidden;
+  padding-top: 2rem;
 }
 
 .main {
