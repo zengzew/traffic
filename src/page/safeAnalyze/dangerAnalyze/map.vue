@@ -72,7 +72,6 @@ export default {
 
             // 初始化 Line
             this.initLine();
-
         },
         // 实时路况图层
         trailSetPath() {
@@ -171,14 +170,18 @@ export default {
                         width: 8, //折线宽度
                         borderWidth: 2, //边线宽度
                         lineCap: "round", //线端头方式
+                        showArrow: true,
+                        arrowOptions: { width: 10, height: 20, space: 30 },
                     }),
                     highlight: new TMap.PolylineStyle({
                         color: "#51A7D7", //线填充色
                         width: 8, //折线宽度
                         borderWidth: 2, //边线宽度
                         lineCap: "round", //线端头方式
+                        showArrow: true,
+                        arrowOptions: { width: 10, height: 20, space: 50 },
                     }),
-                }
+                },
             });
         },
     },
@@ -187,7 +190,8 @@ export default {
             clearInterval(this.timer); // 在Vue实例销毁前，清除我们的定时器
         }
         // 销毁线标记
-        this.$store.state.safeAnalysis.line && this.$store.state.safeAnalysis.line.destroy();
+        this.$store.state.safeAnalysis.line &&
+            this.$store.state.safeAnalysis.line.destroy();
         // 离开后销毁地图
         this.$store.state.safeAnalysis.map &&
             this.$store.state.safeAnalysis.map.destroy();

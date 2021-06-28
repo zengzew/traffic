@@ -43,7 +43,7 @@ const safeAnalyze = {
     overspeedDataGet: (params) =>
         promiseAxios(
             axios({
-                url: `http://82.156.230.142:10900/track/v1/accelerate/gettop?rank_num=${params}`,
+                url: `http://82.156.230.142:10900/track/v1/overspeed/gettop?rank_num=${params}`,
                 type: "get",
                 withCredentials: false,
             })

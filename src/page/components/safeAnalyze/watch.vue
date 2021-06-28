@@ -57,6 +57,7 @@
                 <el-table-column
                     :prop="propName"
                     :label="label2"
+                    :formatter="tableFormatter"
                 ></el-table-column>
             </el-table>
         </template>
@@ -74,7 +75,7 @@ export default {
             loading: false,
             tableData: [],
             scrollTop: "",
-            rank_num: 20, //请求排行榜前20
+            rank_num: 30, //请求排行榜前20
         };
     },
     computed: {
@@ -196,7 +197,7 @@ export default {
         },
         getHeight() {
             this.tableHeight = window.innerHeight - 100;
-            this.tableHeight1 = window.innerHeight - 380;
+            this.tableHeight1 = window.innerHeight-200;
         },
         questData() {
             this.loading = true;
@@ -282,6 +283,10 @@ export default {
                     }, 13);
                 });
             });
+        },
+        // 格式化表格数据，让其精确到小数点后两位
+        tableFormatter(row,col,val,index){
+            return val.toFixed(2)
         },
     },
     mounted() {
