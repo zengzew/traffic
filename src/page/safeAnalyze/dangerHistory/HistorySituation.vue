@@ -297,7 +297,7 @@ export default {
           zlevel: 0,
           text: ["路段数（条): " + this.totalnum],
           x: "center",
-          y: "60%",
+          y: "bottom",
           textAlign: "left",
           textStyle: { fontSize: 15 },
         },
@@ -630,11 +630,13 @@ export default {
 }
 #tabletitle {
   font-weight: bold;
+  font-size: 1.5rem;
 }
 #charttitle {
   font-weight: bold;
   position: relative;
   margin-top: 5%;
+  font-size: 1.5rem;
 }
 #deadline {
   padding-left: 100px;
@@ -660,6 +662,7 @@ export default {
 }
 
 .timepicker {
+  padding-top: 6%;
   //   position: relative;
   //   left: 100%;
   //   transform: translateX(-50%);
