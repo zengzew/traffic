@@ -57,6 +57,7 @@
                 <el-table-column
                     :prop="propName"
                     :label="label2"
+                    :formatter="tableFormatter"
                 ></el-table-column>
             </el-table>
         </template>
@@ -282,6 +283,10 @@ export default {
                     }, 13);
                 });
             });
+        },
+        // 格式化表格数据，让其精确到小数点后两位
+        tableFormatter(row,col,val,index){
+            return val.toFixed(2)
         },
     },
     mounted() {
