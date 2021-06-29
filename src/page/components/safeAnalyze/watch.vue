@@ -76,6 +76,7 @@ export default {
             tableData: [],
             scrollTop: "",
             rank_num: 30, //请求排行榜前20
+            segidToLinkNum: {}, //记录每条路有多少条link的对象
         };
     },
     computed: {
@@ -175,21 +176,34 @@ export default {
             this.$API.safeAnalyze
                 .segLocation(seg_ids.join(","), type)
                 .then((res) => {
-                    console.log(res.data);
+                    console.log(res.data)
                     res.data.forEach((ele) => {
                         var paths = [];
-                        var coords = ele.coords.split(";");
-                        coords.forEach((element) => {
-                            var lntlat = element.split(",");
-                            paths.push(new TMap.LatLng(lntlat[1], lntlat[0]));
-                        });
                         var row = seg_ids.indexOf(ele.segId);
-                        geometries.push({
-                            id: ele.segId,
-                            row,
-                            styleId: "default",
-                            paths,
+                        var coords = (ele.coords + ";").split(";");
+                        coords.pop();
+                        coords.forEach((element, index) => {
+                            var lntlat = element.split(",");
+                            for (
+                                var count = 0;
+                                count < lntlat.length;
+                                count = count + 2
+                            ) {
+                                paths.push(
+                                    new TMap.LatLng(
+                                        lntlat[count + 1],
+                                        lntlat[count]
+                                    )
+                                );
+                            }
+                            geometries.push({
+                                id: ele.segId + "-" + String(index),
+                                row,
+                                styleId: "default",
+                                paths,
+                            });
                         });
+                        this.segidToLinkNum[ele.segId] = coords.length;
                     });
                     this.$store.state.safeAnalysis.line.setGeometries(
                         geometries
@@ -249,20 +263,32 @@ export default {
         handleCurrentChange(data) {
             if (data) {
                 var seg_id = data.seg_id;
+                var link_num = this.segidToLinkNum[seg_id];
                 var geometries =
                     this.$store.state.safeAnalysis.line.getGeometries();
                 geometries.forEach((ele) => {
                     ele.styleId = "default";
                 });
                 this.$store.state.safeAnalysis.line.setGeometries(geometries);
-                var geometry =
-                    this.$store.state.safeAnalysis.line.getGeometryById(seg_id);
-                this.$store.state.safeAnalysis.map.setCenter(
-                    geometry.paths[Math.floor(geometry.paths.length / 2)]
-                );
-                this.$store.state.safeAnalysis.map.setZoom(17);
-                geometry.styleId = "highlight";
-                this.$store.state.safeAnalysis.line.updateGeometries(geometry);
+
+                for (var i = 0; i < link_num; i++) {
+                    var geometry =
+                        this.$store.state.safeAnalysis.line.getGeometryById(
+                            seg_id + "-" + i
+                        );
+                    if (i == Math.floor((link_num-1)/2)) {
+                        this.$store.state.safeAnalysis.map.setCenter(
+                            geometry.paths[
+                                Math.floor(geometry.paths.length / 2)
+                            ]
+                        );
+                        this.$store.state.safeAnalysis.map.setZoom(17);
+                    }
+                    geometry.styleId = "highlight";
+                    this.$store.state.safeAnalysis.line.updateGeometries(
+                        geometry
+                    );
+                }
             }
         },
         //地图上线条的点击事件，由于要等待表格加载完成再设置，故写在这里

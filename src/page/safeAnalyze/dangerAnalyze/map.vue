@@ -170,16 +170,16 @@ export default {
                         width: 8, //折线宽度
                         borderWidth: 2, //边线宽度
                         lineCap: "round", //线端头方式
-                        showArrow: true,
-                        arrowOptions: { width: 10, height: 20, space: 30 },
+                        // showArrow: true,
+                        // arrowOptions: { width: 10, height: 20, space: 30 },
                     }),
                     highlight: new TMap.PolylineStyle({
                         color: "#51A7D7", //线填充色
                         width: 8, //折线宽度
                         borderWidth: 2, //边线宽度
                         lineCap: "round", //线端头方式
-                        showArrow: true,
-                        arrowOptions: { width: 10, height: 20, space: 50 },
+                        // showArrow: true,
+                        // arrowOptions: { width: 10, height: 20, space: 50 },
                     }),
                 },
             });
