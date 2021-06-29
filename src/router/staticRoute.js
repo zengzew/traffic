@@ -71,7 +71,7 @@ const staticRoute = [
     },
     {
         path: "/select",
-        name: "选择平台界面",
+        name: "",
         // component: () => import('../page/select'),
         component: Layout,
         meta: {
@@ -88,7 +88,7 @@ const staticRoute = [
     },
     {
       path: "/dangerAnalyze",
-      name: "安全隐患分析",
+      name: "",
       component: Layout,
       meta: {
           keepAlive: false,
@@ -100,23 +100,43 @@ const staticRoute = [
               component: () => import("../page/safeAnalyze/dangerAnalyze"),
               meta: { keepAlive: false },
           },
-        //   {
-        //     path: "/dangerAnalyze",
-        //     name: "安全隐患分析",
-        //     component: () => import("../page/safeAnalyze/dangerAnalyze"),
-        //     meta: { keepAlive: false },
-        // },
-        // {
-        //   path: "/dangerHistory",
-        //   name: "安全隐患历史统计分析",
-        //   component: () => import("../page/safeAnalyze/dangerHistory"),
-        //   meta: { keepAlive: false },
-        // },
       ],
   },
   {
+    path: "/trafficAnalyze",
+    name: "",
+    component: Layout,
+    meta: {
+        keepAlive: false,
+    },
+    children: [
+        {
+            path: "",
+            name: "trafficAnalyze",
+            component: () => import("../page/safeAnalyze/trafficAnalyze"),
+            meta: { keepAlive: false },
+        },
+    ],
+},
+{
+    path: "/dangerPotential",
+    name: "",
+    component: Layout,
+    meta: {
+        keepAlive: false,
+    },
+    children: [
+        {
+            path: "",
+            name: "dangerPotential",
+            component: () => import("../page/safeAnalyze/dangerPotential"),
+            meta: { keepAlive: false },
+        },
+    ],
+},
+  {
     path: "/dangerHistory",
-    name: "隐患历史统计分析",
+    name: "",
     component: Layout,
     meta: {
         keepAlive: false,
@@ -128,18 +148,6 @@ const staticRoute = [
             component: () => import("../page/safeAnalyze/dangerHistory"),
             meta: { keepAlive: false },
         },
-      //   {
-      //     path: "/dangerAnalyze",
-      //     name: "安全隐患分析",
-      //     component: () => import("../page/safeAnalyze/dangerAnalyze"),
-      //     meta: { keepAlive: false },
-      // },
-      // {
-      //   path: "/dangerHistory",
-      //   name: "安全隐患历史统计分析",
-      //   component: () => import("../page/safeAnalyze/dangerHistory"),
-      //   meta: { keepAlive: false },
-      // },
     ],
 },
     {

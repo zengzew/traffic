@@ -5,6 +5,7 @@ const state = {
     turnGeometry: [],
     accelerateGeometry: [],
     overspeedGeometry: [],
+    isFromHistory:false, //是否从历史统计分析页面跳转过来
 }
 
 const mutations = {

@@ -175,6 +175,7 @@ export default {
             this.$API.safeAnalyze
                 .segLocation(seg_ids.join(","), type)
                 .then((res) => {
+                    console.log(res.data);
                     res.data.forEach((ele) => {
                         var paths = [];
                         var coords = ele.coords.split(";");
@@ -197,7 +198,7 @@ export default {
         },
         getHeight() {
             this.tableHeight = window.innerHeight - 100;
-            this.tableHeight1 = window.innerHeight-200;
+            this.tableHeight1 = window.innerHeight - 200;
         },
         questData() {
             this.loading = true;
@@ -285,8 +286,12 @@ export default {
             });
         },
         // 格式化表格数据，让其精确到小数点后两位
-        tableFormatter(row,col,val,index){
-            return val.toFixed(2)
+        tableFormatter(row, col, val, index) {
+            if (val) {
+                return val.toFixed(2);
+            } else {
+                return val;
+            }
         },
     },
     mounted() {

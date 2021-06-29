@@ -24,9 +24,17 @@ const AiCalPlatformNavList = [
     name:'安全隐患分析',
   },
   {
+    path:'/trafficAnalyze',
+    name:"交通事故分析",
+  },
+  {
+    path:'/dangerPotential',
+    name:"潜在安全隐患挖掘",
+  },
+  {
     path:'/dangerHistory',
     name:"历史统计分析",
-  }
+  },
 ]
 
 const state = {
