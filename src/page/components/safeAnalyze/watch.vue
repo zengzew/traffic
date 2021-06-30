@@ -176,14 +176,15 @@ export default {
             this.$API.safeAnalyze
                 .segLocation(seg_ids.join(","), type)
                 .then((res) => {
-                    console.log(res.data)
+                    console.log(res.data);
                     res.data.forEach((ele) => {
-                        var paths = [];
                         var row = seg_ids.indexOf(ele.segId);
                         var coords = (ele.coords + ";").split(";");
                         coords.pop();
                         coords.forEach((element, index) => {
+                            var paths = [];
                             var lntlat = element.split(",");
+                            var linkOrder = ele.linkOrders.split(";")[index];
                             for (
                                 var count = 0;
                                 count < lntlat.length;
@@ -195,6 +196,9 @@ export default {
                                         lntlat[count]
                                     )
                                 );
+                            }
+                            if (Number(linkOrder)) {
+                                paths.reverse();
                             }
                             geometries.push({
                                 id: ele.segId + "-" + String(index),
@@ -221,6 +225,7 @@ export default {
                     this.$API.safeAnalyze
                         .brakeDataGet(this.rank_num)
                         .then((res) => {
+                            console.log(res.data);
                             this.tableData = res.data;
                             this.loading = false;
                             this.drawLine(res.data, "brake");
@@ -264,19 +269,21 @@ export default {
             if (data) {
                 var seg_id = data.seg_id;
                 var link_num = this.segidToLinkNum[seg_id];
-                var geometries =
-                    this.$store.state.safeAnalysis.line.getGeometries();
-                geometries.forEach((ele) => {
-                    ele.styleId = "default";
-                });
-                this.$store.state.safeAnalysis.line.setGeometries(geometries);
 
+                // var geometries =
+                //     this.$store.state.safeAnalysis.line.getGeometries();
+                // geometries.forEach((ele) => {
+                //     ele.styleId = "default";
+                // });
+                // this.$store.state.safeAnalysis.line.setGeometries(geometries);
+
+                var geometries = [];
                 for (var i = 0; i < link_num; i++) {
                     var geometry =
                         this.$store.state.safeAnalysis.line.getGeometryById(
                             seg_id + "-" + i
                         );
-                    if (i == Math.floor((link_num-1)/2)) {
+                    if (i == Math.floor((link_num - 1) / 2)) {
                         this.$store.state.safeAnalysis.map.setCenter(
                             geometry.paths[
                                 Math.floor(geometry.paths.length / 2)
@@ -285,30 +292,41 @@ export default {
                         this.$store.state.safeAnalysis.map.setZoom(17);
                     }
                     geometry.styleId = "highlight";
-                    this.$store.state.safeAnalysis.line.updateGeometries(
-                        geometry
-                    );
+                    // this.$store.state.safeAnalysis.line.updateGeometries(
+                    //     geometry
+                    // );
+                    geometries.push(geometry);
                 }
+                this.$store.state.safeAnalysis.activeLine.setGeometries(
+                    geometries
+                );
             }
         },
         //地图上线条的点击事件，由于要等待表格加载完成再设置，故写在这里
         lineClick() {
             this.$store.state.safeAnalysis.line.on("click", (evt) => {
-                this.$refs.safeAnalysis.setCurrentRow(
-                    this.tableData[evt.geometry.row]
-                );
-                // 设置滚动条位置
-                this.$nextTick(() => {
-                    setTimeout(() => {
-                        var scrollTop = this.$el.querySelector(
-                            ".el-table__body-wrapper"
-                        );
-                        scrollTop.scrollTop =
-                            ((scrollTop.scrollHeight - scrollTop.clientHeight) /
-                                this.rank_num) *
-                            evt.geometry.row;
-                    }, 13);
-                });
+                try {
+                    console.log(evt.geometry);
+                    this.$refs.safeAnalysis.setCurrentRow(
+                        this.tableData[evt.geometry.row]
+                    );
+                    // 设置滚动条位置
+                    this.$nextTick(() => {
+                        setTimeout(() => {
+                            var scrollTop = this.$el.querySelector(
+                                ".el-table__body-wrapper"
+                            );
+                            scrollTop.scrollTop =
+                                ((scrollTop.scrollHeight -
+                                    scrollTop.clientHeight) /
+                                    this.rank_num) *
+                                evt.geometry.row;
+                        }, 13);
+                    });
+                } 
+                catch(e) {
+                    return;
+                }
             });
         },
         // 格式化表格数据，让其精确到小数点后两位
