@@ -240,6 +240,11 @@ export default {
       tableHistorySituation: [],
     };
   },
+  created() {
+    this.updateChart(this.timestamp).then(() => {
+      this.calculateData(this.timestamp);
+    });
+  },
   mounted() {
     //取今天的数据
     this.historySituationGet(this.timestamp);
