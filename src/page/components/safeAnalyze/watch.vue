@@ -22,7 +22,6 @@
                 class="el-menu-demo"
                 mode="horizontal"
                 @select="handleSelect"
-                background-color="#E4E4E4"
                 text-color="#7E7E7E"
             >
                 <el-menu-item index="1">急刹车 </el-menu-item>
@@ -39,10 +38,11 @@
                 :data="tableData"
                 v-loading="loading"
                 element-loading-text="加载中"
-                element-loading-background="rgba(255, 255, 255,1)"
+                element-loading-background="rgba(1, 1, 1,1)"
                 style="width: 100%"
                 higlight-current-row
                 @current-change="handleCurrentChange"
+                :header-cell-style="{backgroundColor:'#374A63',color:'#ABBED9',borderRadius:'2px',borderBottom:'0'}"
             >
                 <el-table-column
                     type="index"
@@ -76,6 +76,7 @@ export default {
             tableData: [],
             scrollTop: "",
             rank_num: 30, //请求排行榜前20
+            segidToLinkNum: {}, //记录每条路有多少条link的对象
         };
     },
     computed: {
@@ -177,19 +178,36 @@ export default {
                 .then((res) => {
                     console.log(res.data);
                     res.data.forEach((ele) => {
-                        var paths = [];
-                        var coords = ele.coords.split(";");
-                        coords.forEach((element) => {
-                            var lntlat = element.split(",");
-                            paths.push(new TMap.LatLng(lntlat[1], lntlat[0]));
-                        });
                         var row = seg_ids.indexOf(ele.segId);
-                        geometries.push({
-                            id: ele.segId,
-                            row,
-                            styleId: "default",
-                            paths,
+                        var coords = (ele.coords + ";").split(";");
+                        coords.pop();
+                        coords.forEach((element, index) => {
+                            var paths = [];
+                            var lntlat = element.split(",");
+                            var linkOrder = ele.linkOrders.split(";")[index];
+                            for (
+                                var count = 0;
+                                count < lntlat.length;
+                                count = count + 2
+                            ) {
+                                paths.push(
+                                    new TMap.LatLng(
+                                        lntlat[count + 1],
+                                        lntlat[count]
+                                    )
+                                );
+                            }
+                            if (Number(linkOrder)) {
+                                paths.reverse();
+                            }
+                            geometries.push({
+                                id: ele.segId + "-" + String(index),
+                                row,
+                                styleId: "default",
+                                paths,
+                            });
                         });
+                        this.segidToLinkNum[ele.segId] = coords.length;
                     });
                     this.$store.state.safeAnalysis.line.setGeometries(
                         geometries
@@ -207,6 +225,7 @@ export default {
                     this.$API.safeAnalyze
                         .brakeDataGet(this.rank_num)
                         .then((res) => {
+                            console.log(res.data);
                             this.tableData = res.data;
                             this.loading = false;
                             this.drawLine(res.data, "brake");
@@ -249,40 +268,65 @@ export default {
         handleCurrentChange(data) {
             if (data) {
                 var seg_id = data.seg_id;
-                var geometries =
-                    this.$store.state.safeAnalysis.line.getGeometries();
-                geometries.forEach((ele) => {
-                    ele.styleId = "default";
-                });
-                this.$store.state.safeAnalysis.line.setGeometries(geometries);
-                var geometry =
-                    this.$store.state.safeAnalysis.line.getGeometryById(seg_id);
-                this.$store.state.safeAnalysis.map.setCenter(
-                    geometry.paths[Math.floor(geometry.paths.length / 2)]
+                var link_num = this.segidToLinkNum[seg_id];
+
+                // var geometries =
+                //     this.$store.state.safeAnalysis.line.getGeometries();
+                // geometries.forEach((ele) => {
+                //     ele.styleId = "default";
+                // });
+                // this.$store.state.safeAnalysis.line.setGeometries(geometries);
+
+                var geometries = [];
+                for (var i = 0; i < link_num; i++) {
+                    var geometry =
+                        this.$store.state.safeAnalysis.line.getGeometryById(
+                            seg_id + "-" + i
+                        );
+                    if (i == Math.floor((link_num - 1) / 2)) {
+                        this.$store.state.safeAnalysis.map.setCenter(
+                            geometry.paths[
+                                Math.floor(geometry.paths.length / 2)
+                            ]
+                        );
+                        this.$store.state.safeAnalysis.map.setZoom(17);
+                    }
+                    geometry.styleId = "highlight";
+                    // this.$store.state.safeAnalysis.line.updateGeometries(
+                    //     geometry
+                    // );
+                    geometries.push(geometry);
+                }
+                this.$store.state.safeAnalysis.activeLine.setGeometries(
+                    geometries
                 );
-                this.$store.state.safeAnalysis.map.setZoom(17);
-                geometry.styleId = "highlight";
-                this.$store.state.safeAnalysis.line.updateGeometries(geometry);
             }
         },
         //地图上线条的点击事件，由于要等待表格加载完成再设置，故写在这里
         lineClick() {
             this.$store.state.safeAnalysis.line.on("click", (evt) => {
-                this.$refs.safeAnalysis.setCurrentRow(
-                    this.tableData[evt.geometry.row]
-                );
-                // 设置滚动条位置
-                this.$nextTick(() => {
-                    setTimeout(() => {
-                        var scrollTop = this.$el.querySelector(
-                            ".el-table__body-wrapper"
-                        );
-                        scrollTop.scrollTop =
-                            ((scrollTop.scrollHeight - scrollTop.clientHeight) /
-                                this.rank_num) *
-                            evt.geometry.row;
-                    }, 13);
-                });
+                try {
+                    console.log(evt.geometry);
+                    this.$refs.safeAnalysis.setCurrentRow(
+                        this.tableData[evt.geometry.row]
+                    );
+                    // 设置滚动条位置
+                    this.$nextTick(() => {
+                        setTimeout(() => {
+                            var scrollTop = this.$el.querySelector(
+                                ".el-table__body-wrapper"
+                            );
+                            scrollTop.scrollTop =
+                                ((scrollTop.scrollHeight -
+                                    scrollTop.clientHeight) /
+                                    this.rank_num) *
+                                evt.geometry.row;
+                        }, 13);
+                    });
+                } 
+                catch(e) {
+                    return;
+                }
             });
         },
         // 格式化表格数据，让其精确到小数点后两位
@@ -333,6 +377,7 @@ export default {
     width: 42px;
     position: absolute;
     right: -63px;
+    top:4px;
     cursor: pointer;
     img {
         border: 1px solid rgba(202, 215, 237, 0.24);
@@ -360,6 +405,7 @@ export default {
     // border-bottom: none;
     width: 370px;
     margin: 0 auto;
+    padding-bottom: 5%;
     text-align: center;
 }
 
@@ -368,6 +414,30 @@ export default {
     display: inline-block;
     width: 25%;
     // padding: 0 25px;
+    color: #E2E8F1 !important;
+}
+
+.el-menu--horizontal > .el-menu-item {
+  border-bottom: none !important;
+}
+.el-menu--horizontal > .el-menu-item.is-active {
+  border-bottom: 2px solid #09D5DE !important;
+  padding-bottom: 1px !important;
+}
+
+.el-menu-item.is-active {
+      background-color: transparent !important;
+      color: #09D5DE !important;
+      border-bottom: 2px #09D5DE !important;
+      span {
+        color: #09D5DE !important;
+      }
+    }
+ 
+
+.el-menu-item:hover{
+    color: #09D5DE !important;
+    background-color: transparent !important;
 }
 
 #watch .el-table {
@@ -378,16 +448,37 @@ export default {
     // border-top: 1px solid #EBEEF5 !important;
 }
 
-.el-table__header-wrapper {
-    border-top: 1px solid #ebeef5 !important;
-}
-.el-table::before {
-    height: 0;
+.el-table::before{
+    height: 0 !important;
 }
 
-::-webkit-scrollbar {
-    width: 13px;
-    height: 10px;
-    background-color: #fff;
+.el-table__header-wrapper {
+    border-bottom: 0px !important;
 }
+
+
+.el-menu.el-menu--horizontal{
+    border-bottom: 0px !important;
+}
+
+/deep/.el-table td{
+	border-bottom: 0px !important;
+}
+
+/*滚动条整体样式*/
+/deep/ .el-table__body-wrapper::-webkit-scrollbar {
+  width: 8px; /*竖向滚动条的宽度*/
+  height: 10px; /*横向滚动条的高度*/
+}
+/deep/ .el-table__body-wrapper::-webkit-scrollbar-thumb {
+  /*滚动条里面的小方块*/
+  background: #9A9DA2;
+  border-radius: 4px;
+}
+/deep/ .el-table__body-wrapper::-webkit-scrollbar-track {
+  /*滚动条轨道的样式*/
+  background: #727C8A;
+}
+
+
 </style>

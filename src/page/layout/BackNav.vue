@@ -106,10 +106,11 @@ export default {
   height: 48px;
   z-index: 1000;
   padding: 1px 30px;
-  border-bottom: 1px solid #ddd;
-  box-shadow: 0 4px 10px 0 rgba(0, 44, 102, 0.05);
+  // border-bottom: 1px solid #ddd;
+  // box-shadow: 0 4px 10px 0 rgba(0, 44, 102, 0.05);
   box-sizing: border-box;
-
+  background-color: #1c2430;
+  color: #ACBACD;
   .back-nav-router {
     float: left;
     height: 50px;

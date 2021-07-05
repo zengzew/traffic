@@ -54,6 +54,7 @@ export default {
                 zoom: 13, //  13,
                 viewMode: "2D",
                 pitchable: false, // 1.0.12版本gl暂不包含该接口，设置无效, 使用时应在3D模式下
+                mapStyleId: 'style2'
             });
             // 设置控件位置
             const zoomCrl = this.$store.state.safeAnalysis.map.getControl(
@@ -66,9 +67,9 @@ export default {
                 TMap.constants.DEFAULT_CONTROL_ID.ROTATION
             );
             // 专网地图 个性化样式
-            this.$store.state.safeAnalysis.map.setMapStyleConfig({
-                style: GET_STYLE(),
-            });
+            // this.$store.state.safeAnalysis.map.setMapStyleConfig({
+            //     style: GET_STYLE(),
+            // });
 
             // 初始化 Line
             this.initLine();
@@ -162,6 +163,7 @@ export default {
             //创建 MultiPolyline
             this.$store.state.safeAnalysis.line = new TMap.MultiPolyline({
                 id: "polyline-layer", //图层唯一标识
+                zIndex:5,
                 map: this.$store.state.safeAnalysis.map, //绘制到目标地图
                 //折线样式定义
                 styles: {
@@ -171,8 +173,24 @@ export default {
                         borderWidth: 2, //边线宽度
                         lineCap: "round", //线端头方式
                         showArrow: true,
-                        arrowOptions: { width: 10, height: 20, space: 30 },
+                        arrowOptions: { width: 10, height: 20, space: 10 },
                     }),
+                    highlight: new TMap.PolylineStyle({
+                        color: "#51A7D7", //线填充色
+                        width: 8, //折线宽度
+                        borderWidth: 2, //边线宽度
+                        lineCap: "round", //线端头方式
+                        showArrow: true,
+                        arrowOptions: { width: 10, height: 20, space: 50 },
+                    }),
+                },
+            });
+            this.$store.state.safeAnalysis.activeLine = new TMap.MultiPolyline({
+                id: "polyline-layer-active", //图层唯一标识
+                map: this.$store.state.safeAnalysis.map, //绘制到目标地图
+                zIndex:5,
+                //折线样式定义
+                styles: {
                     highlight: new TMap.PolylineStyle({
                         color: "#51A7D7", //线填充色
                         width: 8, //折线宽度
@@ -192,6 +210,9 @@ export default {
         // 销毁线标记
         this.$store.state.safeAnalysis.line &&
             this.$store.state.safeAnalysis.line.destroy();
+
+        this.$store.state.safeAnalysis.activeLine &&
+            this.$store.state.safeAnalysis.activeLine.destroy();
         // 离开后销毁地图
         this.$store.state.safeAnalysis.map &&
             this.$store.state.safeAnalysis.map.destroy();

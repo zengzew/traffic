@@ -1,6 +1,7 @@
 <template>
     <div id="container">
         <map2></map2>
+        <div class="colorbar"></div>
         <watch id="watch" ></watch>
         <div style="clear: both"></div>
     </div>
@@ -26,6 +27,15 @@ export default {
     top: 48px;
     bottom: 20px;
     transition: 0.3s;
+}
+
+.colorbar{
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    top: 48px;
+    background-color: #1C2430;
+    z-index: 10000;
 }
 
 </style>

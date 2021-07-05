@@ -240,10 +240,12 @@ export default {
       tableHistorySituation: [],
     };
   },
-  created() {
-    this.updateChart(this.timestamp).then(() => {
-      this.calculateData(this.timestamp);
-    });
+  //默认读取当前数据，并渲染
+  created(){
+        this.updateChart(this.timestamp).then(() => {
+        this.calculateData(this.timestamp);
+      });
+     
   },
   mounted() {
     //取今天的数据
@@ -351,7 +353,7 @@ export default {
               { value: this.turnnum, name: "急转弯路段" },
               { value: this.acceleratenum, name: "急加速路段" },
               { value: this.brakenum, name: "急刹路段" },
-              { value: this.acceleratenum, name: "超速路段" },
+              { value: this.overspeednum, name: "超速路段" },
             ],
           },
         ],

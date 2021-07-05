@@ -1,6 +1,7 @@
 const state = {
     map:"",
     line:"",
+    activeLine:"",
     brakeGeometry: [],
     turnGeometry: [],
     accelerateGeometry: [],
