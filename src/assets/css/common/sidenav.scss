@@ -67,15 +67,16 @@
             /* 无下级菜单的menu-item */
             & > .el-menu-item{
                 font-size: 15px;
-                color: #555B6D;
+                color: #ABBED9;
                 &:hover{
                     //background-color: rgba(0,98,255,0.08);
+                    background-color: #2D3C51 !important;
                 }
                 &.is-active{
                     //background-color: transparent;
-                    background: rgba(0,98,255,0.08);
-                    border-bottom-color:  #607EF6;
-                    color: #0062FF;
+                    background-image: linear-gradient(to top, rgba(0,250,255,.13),rgba(40,141,180,0)); // rgba(0,98,255,0.08);
+                    border-bottom-color: #00FAFF; //#607EF6;
+                    color: #00FAFF ;// #0062FF;
                     font-weight: 600;
                 }
             }

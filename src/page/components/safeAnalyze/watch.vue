@@ -22,7 +22,6 @@
                 class="el-menu-demo"
                 mode="horizontal"
                 @select="handleSelect"
-                background-color="#E4E4E4"
                 text-color="#7E7E7E"
             >
                 <el-menu-item index="1">急刹车 </el-menu-item>
@@ -39,10 +38,11 @@
                 :data="tableData"
                 v-loading="loading"
                 element-loading-text="加载中"
-                element-loading-background="rgba(255, 255, 255,1)"
+                element-loading-background="rgba(1, 1, 1,1)"
                 style="width: 100%"
                 higlight-current-row
                 @current-change="handleCurrentChange"
+                :header-cell-style="{backgroundColor:'#374A63',color:'#ABBED9',borderRadius:'2px',borderBottom:'0'}"
             >
                 <el-table-column
                     type="index"
@@ -377,6 +377,7 @@ export default {
     width: 42px;
     position: absolute;
     right: -63px;
+    top:4px;
     cursor: pointer;
     img {
         border: 1px solid rgba(202, 215, 237, 0.24);
@@ -404,6 +405,7 @@ export default {
     // border-bottom: none;
     width: 370px;
     margin: 0 auto;
+    padding-bottom: 5%;
     text-align: center;
 }
 
@@ -412,6 +414,30 @@ export default {
     display: inline-block;
     width: 25%;
     // padding: 0 25px;
+    color: #E2E8F1 !important;
+}
+
+.el-menu--horizontal > .el-menu-item {
+  border-bottom: none !important;
+}
+.el-menu--horizontal > .el-menu-item.is-active {
+  border-bottom: 2px solid #09D5DE !important;
+  padding-bottom: 1px !important;
+}
+
+.el-menu-item.is-active {
+      background-color: transparent !important;
+      color: #09D5DE !important;
+      border-bottom: 2px #09D5DE !important;
+      span {
+        color: #09D5DE !important;
+      }
+    }
+ 
+
+.el-menu-item:hover{
+    color: #09D5DE !important;
+    background-color: transparent !important;
 }
 
 #watch .el-table {
@@ -422,16 +448,37 @@ export default {
     // border-top: 1px solid #EBEEF5 !important;
 }
 
-.el-table__header-wrapper {
-    border-top: 1px solid #ebeef5 !important;
-}
-.el-table::before {
-    height: 0;
+.el-table::before{
+    height: 0 !important;
 }
 
-::-webkit-scrollbar {
-    width: 13px;
-    height: 10px;
-    background-color: #fff;
+.el-table__header-wrapper {
+    border-bottom: 0px !important;
 }
+
+
+.el-menu.el-menu--horizontal{
+    border-bottom: 0px !important;
+}
+
+/deep/.el-table td{
+	border-bottom: 0px !important;
+}
+
+/*滚动条整体样式*/
+/deep/ .el-table__body-wrapper::-webkit-scrollbar {
+  width: 8px; /*竖向滚动条的宽度*/
+  height: 10px; /*横向滚动条的高度*/
+}
+/deep/ .el-table__body-wrapper::-webkit-scrollbar-thumb {
+  /*滚动条里面的小方块*/
+  background: #9A9DA2;
+  border-radius: 4px;
+}
+/deep/ .el-table__body-wrapper::-webkit-scrollbar-track {
+  /*滚动条轨道的样式*/
+  background: #727C8A;
+}
+
+
 </style>

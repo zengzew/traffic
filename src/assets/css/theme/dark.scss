@@ -1,4 +1,4 @@
-$themeColor: #242633;
+$themeColor:  #2D3C51; //#242633
 // $themeColor: #465873;
 $baseImageURL: '~sysStatic/images/dark/';
 
@@ -26,6 +26,7 @@ $loginLangCurColor: $themeColor;
 
 /* header */
 $headerBgColor: $themeColorDarken;
+$headerColor: #fff !default;     //#1B202C
 
 /* nav */
 $leftNavBg: $themeColor;

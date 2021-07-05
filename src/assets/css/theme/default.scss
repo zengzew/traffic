@@ -59,10 +59,10 @@ $loginLangCurColor: $lighterGray !default;
 
 /* header */
 $headerHeight: 60px !default;
-$headerBgColor: #fff !default;
+$headerBgColor: #2D3C51 !default;   //#fff
 $headerBorderColor: none !default;
 $headerShadow: $transparent !default;
-$headerColor: #1B202C !default;
+$headerColor:  #D5D8E3 !default;     //#1B202C
 $headerFontSize: 20px !default;
 $headerFontFamily: "TTTGBMedium";
 
@@ -83,7 +83,7 @@ $topNavItemActiveBg: $themeColorLighter !default;
 
 $topSubNavBg: $white !default;
 $topSubNavItemColor: $themeColorDarken !default;
-$topSubNavItemHover: darken($topSubNavBg, 5%) !default;
+$topSubNavItemHover: linear-gradient(to top, #00FAFF , #2C4155) !default; //darken($topSubNavBg, 5%)
 
 /* sysNotes */
 $notesBgColor: $lighterGray !default;

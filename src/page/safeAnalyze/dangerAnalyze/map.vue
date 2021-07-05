@@ -54,6 +54,7 @@ export default {
                 zoom: 13, //  13,
                 viewMode: "2D",
                 pitchable: false, // 1.0.12版本gl暂不包含该接口，设置无效, 使用时应在3D模式下
+                mapStyleId: 'style2'
             });
             // 设置控件位置
             const zoomCrl = this.$store.state.safeAnalysis.map.getControl(
@@ -66,9 +67,9 @@ export default {
                 TMap.constants.DEFAULT_CONTROL_ID.ROTATION
             );
             // 专网地图 个性化样式
-            this.$store.state.safeAnalysis.map.setMapStyleConfig({
-                style: GET_STYLE(),
-            });
+            // this.$store.state.safeAnalysis.map.setMapStyleConfig({
+            //     style: GET_STYLE(),
+            // });
 
             // 初始化 Line
             this.initLine();

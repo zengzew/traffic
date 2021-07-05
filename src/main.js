@@ -4,6 +4,7 @@ import 'sysStatic/css/theme-default.scss';
 
 import 'babel-polyfill';
 import Vue from 'vue';
+import "./assets/css/elementUITheme/index.css"
 import ElementUI, { Message } from 'element-ui';
 import router from './router';
 import store from './store';

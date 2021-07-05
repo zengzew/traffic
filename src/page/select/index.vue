@@ -41,6 +41,7 @@ export default {
     justify-content: space-evenly;
     align-items: center;
     min-height: 600px;
+    background-size:100% 100%;
 }
 
 .aipp-select-item{
@@ -54,10 +55,11 @@ export default {
 .diamond {
     width: 200px;
     height: 200px;
-    background: #2d5d81;
+    background:#0b0d168c;
     cursor: pointer;
     transition: 0.4s;
     transform:rotate(45deg);
+    border: #fff 1px solid;
 }
 
 .aipp-select-item:hover {
@@ -65,17 +67,19 @@ export default {
 }
 
 .aipp-select-item:hover .diamond {
-    box-shadow: 10px 5px 5px black;
+    box-shadow: 10px 5px 5px rgba(255, 255, 255, 0.486);
+    border-block-color: rgb(133, 129, 129);
+    background-color: #0b0d16c2;
 }
 
 .aipp-select-item:hover .platName {
-    text-shadow: 1px 1px 1px black;
+    text-shadow: 1px 1px 1px #fff;
 }
 
 .platName {
     margin-top: 20%;
     display: inline-block;
-    color: #2d5d81;
+    color: #fff;
     font-weight: 900;
     font-size: 2rem;
     transition: 0.4s;
