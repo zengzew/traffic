@@ -241,11 +241,10 @@ export default {
     };
   },
   //默认读取当前数据，并渲染
-  created(){
-        this.updateChart(this.timestamp).then(() => {
-        this.calculateData(this.timestamp);
-      });
-     
+  created() {
+    this.updateChart(this.timestamp).then(() => {
+      this.calculateData(this.timestamp);
+    });
   },
   mounted() {
     //取今天的数据
@@ -317,7 +316,7 @@ export default {
           x: "center",
           y: "bottom",
           textAlign: "left",
-          textStyle: { fontSize: 15 },
+          textStyle: { fontSize: 15, color: "#fff" },
         },
         tooltip: {
           trigger: "item",
@@ -326,6 +325,7 @@ export default {
           orient: "vertical",
           right: 0,
           top: "center",
+          textStyle: { color: "#fff" },
         },
         series: [
           {
@@ -350,10 +350,26 @@ export default {
               show: false,
             },
             data: [
-              { value: this.turnnum, name: "急转弯路段" },
-              { value: this.acceleratenum, name: "急加速路段" },
-              { value: this.brakenum, name: "急刹路段" },
-              { value: this.overspeednum, name: "超速路段" },
+              {
+                value: this.turnnum,
+                name: "急转弯路段",
+                itemStyle: { color: "#99ffa2" },
+              },
+              {
+                value: this.acceleratenum,
+                name: "急加速路段",
+                itemStyle: { color: "#f2f26d" },
+              },
+              {
+                value: this.brakenum,
+                name: "急刹路段",
+                itemStyle: { color: "#3a9099" },
+              },
+              {
+                value: this.overspeednum,
+                name: "超速路段",
+                itemStyle: { color: "#e68337" },
+              },
             ],
           },
         ],
@@ -661,12 +677,14 @@ export default {
   font-weight: bold;
   font-size: 1.5rem;
   margin-top: 5%;
+  color: white;
 }
 #charttitle {
   font-weight: bold;
   position: relative;
   margin-top: 5%;
   font-size: 1.5rem;
+  color: white;
 }
 #deadline {
   padding-left: 100px;
@@ -689,6 +707,7 @@ export default {
 
 .timepicker {
   padding-top: 2rem;
+  color: #fff;
 }
 .timepickerFake {
   visibility: hidden;
