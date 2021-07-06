@@ -49,7 +49,7 @@ export default {
 /deep/ .el-tabs__content {
   height: 100%;
   position: absolute;
-  margin: -1%;
+  margin: -14px;
 }
 
 /deep/ .el-tab-pane {
@@ -58,6 +58,6 @@ export default {
 }
 
 /deep/ .el-tabs__nav-scroll {
-  background-color: rgb(19, 40, 54);
+  background-color: rgb(33, 45, 61);
 }
 </style>

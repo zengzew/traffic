@@ -40,6 +40,7 @@
             :border="true"
             size="medium"
             :row-style="{ height: '40px' }"
+            :header-cell-style="{ background: '#374a63' }"
           >
             <el-table-column type="index"> </el-table-column>
             <el-table-column prop="type" label="路段类型"> </el-table-column>
@@ -743,5 +744,8 @@ export default {
 
 .el-row {
   width: 100%;
+}
+.el-table {
+  max-width: 70%;
 }
 </style>
