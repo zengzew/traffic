@@ -1,5 +1,5 @@
 <template>
-  <div class="haha">
+  <div id="haha">
     <el-tabs
       v-model="activeName"
       type="card"
@@ -18,7 +18,6 @@
 <script>
 import HistoryEvents from "./HistoryEvents.vue";
 import HistorySituation from "./HistorySituation.vue";
-
 export default {
   components: { HistorySituation, HistoryEvents },
   data() {
@@ -27,9 +26,8 @@ export default {
     };
   },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event);
-    },
+    //当切换到历史点事件标签页时，设置页面高不滚动
+    handleClick(tab, event) {},
     goBack() {
       this.$router.push({ name: "select" });
     },
@@ -37,19 +35,15 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.haha {
-  height: 100%;
+#haha {
   width: 100%;
   position: absolute;
-  top: 48px;
-  bottom: 0;
-  min-height: 600px;
 }
 
 /deep/ .el-tabs__content {
-  height: 100%;
-  position: absolute;
   margin: -14px;
+  overflow-y: scroll;
+  background-color: rgb(33, 45, 61);
 }
 
 /deep/ .el-tab-pane {

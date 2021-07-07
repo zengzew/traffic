@@ -449,22 +449,18 @@ export default {
 </script>
 <style lang="less">
 .eventsContainer {
-  margin: 0 200px;
-  height: 1080px;
+  margin: 0 10%;
+  height: 1147px;
   position: relative;
   .eventsTitle {
     color: #fff;
-    font-size: 3rem;
+    font-size: 2.5rem;
     display: flex;
     justify-content: center;
     padding: 1%;
   }
-  .el-form {
-    padding-top: 2%;
-  }
   .el-pagination {
-    position: absolute;
-    bottom: 0;
+    padding: 1% 0;
   }
 }
 
