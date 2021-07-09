@@ -1,7 +1,7 @@
 <template>
     <div class="analyze-watch" :class="{ active_a: !isActive }">
         <div class="wathc-packup">
-            <img
+            <!-- <img
                 class="packup"
                 @click="animate"
                 v-if="isActive"
@@ -13,6 +13,20 @@
                 @click="animate"
                 v-else
                 src="~sysStatic/images/right@2x.png"
+                alt=""
+            /> -->
+                        <img
+                class="packup"
+                @click="animate"
+                v-if="isActive"
+                src="~sysStatic/images/yi-1.png"
+                alt=""
+            />
+            <img
+                class="packup"
+                @click="animate"
+                v-else
+                src="~sysStatic/images/yi-2.png"
                 alt=""
             />
         </div>
@@ -382,6 +396,7 @@ export default {
     img {
         border: 1px solid rgba(202, 215, 237, 0.24);
         box-shadow: 0 4px 10px 0 rgba(0, 44, 102, 0.05);
+        border-radius: 5px;
     }
 }
 

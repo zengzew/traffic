@@ -134,6 +134,36 @@ const safeAnalyze = {
     // segLocation: (seg_ids) => {
     //     return jsonp(`http://82.156.230.142:10003/querySegById?`,{param:"segIds",name:seg_ids,output: 'jsonp'})
     // }
+
+    //全城事件点实时查询接口
+    allEventsPoints: () =>
+    promiseAxios(
+        axios({
+            url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/allPoint`,
+            type: "get",
+            withCredentials: false,
+        })
+    ),
+
+    //某一事件点详细数据接口
+    eventDetail: (event_id) =>
+    promiseAxios(
+        axios({
+            url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/eventDetail/${event_id}`,
+            type: "get",
+            withCredentials: false,
+        })
+    ),
+
+    //路段事件查看详情接口
+    segEvent: (seg_id) =>
+    promiseAxios(
+        axios({
+            url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/segEvent/${seg_id}`,
+            type: "get",
+            withCredentials: false,
+        })
+    ),
 };
 
 export default safeAnalyze;

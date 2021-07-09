@@ -1,12 +1,16 @@
 const state = {
     map:"",
     line:"",
+    mark:"",
     activeLine:"",
+    activeMark:"",
     brakeGeometry: [],
     turnGeometry: [],
     accelerateGeometry: [],
     overspeedGeometry: [],
-    isFromHistory:false, //是否从历史统计分析页面跳转过来
+    isFromHistory:false, //交通事故分析页面 是否从历史统计分析页面跳转过来
+    ifEventDetail:false, //交通事故分析页面 是否打开交通事故事件详情
+    activePointId:0,         //交通事故分析页面 被激活点的ID
 }
 
 const mutations = {
