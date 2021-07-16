@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+    <!-- 第一行 -->
     <div class="centerbox" ref="tablecontainer">
       <div class="chartcontainer">
         <div class="timepicker">
@@ -49,6 +50,7 @@
         </div>
       </div>
     </div>
+    <!-- 第二行 -->
     <div class="cardContainer">
       <el-row type="flex" justify="space-around">
         <el-col :span="4">
@@ -177,6 +179,7 @@
         </el-col>
       </el-row>
     </div>
+    <!-- 第三行 -->
     <div class="bottombox">
       <div class="chartcontainer">
         <div class="charttitle">事件数量对比情况</div>
@@ -222,6 +225,7 @@
         </div>
       </div>
     </div>
+    <!-- 第四行 -->
     <div class="bottomCardContainer">
       <el-row type="flex" justify="space-around" class="firstrow">
         <el-col :span="4">
@@ -389,27 +393,27 @@
               <span>高速事件数</span>
               <i style="float: right; padding: 0 3rem" class="el-icon-info"></i>
             </div>
-            <div>{{ haighwaynum }}</div>
+            <div>{{ highwaynum }}</div>
             <div class="datarow">
               <div class="gap">
                 日同比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(haighwaynumover > 0) & (haighwaynumover !== Infinity)"
+                  v-if="(highwayover > 0) & (highwayover !== Infinity)"
                 ></i>
-                <i class="el-icon-caret-bottom" v-if="haighwaynumover < 0"></i>
-                <i class="el-icon-minus" v-if="haighwaynumover == 0"> </i
-                >{{ haighwaynumover | percent }}
+                <i class="el-icon-caret-bottom" v-if="highwayover < 0"></i>
+                <i class="el-icon-minus" v-if="highwayover == 0"> </i
+                >{{ highwayover | percent }}
               </div>
               <div>
                 日环比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(haighwaynumon > 0) & (haighwaynumon !== Infinity)"
+                  v-if="(highwayon > 0) & (highwayon !== Infinity)"
                 ></i>
-                <i class="el-icon-caret-bottom" v-if="haighwaynumon < 0"></i>
-                <i class="el-icon-minus" v-if="haighwaynumon == 0"> </i
-                >{{ haighwaynumon | percent }}
+                <i class="el-icon-caret-bottom" v-if="highwayon < 0"></i>
+                <i class="el-icon-minus" v-if="highwayon == 0"> </i
+                >{{ highwayon | percent }}
               </div>
             </div>
           </el-card>
@@ -446,7 +450,7 @@ export default {
       roadworknum: 0,
       totalnumevents2: 0,
       citynum: 0,
-      haighwaynum: 0,
+      highwaynum: 0,
       accidentsum: 0,
       closesum: 0,
       jamsum: 0,
@@ -465,6 +469,18 @@ export default {
       accelerateon: 0,
       overspeedover: 0,
       overspeedon: 0,
+      accidenton: 0,
+      accidentover: 0,
+      closeon: 0,
+      closeover: 0,
+      jamon: 0,
+      jamover: 0,
+      roadworkon: 0,
+      roadworkover: 0,
+      cityon: 0,
+      cityover: 0,
+      highwayon: 0,
+      highwayover: 0,
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now();
@@ -511,8 +527,12 @@ export default {
   mounted() {
     //取今天的数据
     this.historySituationGet(this.timestamp);
+    this.eventsSituationGet(this.timestamp);
     //刷新表格中历史累计数据
     this.historySumGet().then(() => {
+      this.updateData();
+    });
+    this.eventsSumGet().then(() => {
       this.updateData();
     });
   },
@@ -523,7 +543,7 @@ export default {
       this.turnnum + this.brakenum + this.acceleratenum + this.overspeednum;
     this.totalnumevents1 =
       this.accidentnum + this.closenum + this.jamnum + this.roadworknum;
-    this.totalnumevents2 = this.citynum + this.citysum;
+    this.totalnumevents2 = this.citynum + this.highwaynum;
     this.drawChart();
     this.drawChartEvents1();
     this.drawChartEvents2();
@@ -751,7 +771,7 @@ export default {
             },
             data: [
               {
-                value: this.haighwaynum,
+                value: this.highwaynum,
                 name: "高速事件",
                 itemStyle: { color: "#99ffa2" },
               },
@@ -963,6 +983,76 @@ export default {
       );
       return Promise.all(promises);
     },
+    //事件数量查询
+    async eventsSituationGet(timestamp) {
+      let date = this.timestampToTime(timestamp);
+      var eventsSituation = new Array();
+      //查询刹车路段
+      await API.safeAnalyze
+        .eventsNumGet(date)
+        .then((res) => {
+          if (res.status === 0) {
+            EventsSituation[0] = event_num; //事故
+            EventsSituation[1] = event_num; //封路
+            EventsSituation[2] = event_num; //拥堵
+            EventsSituation[3] = event_num; //施工
+            EventsSituation[4] = event_num; //城内
+            EventsSituation[5] = event_num; //高速
+          } else {
+            this.$message({
+              message: "数据更新失败，请稍后重试",
+              type: "error",
+            });
+            date;
+          }
+        })
+        .catch((error) => {
+          this.$message({
+            message: "数据更新失败，请稍后重试",
+            type: error,
+          });
+        });
+      //查询急转弯路段
+      return eventsSituation;
+    },
+    //事件累计数量
+    eventsSumGet() {
+      let promises = [];
+      promises.push(
+        new Promise((resolve, reject) => {
+          // 查询累计急转弯路段
+          API.safeAnalyze
+            .eventsSumGet()
+            .then((res) => {
+              if (res.status === 0) {
+                this.accidentsum = res.event_num;
+                this.closesum = res.event_num;
+                this.jamsum = res.event_num;
+                this.roadworksum = res.event_num;
+                this.citysum = res.event_num;
+                this.highwaysum = res.event_num;
+                // 更新update日期
+                this.eventsdeadlinedate = res.update_time;
+                resolve();
+              } else {
+                this.$message({
+                  message: "数据更新失败，请稍后重试",
+                  type: "error",
+                });
+                resolve();
+              }
+            })
+            .catch((error) => {
+              this.$message({
+                message: "数据更新失败，请稍后重试",
+                type: error,
+              });
+              reject(error);
+            });
+        })
+      );
+      return Promise.all(promises);
+    },
     updateData() {
       this.tableHistorySituation.push(
         {
@@ -1020,18 +1110,21 @@ export default {
         let yesterdayturn = yesterdayData[1];
         let yesterdayaccelerate = yesterdayData[2];
         let yesterdayoverspeed = yesterdayData[3];
-        let yesterdayaccident = yesterdayData[4];
-        let yesterdayclose = yesterdayData[5];
-        let yesterdayjam = yesterdayData[6];
-        let yesterdayraodwork = yesterdayData[7];
-        let yesterdaycity = yesterdayData[8];
-        let yesterdayhighway = yesterdayData[9];
         this.brakeon = (this.brakenum - yesterdaybrake) / yesterdaybrake;
         this.turnon = (this.turnnum - yesterdayturn) / yesterdayturn;
         this.accelerateon =
           (this.acceleratenum - yesterdayaccelerate) / yesterdayaccelerate;
         this.overspeedon =
           (this.overspeednum - yesterdayoverspeed) / yesterdayoverspeed;
+      });
+      this.eventsSituationGet(timestamp - 86400000).then((res) => {
+        let yesterdayData = res;
+        let yesterdayaccident = yesterdayData[0];
+        let yesterdayclose = yesterdayData[1];
+        let yesterdayjam = yesterdayData[2];
+        let yesterdayraodwork = yesterdayData[3];
+        let yesterdaycity = yesterdayData[4];
+        let yesterdayhighway = yesterdayData[5];
         this.accidenton =
           (this.overspeednum - yesterdayaccident) / yesterdayaccident;
         this.closeon = (this.overspeednum - yesterdayclose) / yesterdayclose;
@@ -1050,19 +1143,22 @@ export default {
         let weekturn = weekData[1];
         let weekaccelerate = weekData[2];
         let weekoverspeed = weekData[3];
-        let weekaccident = weekData[4];
-        let weekclose = weekData[5];
-        let weekjam = weekData[6];
-        let weekroadwork = weekData[7];
-        let weekcity = weekData[8];
-        let weekhighway = weekData[9];
         this.brakeover = (this.brakenum - weekbrake) / weekbrake;
         this.turnover = (this.turnnum - weekturn) / weekturn;
         this.accelerateover =
           (this.acceleratenum - weekaccelerate) / weekaccelerate;
         this.overspeedover =
           (this.overspeednum - weekoverspeed) / weekoverspeed;
-
+      });
+      //同比
+      this.historySituationGet(timestamp - 604800000).then((res) => {
+        let weekData = res;
+        let weekaccident = weekData[0];
+        let weekclose = weekData[2];
+        let weekjam = weekData[3];
+        let weekroadwork = weekData[4];
+        let weekcity = weekData[5];
+        let weekhighway = weekData[6];
         this.accidentover = (this.accidentnum - weekaccident) / weekaccident;
         this.closeover = (this.closenum - weekclose) / weekclose;
         this.jamover = (this.jamnum - weekjam) / weekjam;
@@ -1094,6 +1190,18 @@ export default {
           this.turnnum = historyNumber[1];
           this.acceleratenum = historyNumber[2];
           this.overspeednum = historyNumber[3];
+          resolve();
+        });
+
+        this.eventsSituationGet(timestamp).then((res) => {
+          let eventsNumber;
+          eventsNumber = res;
+          this.accidentnum = eventsNumber[0];
+          this.closenum = eventsNumber[1];
+          this.jamnum = eventsNumber[2];
+          this.roadworknum = eventsNumber[3];
+          this.citynum = eventsNumber[4];
+          this.highwaynum = eventsNumber[5];
           resolve();
         });
       });

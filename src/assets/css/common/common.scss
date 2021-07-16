@@ -64,7 +64,7 @@
  {  
      width: 6px;
     height: 10px;
-     background-color: #fff;  
+     background-color: #2D3C51;  
  }  
  /*定义滑块 内阴影+圆角*/  
  ::-webkit-scrollbar-thumb {  
@@ -73,7 +73,7 @@
     width: 0;
     height: 0;
     cursor: pointer;
-    background-color: rgba(144,147,153,.3);
+    background-color: rgba(#00FAFF,.2);
     -webkit-transition: .3s background-color;
     transition: .3s background-color;
     border-radius: 10px;

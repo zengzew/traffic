@@ -1,15 +1,19 @@
 <template>
-  <div class="eventsContainer">
+  <div class="eventsContainer" ref="eventsContainer">
     <div class="eventsTitle">交通事件查询</div>
     <el-form :inline="true" :model="form" class="form">
       <el-form-item label="事件类型">
         <el-select v-model="form.type" clearable placeholder="请选择事件类型">
-          <el-option label="交通违规" value="type1"></el-option>
-          <el-option label="交通事故" value="type2"></el-option>
+          <el-option label="事故" value="1"></el-option>
+          <el-option label="封路" value="2"></el-option>
+          <el-option label="拥堵" value="3"></el-option>
+          <el-option label="施工" value="4"></el-option>
+          <el-option label="城内" value="5"></el-option>
+          <el-option label="高速" value="6"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="时间范围">
-        <el-date-picker
+        <!-- <el-date-picker
           v-model="form.daterange"
           type="daterange"
           align="right"
@@ -18,16 +22,30 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :picker-options="pickerOptions"
-          value-format="yyyyMMdd"
+          value-format="timestamp"
         >
-        </el-date-picker>
+        </el-date-picker> -->
+        <el-col :span="4">
+          <el-date-picker
+            v-model="form.projectStartDate"
+            :picker-options="startDatePicker"
+            type="date"
+            placeholder="开始日期"
+          ></el-date-picker>
+        </el-col>
+        <el-col :span="8">-</el-col>
+        <el-col :span="4">
+          <el-date-picker
+            v-model="form.projectEndDate"
+            :picker-options="endDatePicker"
+            type="date"
+            placeholder="结束日期"
+          ></el-date-picker>
+        </el-col>
+        <el-col :span="8">-</el-col>
       </el-form-item>
-      <el-form-item label="其他字段">
-        <el-select v-model="form.others" clearable placeholder="请选择">
-          <el-option label="地理空间所处范围" value="others1"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
+
+      <el-form-item label="">
         <el-button type="primary" @click="onSubmit">查询</el-button>
       </el-form-item>
     </el-form>
@@ -37,6 +55,7 @@
       style="width: 100%"
       size="medium"
       :header-cell-style="{ background: '#374a63' }"
+      :max-height="getTableHeight"
     >
       <el-table-column type="index"> </el-table-column>
       <el-table-column prop="id" label="事件编号"> </el-table-column>
@@ -69,41 +88,11 @@
 export default {
   data() {
     return {
+      startDatePicker: this.beginDate(),
+      endDatePicker: this.processDate(),
       form: {
         type: "",
-        daterange: "",
-        others: "",
-      },
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: "最近一周",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", [start, end]);
-            },
-          },
-          {
-            text: "最近一个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
-            },
-          },
-          {
-            text: "最近三个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
-            },
-          },
-        ],
+        daterange: new Date(),
       },
       pageList: [],
       rawList: [
@@ -409,13 +398,56 @@ export default {
       ],
       pageSize: 10,
       currentPage1: 1,
+      screenHeight: document.body.clientHeight, // 初始化时获取当前打开页面的高度
     };
   },
   mounted() {
     //this.getHistoryEvents();
     this.currentChangePage(this.rawList, 1);
+    // 窗口或页面被调整大小时触发事件
+    window.onresize = () => {
+      // 获取body的高度
+      this.screenHeight = document.body.clientHeight;
+    };
+  },
+  computed: {
+    //获取窗口大小调整表格大小，使panigation不被表格覆盖掉
+    getTableHeight() {
+      return this.screenHeight - 372;
+    },
   },
   methods: {
+    // 日期选择约束
+    beginDate() {
+      const self = this;
+      return {
+        disabledDate(time) {
+          if (self.form.projectEndDate) {
+            //如果结束时间不为空，则小于结束时间
+            return (
+              new Date(self.form.projectEndDate).getTime() < time.getTime()
+            );
+          } else {
+            return time.getTime() > Date.now(); //开始时间不选时，结束时间最大值小于等于当天
+          }
+        },
+      };
+    },
+    processDate() {
+      const self = this;
+      return {
+        disabledDate(time) {
+          if (self.form.projectStartDate) {
+            //如果开始时间不为空，则结束时间大于开始时间
+            return (
+              new Date(self.form.projectStartDate).getTime() > time.getTime()
+            );
+          } else {
+            return time.getTime() > Date.now(); //开始时间不选时，结束时间最大值小于等于当天
+          }
+        },
+      };
+    },
     onSubmit() {
       console.log("submite!", this.form);
     },
@@ -450,20 +482,22 @@ export default {
 <style lang="less">
 .eventsContainer {
   margin: 0 10%;
-  height: 1147px;
-  position: relative;
+  min-height: 88.4vh;
   .eventsTitle {
     color: #fff;
-    font-size: 2.5rem;
+    font-size: 2rem;
     display: flex;
     justify-content: center;
     padding: 1%;
   }
   .el-pagination {
     padding: 1% 0;
+    bottom: 0;
+    position: absolute;
   }
 }
 
+//修改timepicker样式
 .el-date-table td.in-range div {
   background-color: #3e6baf !important;
 }

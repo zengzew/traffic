@@ -1,5 +1,5 @@
 <template>
-  <div id="haha">
+  <div class="haha">
     <el-tabs
       v-model="activeName"
       type="card"
@@ -22,7 +22,7 @@ export default {
   components: { HistorySituation, HistoryEvents },
   data() {
     return {
-      activeName: "first",
+      activeName: "second",
     };
   },
   methods: {
@@ -35,13 +35,14 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-#haha {
+.haha {
   width: 100%;
   position: absolute;
 }
 
 /deep/ .el-tabs__content {
   margin: -14px;
+  height: 100%;
   overflow-y: scroll;
   background-color: rgb(33, 45, 61);
 }
