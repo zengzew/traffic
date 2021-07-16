@@ -7,7 +7,6 @@ import axios from ".././ajax";
 import jsonp from "./../jsonp";
 import { promiseAxios } from "./apiUtil";
 
-
 const safeAnalyze = {
     //急刹数据获取
     brakeDataGet: (params) =>
@@ -84,6 +83,15 @@ const safeAnalyze = {
                 withCredentials: false,
             })
         ),
+    //事件类型数量查询
+    eventsNumGet: (date1, date2, type) =>
+        promiseAxios(
+            axios({
+                url: `http://82.156.230.142:10900/track/v1/event/getnum?start_datetime=${date1}&end_datetime=${date2}&type=${type}`,
+                type: "get",
+                withCredentials: false,
+            })
+        ),
     //急刹路段数量历史查询
     brakeHistoryGet: () =>
         promiseAxios(
@@ -120,17 +128,26 @@ const safeAnalyze = {
                 withCredentials: false,
             })
         ),
+    //历史事件累计数量查询
+    eventsSumGet: (type) =>
+        promiseAxios(
+            axios({
+                url: `http://82.156.230.142:10900/track/v1/event/getsum?type=${type} `,
+                type: "get",
+                withCredentials: false,
+            })
+        ),
     //路段坐标查询
-    segLocation: (seg_ids,type) =>
-    promiseAxios(
-        axios({
-            // url: `https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/location/${seg_id}`,
-            url:`http://82.156.230.142:10003/querySegById?segIds=${seg_ids}&topType=${type}`,
-            // url:`/location/querySegById?segIds=${seg_ids}`,
-            type: "get",
-            withCredentials: false,
-        })
-    ),
+    segLocation: (seg_ids, type) =>
+        promiseAxios(
+            axios({
+                // url: `https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/location/${seg_id}`,
+                url: `http://82.156.230.142:10003/querySegById?segIds=${seg_ids}&topType=${type}`,
+                // url:`/location/querySegById?segIds=${seg_ids}`,
+                type: "get",
+                withCredentials: false,
+            })
+        ),
     // segLocation: (seg_ids) => {
     //     return jsonp(`http://82.156.230.142:10003/querySegById?`,{param:"segIds",name:seg_ids,output: 'jsonp'})
     // }

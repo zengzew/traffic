@@ -527,13 +527,12 @@ export default {
   mounted() {
     //取今天的数据
     this.historySituationGet(this.timestamp);
-    this.eventsSituationGet(this.timestamp);
     //刷新表格中历史累计数据
     this.historySumGet().then(() => {
-      this.updateData();
+      this.updateDataHistory();
     });
     this.eventsSumGet().then(() => {
-      this.updateData();
+      this.updateDataEvents();
     });
   },
   destroyed() {},
@@ -1018,42 +1017,65 @@ export default {
     //事件累计数量
     eventsSumGet() {
       let promises = [];
-      promises.push(
-        new Promise((resolve, reject) => {
-          // 查询累计急转弯路段
-          API.safeAnalyze
-            .eventsSumGet()
-            .then((res) => {
-              if (res.status === 0) {
-                this.accidentsum = res.event_num;
-                this.closesum = res.event_num;
-                this.jamsum = res.event_num;
-                this.roadworksum = res.event_num;
-                this.citysum = res.event_num;
-                this.highwaysum = res.event_num;
-                // 更新update日期
-                this.eventsdeadlinedate = res.update_time;
-                resolve();
-              } else {
+      for (let type = 0; type < 6; type++) {
+        promises.push(
+          new Promise((resolve, reject) => {
+            API.safeAnalyze
+              .eventsSumGet(type)
+              .then((res) => {
+                if (res.status === 0) {
+                  console.log(type);
+                  this.eventsdeadlinedate = res.update_time;
+                  switch (type) {
+                    case 0:
+                      this.accidentsum = res.event_num;
+                      console.log("事故数量", this.accidentsum);
+                      break;
+                    case 1:
+                      this.closesum = res.event_num;
+                      console.log("封路数量", this.closesum);
+                      break;
+                    case 2:
+                      this.jamsum = res.event_num;
+                      console.log("拥堵数量", this.jamsum);
+                      break;
+                    case 3:
+                      this.roadworksum = res.event_num;
+                      console.log("施工数量", this.roadworksum);
+                      break;
+                    case 4:
+                      this.citysum = res.event_num;
+                      console.log("城市数量", this.citysum);
+                      break;
+                    case 5:
+                      this.highwaysum = res.event_num;
+                      console.log("高速数量", this.highwaysum);
+                      break;
+                    default:
+                      console.log("error");
+                  }
+                  resolve();
+                } else {
+                  this.$message({
+                    message: "数据更新失败，请稍后重试",
+                    type: "error",
+                  });
+                  resolve();
+                }
+              })
+              .catch((error) => {
                 this.$message({
                   message: "数据更新失败，请稍后重试",
-                  type: "error",
+                  type: error,
                 });
-                resolve();
-              }
-            })
-            .catch((error) => {
-              this.$message({
-                message: "数据更新失败，请稍后重试",
-                type: error,
+                reject(error);
               });
-              reject(error);
-            });
-        })
-      );
+          })
+        );
+      }
       return Promise.all(promises);
     },
-    updateData() {
+    updateDataHistory() {
       this.tableHistorySituation.push(
         {
           type: "急转弯路段",
@@ -1072,6 +1094,8 @@ export default {
           volume: this.overspeedsum,
         }
       );
+    },
+    updateDataEvents() {
       this.tableHistoryEvents1.push(
         {
           eventsType: "事故",
