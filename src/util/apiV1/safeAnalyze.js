@@ -137,6 +137,15 @@ const safeAnalyze = {
                 withCredentials: false,
             })
         ),
+    //历史点事件查询
+    eventsGet: (date1, date2, type) =>
+        promiseAxios(
+            axios({
+                url: `http://82.156.230.142:10900/track/v1/event/gethistory?start_datetime=${date1}&end_datetime=${date2}&type=${type} `,
+                type: "get",
+                withCredentials: false,
+            })
+        ),
     //路段坐标查询
     segLocation: (seg_ids, type) =>
         promiseAxios(

@@ -4,33 +4,22 @@
     <el-form :inline="true" :model="form" class="form">
       <el-form-item label="事件类型">
         <el-select v-model="form.type" clearable placeholder="请选择事件类型">
-          <el-option label="事故" value="1"></el-option>
-          <el-option label="封路" value="2"></el-option>
-          <el-option label="拥堵" value="3"></el-option>
-          <el-option label="施工" value="4"></el-option>
-          <el-option label="城内" value="5"></el-option>
-          <el-option label="高速" value="6"></el-option>
+          <el-option label="事故" value="0"></el-option>
+          <el-option label="封路" value="1"></el-option>
+          <el-option label="拥堵" value="2"></el-option>
+          <el-option label="施工" value="3"></el-option>
+          <el-option label="城内" value="4"></el-option>
+          <el-option label="高速" value="5"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="时间范围">
-        <!-- <el-date-picker
-          v-model="form.daterange"
-          type="daterange"
-          align="right"
-          unlink-panels
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :picker-options="pickerOptions"
-          value-format="timestamp"
-        >
-        </el-date-picker> -->
         <el-col :span="4">
           <el-date-picker
             v-model="form.projectStartDate"
             :picker-options="startDatePicker"
             type="date"
             placeholder="开始日期"
+            value-format="timestamp"
           ></el-date-picker>
         </el-col>
         <el-col :span="8">-</el-col>
@@ -40,11 +29,11 @@
             :picker-options="endDatePicker"
             type="date"
             placeholder="结束日期"
+            value-format="timestamp"
           ></el-date-picker>
         </el-col>
         <el-col :span="8">-</el-col>
       </el-form-item>
-
       <el-form-item label="">
         <el-button type="primary" @click="onSubmit">查询</el-button>
       </el-form-item>
@@ -58,18 +47,26 @@
       :max-height="getTableHeight"
     >
       <el-table-column type="index"> </el-table-column>
-      <el-table-column prop="id" label="事件编号"> </el-table-column>
+      <el-table-column prop="origin_id" label="事件编号"> </el-table-column>
       <el-table-column prop="title" label="事件标题"> </el-table-column>
-      <el-table-column prop="content" label="事件内容"> </el-table-column>
+      <el-table-column prop="info" label="事件内容"> </el-table-column>
       <el-table-column prop="source" label="事件来源"> </el-table-column>
-      <el-table-column prop="status" label="事件状态"> </el-table-column>
-      <el-table-column prop="location" label="事件发生位置"> </el-table-column>
-      <el-table-column prop="name" label="路段名称"> </el-table-column>
-      <el-table-column prop="rank" label="道路等级"> </el-table-column>
-      <el-table-column prop="scope" label="地理空间所属范围"></el-table-column>
-      <el-table-column prop="starttime" label="起始时间"></el-table-column>
-      <el-table-column prop="endtime" label="结束时间"></el-table-column>
-      <el-table-column prop="updatetime" label="更新时间"></el-table-column>
+      <el-table-column prop="event_status" label="事件状态"> </el-table-column>
+
+      <el-table-column prop="event_id" label="事件发生位置">
+        <template slot-scope="scope">
+          <el-button size="mini" @click="goMap(scope.row.event_id)"
+            >查看位置</el-button
+          >
+        </template></el-table-column
+      >
+
+      <el-table-column prop="seg_name" label="路段名称"> </el-table-column>
+      <el-table-column prop="rc" label="道路等级"> </el-table-column>
+      <el-table-column prop="region" label="地理空间所属范围"></el-table-column>
+      <el-table-column prop="start_time" label="起始时间"></el-table-column>
+      <el-table-column prop="end_time" label="结束时间"></el-table-column>
+      <el-table-column prop="update_time" label="更新时间"></el-table-column>
     </el-table>
     <el-pagination
       @size-change="handleSizeChange"
@@ -79,12 +76,13 @@
       :page-sizes="[5, 10, 15, 20]"
       :page-size="10"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="rawList.length"
+      :total="this.total"
     >
     </el-pagination>
   </div>
 </template>
 <script>
+import API from "../../../util/apiV1";
 export default {
   data() {
     return {
@@ -92,317 +90,16 @@ export default {
       endDatePicker: this.processDate(),
       form: {
         type: "",
-        daterange: new Date(),
       },
       pageList: [],
-      rawList: [
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-        {
-          title: "交通事件",
-          content: "撞车",
-          name: "西土城路十号",
-          source: "交管所",
-          code: "10002",
-          status: "已完成",
-          location: "未知",
-          effect: "Q",
-          starttime: "20200608",
-          endtime: "20200609",
-          updatetime: "20200610",
-        },
-      ],
+      rawList: [],
+      total: 0,
       pageSize: 10,
       currentPage1: 1,
       screenHeight: document.body.clientHeight, // 初始化时获取当前打开页面的高度
     };
   },
   mounted() {
-    //this.getHistoryEvents();
     this.currentChangePage(this.rawList, 1);
     // 窗口或页面被调整大小时触发事件
     window.onresize = () => {
@@ -417,6 +114,12 @@ export default {
     },
   },
   methods: {
+    goMap(e) {
+      console.log(e);
+      this.$sotre.safeAnalysis.eventIdFromHistory = e;
+      this.$sotre.safeAnalysis.isFromHistory = true;
+      // this.$router.push({ name: "trafficAnalyze" });
+    },
     // 日期选择约束
     beginDate() {
       const self = this;
@@ -449,21 +152,52 @@ export default {
       };
     },
     onSubmit() {
-      console.log("submite!", this.form);
+      //从毫秒单位转换为秒单位
+      let dateStartTimestamp = Number(
+        this.form.projectStartDate.toString().slice(0, 10)
+      );
+      let dateEndTimpestamp = Number(
+        this.form.projectEndDate.toString().slice(0, 10)
+      );
+      //当前时刻转化为当日零时零分零秒，东八区时间
+      var dateStart = dateStartTimestamp - (dateStartTimestamp % 86400) + 57600;
+      //加到下一天零时
+      var dateEnd =
+        dateEndTimpestamp - (dateEndTimpestamp % 86400) + 57600 + 86400;
+      var type = this.form.type;
+      this.getEvents(dateStart, dateEnd, type);
     },
-    getHistoryEvents() {
-      this.axios.get("/api/xxx").then((response) => {
-        this.rawList = response.data;
-        this.currentChangePage(this.rawList, 1);
-      });
+    getEvents(dateStart, dateEnd, type) {
+      API.safeAnalyze
+        .eventsGet(dateStart, dateEnd, type)
+        .then((res) => {
+          if (res.status === 0) {
+            this.rawList = res.data;
+            this.total = res.event_num;
+          } else {
+            this.$message({
+              message: "数据更新失败，请稍后重试",
+              type: "error",
+            });
+          }
+        })
+        .catch((error) => {
+          this.$message({
+            message: "数据更新失败，请稍后重试",
+            type: error,
+          });
+        });
     },
     //处理单页的尺寸
     handleSizeChange: function (pageSize) {
       this.pageSize = pageSize;
+      console.log("每页显示" + this.pageSize + "条");
       this.handleCurrentChange(this.currentPage1);
     },
+    //处理当前页
     handleCurrentChange: function (currentPage) {
       this.currentPage1 = currentPage;
+      console.log("第" + this.currentPage1 + "页");
       this.currentChangePage(this.rawList, currentPage);
     },
     currentChangePage(list, currentPage) {
@@ -491,7 +225,7 @@ export default {
     padding: 1%;
   }
   .el-pagination {
-    padding: 1% 0;
+    padding-bottom: 1%;
     bottom: 0;
     position: absolute;
   }

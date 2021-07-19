@@ -22,7 +22,7 @@ export default {
   components: { HistorySituation, HistoryEvents },
   data() {
     return {
-      activeName: "first",
+      activeName: "second",
     };
   },
   methods: {

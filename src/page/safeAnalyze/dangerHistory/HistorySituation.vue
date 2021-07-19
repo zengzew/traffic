@@ -527,6 +527,7 @@ export default {
   mounted() {
     //取今天的数据
     this.historySituationGet(this.timestamp);
+    this.eventsSituationGet(this.timestamp);
     //刷新表格中历史累计数据
     this.historySumGet().then(() => {
       this.updateDataHistory();
@@ -984,34 +985,56 @@ export default {
     },
     //事件数量查询
     async eventsSituationGet(timestamp) {
-      let date = this.timestampToTime(timestamp);
+      //从毫秒单位转换为秒单位
+      let date = Number(timestamp.toString().slice(0, 10));
+      //当前时刻转化为当日零时零分零秒
+      let dateStart = date - (date % 86400) + 57600;
+      let dateEnd = dateStart + 86400;
       var eventsSituation = new Array();
       //查询刹车路段
-      await API.safeAnalyze
-        .eventsNumGet(date)
-        .then((res) => {
-          if (res.status === 0) {
-            EventsSituation[0] = event_num; //事故
-            EventsSituation[1] = event_num; //封路
-            EventsSituation[2] = event_num; //拥堵
-            EventsSituation[3] = event_num; //施工
-            EventsSituation[4] = event_num; //城内
-            EventsSituation[5] = event_num; //高速
-          } else {
+      for (let type = 0; type < 6; type++) {
+        await API.safeAnalyze
+          .eventsNumGet(dateStart, dateEnd, type)
+          .then((res) => {
+            if (res.status === 0) {
+              switch (type) {
+                case 0:
+                  eventsSituation[0] = res.event_num; //事故
+                  break;
+                case 1:
+                  eventsSituation[1] = res.event_num; //封路
+                  break;
+                case 2:
+                  eventsSituation[2] = res.event_num; //拥堵
+                  break;
+                case 3:
+                  eventsSituation[3] = res.event_num; //施工
+                  break;
+                case 4:
+                  eventsSituation[4] = res.event_num; //城内
+                  break;
+                case 5:
+                  eventsSituation[5] = res.event_num; //高速
+                  break;
+                default:
+                  console.log("获取事件数据失败");
+              }
+            } else {
+              this.$message({
+                message: "数据更新失败，请稍后重试",
+                type: "error",
+              });
+              date;
+            }
+          })
+          .catch((error) => {
             this.$message({
               message: "数据更新失败，请稍后重试",
-              type: "error",
+              type: error,
             });
-            date;
-          }
-        })
-        .catch((error) => {
-          this.$message({
-            message: "数据更新失败，请稍后重试",
-            type: error,
           });
-        });
-      //查询急转弯路段
+        //查询急转弯路段
+      }
       return eventsSituation;
     },
     //事件累计数量
@@ -1024,32 +1047,25 @@ export default {
               .eventsSumGet(type)
               .then((res) => {
                 if (res.status === 0) {
-                  console.log(type);
                   this.eventsdeadlinedate = res.update_time;
                   switch (type) {
                     case 0:
                       this.accidentsum = res.event_num;
-                      console.log("事故数量", this.accidentsum);
                       break;
                     case 1:
                       this.closesum = res.event_num;
-                      console.log("封路数量", this.closesum);
                       break;
                     case 2:
                       this.jamsum = res.event_num;
-                      console.log("拥堵数量", this.jamsum);
                       break;
                     case 3:
                       this.roadworksum = res.event_num;
-                      console.log("施工数量", this.roadworksum);
                       break;
                     case 4:
                       this.citysum = res.event_num;
-                      console.log("城市数量", this.citysum);
                       break;
                     case 5:
                       this.highwaysum = res.event_num;
-                      console.log("高速数量", this.highwaysum);
                       break;
                     default:
                       console.log("error");
@@ -1175,7 +1191,7 @@ export default {
           (this.overspeednum - weekoverspeed) / weekoverspeed;
       });
       //同比
-      this.historySituationGet(timestamp - 604800000).then((res) => {
+      this.eventsSituationGet(timestamp - 604800000).then((res) => {
         let weekData = res;
         let weekaccident = weekData[0];
         let weekclose = weekData[2];
