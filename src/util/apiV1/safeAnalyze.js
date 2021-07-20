@@ -138,10 +138,10 @@ const safeAnalyze = {
             })
         ),
     //历史点事件查询
-    eventsGet: (date1, date2, type) =>
+    eventsGet: (date1, date2, type, pageindex, pagesize) =>
         promiseAxios(
             axios({
-                url: `http://82.156.230.142:10900/track/v1/event/gethistory?start_datetime=${date1}&end_datetime=${date2}&type=${type} `,
+                url: `http://82.156.230.142:10900/track/v1/event/gethistory?start_datetime=${date1}&end_datetime=${date2}&type=${type}&pageindex=${pageindex}&pagesize=${pagesize} `,
                 type: "get",
                 withCredentials: false,
             })

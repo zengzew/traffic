@@ -95,12 +95,16 @@ export default {
       rawList: [],
       total: 0,
       pageSize: 10,
+      pageIndex: 1,
       currentPage1: 1,
+      dateStart: "",
+      dateEnd: "",
+      type: 0,
       screenHeight: document.body.clientHeight, // 初始化时获取当前打开页面的高度
     };
   },
   mounted() {
-    this.currentChangePage(this.rawList, 1);
+    this.currentChangePage(this.pageList, 1);
     // 窗口或页面被调整大小时触发事件
     window.onresize = () => {
       // 获取body的高度
@@ -160,19 +164,26 @@ export default {
         this.form.projectEndDate.toString().slice(0, 10)
       );
       //当前时刻转化为当日零时零分零秒，东八区时间
-      var dateStart = dateStartTimestamp - (dateStartTimestamp % 86400) + 57600;
+      this.dateStart =
+        dateStartTimestamp - (dateStartTimestamp % 86400) + 57600;
       //加到下一天零时
-      var dateEnd =
+      this.dateEnd =
         dateEndTimpestamp - (dateEndTimpestamp % 86400) + 57600 + 86400;
-      var type = this.form.type;
-      this.getEvents(dateStart, dateEnd, type);
+      this.type = this.form.type;
+      this.getEvents(
+        this.dateStart,
+        this.dateEnd,
+        this.type,
+        this.pageIndex,
+        this.pageSize
+      );
     },
-    getEvents(dateStart, dateEnd, type) {
+    getEvents(dateStart, dateEnd, type, pageIndex, pageSize) {
       API.safeAnalyze
-        .eventsGet(dateStart, dateEnd, type)
+        .eventsGet(dateStart, dateEnd, type, pageIndex, pageSize)
         .then((res) => {
           if (res.status === 0) {
-            this.rawList = res.data;
+            this.pageList = res.data;
             this.total = res.event_num;
           } else {
             this.$message({
@@ -193,23 +204,37 @@ export default {
       this.pageSize = pageSize;
       console.log("每页显示" + this.pageSize + "条");
       this.handleCurrentChange(this.currentPage1);
+      this.getEvents(
+        this.dateStart,
+        this.dateEnd,
+        this.type,
+        this.pageIndex,
+        this.pageSize
+      );
     },
     //处理当前页
     handleCurrentChange: function (currentPage) {
-      this.currentPage1 = currentPage;
-      console.log("第" + this.currentPage1 + "页");
-      this.currentChangePage(this.rawList, currentPage);
+      this.pageIndex = currentPage;
+      console.log("第" + this.pageIndex + "页");
+      this.getEvents(
+        this.dateStart,
+        this.dateEnd,
+        this.type,
+        this.pageIndex,
+        this.pageSize
+      );
+      //this.currentChangePage(this.rawList, currentPage);
     },
-    currentChangePage(list, currentPage) {
-      let from = (currentPage - 1) * this.pageSize;
-      let to = currentPage * this.pageSize;
-      this.pageList = [];
-      for (; from < to; from++) {
-        if (list[from]) {
-          this.pageList.push(list[from]);
-        }
-      }
-    },
+    // currentChangePage(list, currentPage) {
+    //   let from = (currentPage - 1) * this.pageSize;
+    //   let to = currentPage * this.pageSize;
+    //   this.pageList = [];
+    //   for (; from < to; from++) {
+    //     if (list[from]) {
+    //       this.pageList.push(list[from]);
+    //     }
+    //   }
+    // },
   },
 };
 </script>
