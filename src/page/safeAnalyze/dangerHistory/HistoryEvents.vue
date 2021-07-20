@@ -46,7 +46,7 @@
       :header-cell-style="{ background: '#374a63' }"
       :max-height="getTableHeight"
     >
-      <el-table-column type="index"> </el-table-column>
+      <el-table-column type="index" :index="indexMethod"> </el-table-column>
       <el-table-column prop="origin_id" label="事件编号"> </el-table-column>
       <el-table-column prop="title" label="事件标题"> </el-table-column>
       <el-table-column prop="info" label="事件内容"> </el-table-column>
@@ -60,7 +60,6 @@
           >
         </template></el-table-column
       >
-
       <el-table-column prop="seg_name" label="路段名称"> </el-table-column>
       <el-table-column prop="rc" label="道路等级"> </el-table-column>
       <el-table-column prop="region" label="地理空间所属范围"></el-table-column>
@@ -147,7 +146,8 @@ export default {
           if (self.form.projectStartDate) {
             //如果开始时间不为空，则结束时间大于开始时间
             return (
-              new Date(self.form.projectStartDate).getTime() > time.getTime()
+              new Date(self.form.projectStartDate).getTime() > time.getTime() ||
+              time.getTime() > Date.now()
             );
           } else {
             return time.getTime() > Date.now(); //开始时间不选时，结束时间最大值小于等于当天
@@ -235,6 +235,12 @@ export default {
     //     }
     //   }
     // },
+
+    //计算每页的index
+    indexMethod(index) {
+      index = index + 1 + (this.pageIndex - 1) * this.pageSize;
+      return index;
+    },
   },
 };
 </script>
@@ -248,6 +254,9 @@ export default {
     display: flex;
     justify-content: center;
     padding: 1%;
+  }
+  .el-table {
+    min-width: 1000px;
   }
   .el-pagination {
     padding-bottom: 1%;
