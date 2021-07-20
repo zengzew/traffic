@@ -659,7 +659,7 @@ export default {
       var option = {
         title: {
           zlevel: 0,
-          text: ["事件（件): " + this.totalnum],
+          text: ["事件（件): " + this.totalnumevents1],
           x: "center",
           y: "bottom",
           textAlign: "left",
@@ -732,7 +732,7 @@ export default {
       var option = {
         title: {
           zlevel: 0,
-          text: ["事件（件): " + this.totalnum],
+          text: ["事件（件): " + this.totalnumevents2],
           x: "center",
           y: "bottom",
           textAlign: "left",
@@ -1166,14 +1166,14 @@ export default {
         let yesterdaycity = yesterdayData[4];
         let yesterdayhighway = yesterdayData[5];
         this.accidenton =
-          (this.overspeednum - yesterdayaccident) / yesterdayaccident;
-        this.closeon = (this.overspeednum - yesterdayclose) / yesterdayclose;
-        this.jamon = (this.overspeednum - yesterdayjam) / yesterdayjam;
+          (this.accidentnum - yesterdayaccident) / yesterdayaccident;
+        this.closeon = (this.closenum - yesterdayclose) / yesterdayclose;
+        this.jamon = (this.jamnum - yesterdayjam) / yesterdayjam;
         this.roadworkon =
-          (this.overspeednum - yesterdayraodwork) / yesterdayraodwork;
-        this.cityon = (this.overspeednum - yesterdaycity) / yesterdaycity;
+          (this.roadworknum - yesterdayraodwork) / yesterdayraodwork;
+        this.cityon = (this.citynum - yesterdaycity) / yesterdaycity;
         this.highwayon =
-          (this.overspeednum - yesterdayhighway) / yesterdayhighway;
+          (this.highwaynum - yesterdayhighway) / yesterdayhighway;
       });
 
       //同比
@@ -1207,7 +1207,7 @@ export default {
         this.highwayover = (this.highwaynum - weekhighway) / weekhighway;
       });
     },
-    // 讲时间戳转为yyyy-mm-dd的格式
+    // 时间戳转为yyyy-mm-dd的格式
     timestampToTime(timestamp) {
       {
         var date = new Date(timestamp);

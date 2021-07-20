@@ -46,14 +46,20 @@
       :header-cell-style="{ background: '#374a63' }"
       :max-height="getTableHeight"
     >
-      <el-table-column type="index" :index="indexMethod"> </el-table-column>
-      <el-table-column prop="origin_id" label="事件编号"> </el-table-column>
+      <el-table-column type="index" :index="indexMethod" width="55">
+      </el-table-column>
+      <el-table-column prop="origin_id" label="事件编号" width="95">
+      </el-table-column>
       <el-table-column prop="title" label="事件标题"> </el-table-column>
       <el-table-column prop="info" label="事件内容"> </el-table-column>
       <el-table-column prop="source" label="事件来源"> </el-table-column>
-      <el-table-column prop="event_status" label="事件状态"> </el-table-column>
+      <el-table-column prop="event_status" label="事件状态">
+        <template slot-scope="scope">
+          {{ scope.row.event_status | convertStatus }}
+        </template>
+      </el-table-column>
 
-      <el-table-column prop="event_id" label="事件发生位置">
+      <el-table-column prop="event_id" label="事件发生位置" width="105">
         <template slot-scope="scope">
           <el-button size="mini" @click="goMap(scope.row.event_id)"
             >查看位置</el-button
@@ -62,7 +68,11 @@
       >
       <el-table-column prop="seg_name" label="路段名称"> </el-table-column>
       <el-table-column prop="rc" label="道路等级"> </el-table-column>
-      <el-table-column prop="region" label="地理空间所属范围"></el-table-column>
+      <el-table-column prop="region" label="地理空间所属范围">
+        <template slot-scope="scope">
+          {{ scope.row.region | convertRegion }}
+        </template>
+      </el-table-column>
       <el-table-column prop="start_time" label="起始时间"></el-table-column>
       <el-table-column prop="end_time" label="结束时间"></el-table-column>
       <el-table-column prop="update_time" label="更新时间"></el-table-column>
@@ -102,8 +112,20 @@ export default {
       screenHeight: document.body.clientHeight, // 初始化时获取当前打开页面的高度
     };
   },
+  filters: {
+    convertStatus(val) {
+      if (val == 0) return "处理中";
+      else if (val == 1) return "已完成";
+      else return "error";
+    },
+    convertRegion(val) {
+      if (val == 0) return "城区";
+      else if (val == 1) return "高速";
+      else return "error";
+    },
+  },
   mounted() {
-    this.currentChangePage(this.pageList, 1);
+    //this.currentChangePage(this.pageList, 1);
     // 窗口或页面被调整大小时触发事件
     window.onresize = () => {
       // 获取body的高度
@@ -118,7 +140,7 @@ export default {
   },
   methods: {
     goMap(e) {
-      console.log(e);
+      console.log("eventID", e);
       this.$sotre.safeAnalysis.eventIdFromHistory = e;
       this.$sotre.safeAnalysis.isFromHistory = true;
       // this.$router.push({ name: "trafficAnalyze" });
@@ -202,7 +224,6 @@ export default {
     //处理单页的尺寸
     handleSizeChange: function (pageSize) {
       this.pageSize = pageSize;
-      console.log("每页显示" + this.pageSize + "条");
       this.handleCurrentChange(this.currentPage1);
       this.getEvents(
         this.dateStart,
@@ -215,7 +236,6 @@ export default {
     //处理当前页
     handleCurrentChange: function (currentPage) {
       this.pageIndex = currentPage;
-      console.log("第" + this.pageIndex + "页");
       this.getEvents(
         this.dateStart,
         this.dateEnd,
@@ -256,7 +276,7 @@ export default {
     padding: 1%;
   }
   .el-table {
-    min-width: 1000px;
+    min-width: 1100px;
   }
   .el-pagination {
     padding-bottom: 1%;
