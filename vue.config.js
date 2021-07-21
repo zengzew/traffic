@@ -25,6 +25,14 @@ module.exports = {
           "^/location": "",
         },
       },
+      "/imgs":{
+        target:"http://152.136.229.63/img",
+        ws:true,
+        changOrigin:true,
+        pathRewrite:{
+          "^/imgs":""
+        }
+      },
     },
   },
 };

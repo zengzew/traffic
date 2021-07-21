@@ -7,6 +7,10 @@ import axios from ".././ajax";
 import jsonp from "./../jsonp";
 import { promiseAxios } from "./apiUtil";
 
+let getTime = ()=>{
+    return Math.round(new Date().getTime()/1000).toString()
+}
+console.log("time",getTime())
 
 const safeAnalyze = {
     //急刹数据获取
@@ -139,7 +143,8 @@ const safeAnalyze = {
     allEventsPoints: () =>
     promiseAxios(
         axios({
-            url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/allPoint`,
+            // url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/allPoint`,
+            url:`http://82.156.230.142:10900/track/v1/event/gets?current_time=${getTime()}`,
             type: "get",
             withCredentials: false,
         })
@@ -149,17 +154,39 @@ const safeAnalyze = {
     eventDetail: (event_id) =>
     promiseAxios(
         axios({
-            url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/eventDetail/${event_id}`,
+            // url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/eventDetail/${event_id}`,
+            url:`http://82.156.230.142:10900/track/v1/event/get?event_id=${event_id}&current_time=${getTime()}`,
             type: "get",
             withCredentials: false,
         })
     ),
 
     //路段事件查看详情接口
-    segEvent: (seg_id) =>
+    segEvent: (seg_id,page_index,page_size) =>
     promiseAxios(
         axios({
-            url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/segEvent/${seg_id}`,
+            // url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/segEvent/${seg_id}`,
+            url:`http://82.156.230.142:10900/track/v1/event/getseg?seg_id=${seg_id}&current_time=${getTime()}&pageindex=${page_index}&pagesize=${page_size}`,
+            type: "get",
+            withCredentials: false,
+        })
+    ),
+
+    //事故严重指数排名接口
+    urgentIndexGet: (rank_num) =>
+    promiseAxios(
+        axios({
+            url:`http://82.156.230.142:10900/track/v1/accident/gettop?rank_num=${rank_num}`,
+            type: "get",
+            withCredentials: false,
+        })
+    ),
+
+    //潜在安全隐患路段排行榜接口
+    dangerPotentialGet:(rank_num) =>
+    promiseAxios(
+        axios({
+            url:`http://82.156.230.142:10900/track/v1/potential/gettop?rank_num=${rank_num}`,
             type: "get",
             withCredentials: false,
         })

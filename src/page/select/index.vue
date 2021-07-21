@@ -36,7 +36,8 @@ export default {
 .aipp-select {
     width: 100%;
     height: 100%;
-    background: url(~@/assets/images/aiCalPlatform/select.png);
+    /* background: url(~@/assets/images/aiCalPlatform/select.png); */
+    background: url(../../assets/images/aiCalPlatform/select.png);
     display: flex;
     justify-content: space-evenly;
     align-items: center;

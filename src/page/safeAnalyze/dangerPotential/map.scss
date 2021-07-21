@@ -1,0 +1,150 @@
+    .trail-container {
+      height: 100%;
+      width: 100%;
+    }
+.map-container {
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+// 新加工具 和 缩放
+.mapZoom {
+  width: 40px;
+  height: 82px;
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  margin-top: -45px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  span {
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    cursor: pointer;
+  }
+}
+  .clusterBubbleStyle {
+    border-radius: 50%;
+    color: #fff;
+    font-weight: 500;
+    text-align: center;
+    opacity: 0.88;
+    background-image: linear-gradient(139deg, #4294FF 0%, #295BFF 100%);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.20);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
+.icon-zoom_up {
+  background: url("../../../assets/images/zoom_up@3x.png");
+  background-size: 100% 100%;
+}
+.icon-zoom_down {
+  background: url("../../../assets/images/zoom_down@3x.png");
+  background-size: 100% 100%;
+}
+.Map-tools {
+  width: 210px;
+  height: 42px;
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 5px;
+  top: 68px;
+  right: 20px;
+  z-index: 9;
+}
+.tool {
+  width: 100px;
+  height: 42px;
+  font-family: PingFangSC-Medium;
+  color: #020202;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid #dcdfe6;
+  padding-left: 18px;
+  box-sizing: border-box;
+  position: relative;
+  box-shadow: 0px 1px 1px #e4e1e1;
+  span {
+    width: 28px;
+    height: 28px;
+    margin-right: 6px;
+    display: inline-block;
+  }
+  .tool-checkbox {
+    width: 80px;
+    height: 30px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    border-radius: 5px;
+    position: absolute;
+    top: 42px;
+    right: 0;
+  }
+}
+.tool-traffic {
+  &:hover {
+    color: #3d4dda;
+    span {
+      width: 28px;
+      height: 28px;
+      margin-right: 6px;
+      display: inline-block;
+      background: url("../../../assets/images/ic_traffic_light@3x.png");
+      background-size: 100% 100%;
+    }
+  }
+}
+.tool-traffic-active {
+  color: #3d4dda;
+  span {
+    width: 28px;
+    height: 28px;
+    margin-right: 6px;
+    display: inline-block;
+    background: url("../../../assets/images/ic_traffic_light@3x.png");
+    background-size: 100% 100%;
+  }
+}
+.tool-satellite {
+  &:hover {
+    color: #3d4dda;
+    span {
+      width: 28px;
+      height: 28px;
+      margin-right: 6px;
+      display: inline-block;
+      background: url("../../../assets/images/ic_satellite_on@3x.png");
+      background-size: 100% 100%;
+    }
+  }
+}
+.tool-satellite-active {
+  color: #3d4dda;
+  span {
+    width: 28px;
+    height: 28px;
+    margin-right: 6px;
+    display: inline-block;
+    background: url("../../../assets/images/ic_satellite_on@3x.png");
+    background-size: 100% 100%;
+  }
+}
+.icon-ic_traffic {
+  background: url("../../../assets/images/icon_traffic@3x.png");
+  background-size: 100% 100%;
+}
+.icon-ic_satellite {
+  background: url("../../../assets/images/icon_satellite@3x.png");
+  background-size: 100% 100%;
+}

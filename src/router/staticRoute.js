@@ -139,7 +139,7 @@ const staticRoute = [
     name: "",
     component: Layout,
     meta: {
-        keepAlive: false,
+        keepAlive: false,       
     },
     children: [
         {

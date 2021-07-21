@@ -4,16 +4,18 @@ import 'sysStatic/css/theme-default.scss';
 
 import 'babel-polyfill';
 import Vue from 'vue';
-import "./assets/css/elementUITheme/index.css"
 import ElementUI, { Message } from 'element-ui';
-import router from './router';
+// import "sysStatic/css/elementUI-theme.css"
 import store from './store';
 import i18n from './util/i18n';
-import App from './index';
 import md5 from 'js-md5';
 import './components/install';
 import './plugins/install';
 import API from './util/apiV1';
+import router from './router';
+
+import App from './index';
+
 
 // 修改message
 let messageInstance = null;
@@ -43,6 +45,8 @@ Vue.prototype.$md5 = md5;
 Vue.use(ElementUI, {
   i18n: (key, value) => i18n.t(key, value),
 });
+
+
 Vue.prototype.$message = overrideMessage;
 
 new Vue({

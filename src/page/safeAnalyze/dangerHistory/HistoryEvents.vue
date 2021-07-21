@@ -1,5 +1,6 @@
 <template>
   <div class="eventsContainer">
+    <div class="eventsTitle">交通事件查询</div>
     <el-form :inline="true" :model="form" class="form">
       <el-form-item label="事件类型">
         <el-select v-model="form.type" clearable placeholder="请选择事件类型">
@@ -30,19 +31,23 @@
         <el-button type="primary" @click="onSubmit">查询</el-button>
       </el-form-item>
     </el-form>
-    <el-table :data="pageList" :border="true" style="width: 100%" size="medium">
+    <el-table
+      :data="pageList"
+      :border="true"
+      style="width: 100%"
+      size="medium"
+      :header-cell-style="{ background: '#374a63' }"
+    >
       <el-table-column type="index"> </el-table-column>
+      <el-table-column prop="id" label="事件编号"> </el-table-column>
       <el-table-column prop="title" label="事件标题"> </el-table-column>
       <el-table-column prop="content" label="事件内容"> </el-table-column>
-      <el-table-column prop="name" label="道路名称"> </el-table-column>
       <el-table-column prop="source" label="事件来源"> </el-table-column>
-      <el-table-column prop="code" label="区域码"> </el-table-column>
       <el-table-column prop="status" label="事件状态"> </el-table-column>
       <el-table-column prop="location" label="事件发生位置"> </el-table-column>
-      <el-table-column
-        prop="effect"
-        label="事件影响道路形状坐标串"
-      ></el-table-column>
+      <el-table-column prop="name" label="路段名称"> </el-table-column>
+      <el-table-column prop="rank" label="道路等级"> </el-table-column>
+      <el-table-column prop="scope" label="地理空间所属范围"></el-table-column>
       <el-table-column prop="starttime" label="起始时间"></el-table-column>
       <el-table-column prop="endtime" label="结束时间"></el-table-column>
       <el-table-column prop="updatetime" label="更新时间"></el-table-column>
@@ -444,12 +449,26 @@ export default {
 </script>
 <style lang="less">
 .eventsContainer {
-  margin: 0 200px;
-  height: 1080px;
+  margin: 0 10%;
+  height: 1147px;
   position: relative;
-  .el-pagination {
-    position: absolute;
-    bottom: 0;
+  .eventsTitle {
+    color: #fff;
+    font-size: 2.5rem;
+    display: flex;
+    justify-content: center;
+    padding: 1%;
   }
+  .el-pagination {
+    padding: 1% 0;
+  }
+}
+
+.el-date-table td.in-range div {
+  background-color: #3e6baf !important;
+}
+.el-date-table td.end-date span,
+.el-date-table td.start-date span {
+  border-radius: 1rem !important;
 }
 </style>

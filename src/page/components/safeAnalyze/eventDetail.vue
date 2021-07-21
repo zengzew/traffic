@@ -5,15 +5,15 @@
             <img
                 @click="
                     $store.state.safeAnalysis.ifEventDetail =
-                        !$store.state.safeAnalysis.ifEventDetail;
+                        !$store.state.safeAnalysis.ifEventDetail
                 "
                 src="~sysStatic/images/btn_close@2x.png"
                 alt="关闭"
+                title="关闭交通事故事件详情页面"
             />
         </div>
 
-        <p>路段名称</p>
-        <p>{{ seg_name }}</p>
+        <p>路段:{{ seg_name }}</p>
         <el-table
             class="eventDistribution"
             ref="safeAnalysis"
@@ -21,6 +21,7 @@
             style="width: 100%"
             :header-cell-style="{ background: '#374a63' }"
             border
+            :max-height="tableHeight"
         >
             <el-table-column
                 prop="origin_id"
@@ -49,7 +50,7 @@
                 :formatter="markType"
             ></el-table-column>
             <el-table-column
-                prop="status"
+                prop="event_status"
                 label="事件状态"
                 align="center"
                 :formatter="eventStatus"
@@ -62,7 +63,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                prop="seg_rc"
+                prop="rc"
                 label="道路等级"
                 align="center"
                 :formatter="segRc"
@@ -89,6 +90,16 @@
                 align="center"
             ></el-table-column>
         </el-table>
+        <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-size="10"
+            layout="total, prev, pager, next"
+            :total="event_sum"
+            background
+            class="pagination"
+        >
+        </el-pagination>
     </div>
 </template>
 
@@ -98,74 +109,89 @@ export default {
         return {
             eventTableData: [],
             seg_name: "", //路段名称
+            tableHeight: "660", //表格高度
+            page_index: "", //表格页数
+            page_size: "", //表格每页显示多少条信息
+            event_sum: 10, //事故总数
+            currentPage:1, //当前页码
+            seg_id:"", //当前表格所属路段的ID
         };
     },
     methods: {
-        questData(seg_id) {
-            this.$API.safeAnalyze.segEvent(seg_id).then((res) => {
-                this.seg_name = res.seg_name;
-                this.eventTableData = res.data;
-            });
+        questData(seg_id, page_index, page_size) {
+            this.$API.safeAnalyze
+                .segEvent(seg_id, page_index, page_size)
+                .then((res) => {
+                    this.event_sum = res.seg_event_count
+                    this.seg_name = res.seg_name;
+                    this.eventTableData = res.data;
+                    this.eventTableData = this.eventTableData.concat(res.data);
+                    this.eventTableData = this.eventTableData.concat(res.data);
+                    this.eventTableData = this.eventTableData.concat(res.data);
+                    this.eventTableData = this.eventTableData.concat(res.data);
+                    this.eventTableData = this.eventTableData.concat(res.data);
+                    this.eventTableData = this.eventTableData.concat(res.data);
+                });
         },
         //事件点的类型判断
         markType(row, col, type, index) {
             switch (type) {
-                case "0":
+                case 0:
                     return "事故";
-                case "1":
+                case 1:
                     return "施工";
-                case "2":
+                case 2:
                     return "封路";
-                case "3":
+                case 3:
                     return "拥堵";
             }
         },
         //事件状态
         eventStatus(row, col, type, index) {
             switch (type) {
-                case "0":
+                case 0:
                     return "处理中";
-                case "1":
+                case 1:
                     return "已完成";
             }
         },
         //事件匹配道路等级
         segRc(row, col, type, index) {
             switch (type) {
-                case "0":
+                case 0:
                     return "高速路";
-                case "1":
+                case 1:
                     return "都市高速路";
-                case "2":
+                case 2:
                     return "国道";
-                case "3":
+                case 3:
                     return "省道";
-                case "4":
+                case 4:
                     return "县道";
-                case "5":
+                case 5:
                     return "暂无定义";
-                case "6":
+                case 6:
                     return "乡镇村道";
-                case "7":
+                case 7:
                     return "暂无定义";
-                case "8":
+                case 8:
                     return "其他道路";
-                case "9":
+                case 9:
                     return "非引导道路";
-                case "10":
+                case 10:
                     return "轮渡";
-                case "11":
+                case 11:
                     return "行人道路";
-                case "12":
+                case 12:
                     return "人渡";
             }
         },
         //地理空间所属区域
         regionBelong(row, col, type, index) {
             switch (type) {
-                case "0":
+                case 0:
                     return "城区";
-                case "1":
+                case 1:
                     return "高速";
             }
         },
@@ -176,19 +202,37 @@ export default {
                 !this.$store.state.safeAnalysis.ifEventDetail;
             this.$store.state.safeAnalysis.activePointId = event_id;
         },
+        //表格高度自适应
+        getHeight() {
+            this.tableHeight = window.innerHeight - 300;
+        },
+        //页码变化回调函数
+        handleCurrentChange(currentPageIndex){
+            this.questData(this.seg_id,currentPageIndex,10);
+        }
     },
     watch: {
         //从地图 通过 "查看更多" 进入 交通事故事件详情页面
-        "$store.state.safeAnalysis.activePointId": function (newVal, oldVal) {
+        "$store.state.safeAnalysis.activeSegId": function (newVal, oldVal) {
             if (this.$store.state.safeAnalysis.ifEventDetail) {
-                this.questData(newVal);
+                this.seg_id = newVal;
+                this.questData(newVal, 1, 10); //默认显示第一页，10条数据
             }
         },
+    },
+    mounted() {
+        setTimeout(() => {
+            this.getHeight();
+        }, 300);
+        window.addEventListener("resize", this.getHeight);
+    },
+    destroyed() {
+        window.removeEventListener("resize", this.getHeight);
     },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 div {
     /* display: flex;
     flex-direction: column;
@@ -199,7 +243,7 @@ div {
 .close {
     position: absolute;
     width: 40px;
-    right: 0;
+    right: -5px;
     top: 48px;
     cursor: pointer;
 }
@@ -213,8 +257,29 @@ h1 {
 p {
     display: inline-block;
     font-size: 1rem;
-    border: 1px solid gray;
-    border-radius: 3px;
+    // border: 1px solid gray;
+    // border-radius: 3px;
     padding: 8px 15px;
 }
+
+.pagination{
+    margin-top: 10px;
+    text-align: center; 
+}
+
+/*滚动条整体样式*/
+/deep/ .el-table__body-wrapper::-webkit-scrollbar {
+  width: 8px; /*竖向滚动条的宽度*/
+  height: 10px; /*横向滚动条的高度*/
+}
+/deep/ .el-table__body-wrapper::-webkit-scrollbar-thumb {
+  /*滚动条里面的小方块*/
+  background: #9A9DA2;
+  border-radius: 4px;
+}
+/deep/ .el-table__body-wrapper::-webkit-scrollbar-track {
+  /*滚动条轨道的样式*/
+  background: #727C8A;
+}
+
 </style>

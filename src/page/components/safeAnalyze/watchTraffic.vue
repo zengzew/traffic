@@ -47,7 +47,7 @@
                 <span class="region">区域</span>
                 <span class="detail-region">西青区</span>
             </div>
-            <div class="index-sum">区域事故严重指数: 1631</div>
+            <div class="index-sum">区域事故严重指数: {{totalIndex}}</div>
             <el-table
                 class="eventAnalysis"
                 ref="safeAnalysis"
@@ -167,13 +167,15 @@ export default {
             activePointId: 0, //被选择的事故点的ID，当为0时表示未选择任何事故点
             eventPlace: "", //事故发生地点
             eventSum: "", //事故总数
+            totalIndex:"", //事故严重指数总数
+            segId:"" //被激活 事件点 所属路段的ID
         };
     },
     computed: {
         propName: function () {
             switch (this.tabIndex) {
                 case "1":
-                    return "brake_index";
+                    return "accident_index";
                 case "2":
                     return "turn_index";
             }
@@ -260,11 +262,12 @@ export default {
                     this.$store.state.safeAnalysis.mark.setGeometries([]);
                     this.$store.state.safeAnalysis.activeMark.setGeometries([]);
                     this.$API.safeAnalyze
-                        .brakeDataGet(this.rank_num)
+                        .urgentIndexGet(this.rank_num)
                         .then((res) => {
+                            this.totalIndex = res.total_index;
                             this.tableData = res.data;
                             this.loading = false;
-                            this.drawLine(res.data, "brake");
+                            this.drawLine(res.data, "accident");
                         });
                     break;
                 }
@@ -277,13 +280,15 @@ export default {
                     //         this.loading = false;
                     //         this.drawLine(res.data, "turn");
                     //     });
+                    this.$store.state.safeAnalysis.loading_traffic = true;
                     this.$API.safeAnalyze.allEventsPoints().then((res) => {
+                        this.$store.state.safeAnalysis.loading_traffic = false;
                         let geo = [];
                         res.data.forEach((ele) => {
                             geo.push({
                                 id: ele.event_id,
-                                styleId: this.markType(ele.type),
-                                position: new TMap.LatLng(ele.lat, ele.lon),
+                                styleId: this.markType(String(ele.type)),
+                                position: new TMap.LatLng(ele.lat, ele.lng),
                             });
                         });
                         this.$store.state.safeAnalysis.mark.setGeometries(geo);
@@ -296,25 +301,30 @@ export default {
         questEvent(event_id) {
             this.loading = true;
             this.$API.safeAnalyze.eventDetail(event_id).then((res) => {
+                console.log(res)
                 this.loading = false;
-                this.eventPlace = "后端数据无该信息";
+                var out_res = res
+                res = res.data[0]
+                this.segId = res.seg_id
+                this.eventPlace = res.seg_name;
                 this.eventSum = res.seg_event_count;
                 this.eventTableData = [
-                    { type: "事故", count: res.accident_count },
-                    { type: "施工", count: res.roadworks_count },
-                    { type: "封路", count: res.close_count },
-                    { type: "拥堵", count: res.jam_count },
+                    { type: "事故", count: out_res.accident_count },
+                    { type: "施工", count: out_res.roadworks_count },
+                    { type: "封路", count: out_res.close_count },
+                    { type: "拥堵", count: out_res.jam_count },
                 ];
                 this.eventInfoTableData = [
-                    { infoName: "事件编号", infoVal: res.event_id },
+                    // { infoName: "事件编号", infoVal: res.event_id },
+                    { infoName: "事件编号", infoVal: event_id },
                     { infoName: "事件标题", infoVal: res.title },
                     { infoName: "事件内容", infoVal: res.info },
                     { infoName: "事件来源", infoVal: res.source },
-                    // {infoName:"事件类型",infoVal:this.markType(String(res.type),true)},
-                    { infoName: "事件类型", infoVal: res.type },
+                    {infoName:"事件类型",infoVal:this.markType(String(res.type),true)},
+                    // { infoName: "事件类型", infoVal: res.type },
                     {
                         infoName: "事件状态",
-                        infoVal: res.status == 0 ? "处理中" : "已完成",
+                        infoVal: res.event_status == 0 ? "处理中" : "已完成",
                     },
                     {
                         infoName: "地理空间所属区域",
@@ -422,6 +432,7 @@ export default {
             this.$store.state.safeAnalysis.ifEventDetail =
                 !this.$store.state.safeAnalysis.ifEventDetail;
             this.$store.state.safeAnalysis.activePointId = this.activePointId;
+            this.$store.state.safeAnalysis.activeSegId =  this.segId
         },
     },
     mounted() {
@@ -444,11 +455,11 @@ export default {
                 this.$store.state.safeAnalysis.activePointId !==
                     this.activePointId
             ) {
-                this.questEvent(this.$store.state.safeAnalysis.activePointId);
+                this.questEvent(this.$store.state.safeAnalysis.activePointId)
                 this.activePointId =
                     this.$store.state.safeAnalysis.activePointId;
                 let geo = this.$store.state.safeAnalysis.mark.getGeometryById(
-                    String(this.$store.state.safeAnalysis.activePointId)
+                    this.$store.state.safeAnalysis.activePointId
                 );
                 this.$store.state.safeAnalysis.activeMark.setGeometries([geo]);
                 this.$store.state.safeAnalysis.map.setCenter(geo.position);

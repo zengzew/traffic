@@ -1,6 +1,6 @@
 <template>
     <div class="trail-container">
-        <div id="map2" class="map-container" v-loading="$store.state.safeAnalysis.loading_traffic"></div>
+        <div id="map2" class="map-container"></div>
         <div class="Map-tools">
             <div
                 :class="{
@@ -31,10 +31,7 @@
 
 <script>
 import { GET_STYLE } from "../../../assets/mapStyle/style.js";
-import tmap from "@/util/amap";
 import "./map.scss";
-const api = "http://152.136.229.63/img"
-console.log("api",api)
 export default {
     data() {
         return {
@@ -57,7 +54,7 @@ export default {
                 zoom: 13, //  13,
                 viewMode: "2D",
                 pitchable: false, // 1.0.12版本gl暂不包含该接口，设置无效, 使用时应在3D模式下
-                mapStyleId: "style2",
+                mapStyleId: 'style2'
             });
             // 设置控件位置
             const zoomCrl = this.$store.state.safeAnalysis.map.getControl(
@@ -74,9 +71,8 @@ export default {
             //     style: GET_STYLE(),
             // });
 
-            // 初始化 Line、Mark
+            // 初始化 Line
             this.initLine();
-            this.initMark();
         },
         // 实时路况图层
         trailSetPath() {
@@ -167,7 +163,7 @@ export default {
             //创建 MultiPolyline
             this.$store.state.safeAnalysis.line = new TMap.MultiPolyline({
                 id: "polyline-layer", //图层唯一标识
-                zIndex: 5,
+                zIndex:5,
                 map: this.$store.state.safeAnalysis.map, //绘制到目标地图
                 //折线样式定义
                 styles: {
@@ -192,7 +188,7 @@ export default {
             this.$store.state.safeAnalysis.activeLine = new TMap.MultiPolyline({
                 id: "polyline-layer-active", //图层唯一标识
                 map: this.$store.state.safeAnalysis.map, //绘制到目标地图
-                zIndex: 5,
+                zIndex:5,
                 //折线样式定义
                 styles: {
                     highlight: new TMap.PolylineStyle({
@@ -202,74 +198,6 @@ export default {
                         lineCap: "round", //线端头方式
                         showArrow: true,
                         arrowOptions: { width: 10, height: 20, space: 50 },
-                    }),
-                },
-            });
-        },
-        // 初始点
-        initMark() {
-            this.$store.state.safeAnalysis.mark = new TMap.MultiMarker({
-                id: "marker-layer",
-                map: this.$store.state.safeAnalysis.map,
-                styles: {
-                    accident: new TMap.MarkerStyle({
-                        width: 35,
-                        height: 35,
-                        anchor: { x: 16, y: 32 },
-                        // "src": 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/markerDefault.png'
-                        // src: `${api}/ac_accident.png`,
-                        src: process.env.NODE_ENV == 'development'? "https://i.postimg.cc/RWJN1Hry/ac-accident.png" : api + "/ac_accident.png"
-                    }),
-                    close: new TMap.MarkerStyle({
-                        width: 35,
-                        height: 35,
-                        anchor: { x: 16, y: 32 },
-                        src: process.env.NODE_ENV == 'development'? "https://i.postimg.cc/xCbzMWn8/ac-close.png" : api + "/ac_close.png"
-                    }),
-                    construction: new TMap.MarkerStyle({
-                        width: 35,
-                        height: 35,
-                        anchor: { x: 16, y: 32 },
-                        // src: `${api}/ac_cons.png`,
-                        src: process.env.NODE_ENV == 'development'? "https://i.postimg.cc/wtWZ67Mx/ac-construction.png" : api + "/ac_cons.png"
-                    }),
-                    jam: new TMap.MarkerStyle({
-                        width: 35,
-                        height: 35,
-                        anchor: { x: 16, y: 32 },
-                        src: process.env.NODE_ENV == 'development'? "https://i.postimg.cc/N95VLB26/ac-jam.png" : api +"/ac_jam.png"
-                    }),
-                },
-            });
-            this.$store.state.safeAnalysis.activeMark = new TMap.MultiMarker({
-                id: "marker-layer-active",
-                map: this.$store.state.safeAnalysis.map,
-                styles: {
-                    accident: new TMap.MarkerStyle({
-                        width: 80,
-                        height: 80,
-                        anchor: { x: 25, y: 39 },
-                        // "src": 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/markerDefault.png'
-                        src: process.env.NODE_ENV == 'development'? "https://i.postimg.cc/RWJN1Hry/ac-accident.png" : api +"/ac_accident.png"
-                    }),
-                    close: new TMap.MarkerStyle({
-                        width: 80,
-                        height: 80,
-                        anchor: { x: 25, y: 39 },
-                        src: process.env.NODE_ENV == 'development'? "https://i.postimg.cc/xCbzMWn8/ac-close.png" : api +"/ac_close.png"
-                    }),
-                    construction: new TMap.MarkerStyle({
-                        width: 80,
-                        height: 80,
-                        anchor: { x: 25, y: 39 },
-                        src: process.env.NODE_ENV == 'development'? "https://i.postimg.cc/wtWZ67Mx/ac-construction.png" : api +"/ac_cons.png"
-                        // src: 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/markerDefault.png'
-                    }),
-                    jam: new TMap.MarkerStyle({
-                        width: 80,
-                        height: 80,
-                        anchor: { x: 25, y: 39 },
-                        src: process.env.NODE_ENV == 'development'? "https://i.postimg.cc/N95VLB26/ac-jam.png" : api + "/ac_jam.png"
                     }),
                 },
             });
@@ -285,10 +213,6 @@ export default {
 
         this.$store.state.safeAnalysis.activeLine &&
             this.$store.state.safeAnalysis.activeLine.destroy();
-
-        // 摧毁点标记
-        this.$store.state.safeAnalysis.mark &&
-            this.$store.state.safeAnalysis.mark.destroy();
         // 离开后销毁地图
         this.$store.state.safeAnalysis.map &&
             this.$store.state.safeAnalysis.map.destroy();

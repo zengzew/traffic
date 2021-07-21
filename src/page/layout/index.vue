@@ -66,8 +66,7 @@ export default {
       if (this.$route.name === "select") {
         return "AI计算平台";
       } else if (
-        this.$route.name === "dangerAnalyze" ||
-        this.$route.name === "dangerHistory"
+        this.$route.name === "dangerAnalyze" || this.$route.name === "dangerHistory" || this.$route.name === "trafficAnalyze" || this.$route.name === "dangerPotential"
       ) {
         return "交通安全分析";
       } else {

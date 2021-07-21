@@ -7,10 +7,10 @@ const citySelectList = ['monitor'];
 // 二级导航栏业务下拉选择框不显示页面
 const orderSelectList = ['trail','dangerHistory'];
 // 二级导航栏不显示 “选择业务 和 数据管理” 的 界面
-const selectOrderList = ["dangerHistory","dangerAnalyze","trafficAnalyze"]
+const selectOrderList = ["dangerHistory","dangerAnalyze","trafficAnalyze","dangerPotential"]
 
 // 地图组件页面，需要提前
-const mapList = ['monitor', 'trail',"dangerAnalyze","trafficAnalyze"];
+const mapList = ['monitor', 'trail',"dangerAnalyze","trafficAnalyze","dangerPotential"];
 
 
 export { whiteList, backRouterWhiteList, citySelectList, orderSelectList,mapList,selectOrderList };

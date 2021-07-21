@@ -11,6 +11,8 @@ const state = {
     isFromHistory:false, //交通事故分析页面 是否从历史统计分析页面跳转过来
     ifEventDetail:false, //交通事故分析页面 是否打开交通事故事件详情
     activePointId:0,         //交通事故分析页面 被激活点的ID
+    activeSegId:"",          //交通事故分析页面 被激活点所属路段的ID
+    loading_traffic:false,   //交通事故分析页面 覆盖事件点分析地图的 loading
 }
 
 const mutations = {
