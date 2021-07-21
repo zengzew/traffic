@@ -4,7 +4,9 @@
       <span class="back-nav-img icon-back" @click="goRouterBack"></span>
       <span class="backText" @click="goRouterBack">返回</span>
       <!--业务名称组件-->
-      <span class="configText" v-if="$route.name === 'configuration'">业务配置 / </span>
+      <span class="configText" v-if="$route.name === 'configuration'"
+        >业务配置 /
+      </span>
       <span class="back-nav-title">
         <el-select
           v-model="currentOrder"
@@ -14,24 +16,44 @@
           placeholder="请选择业务"
           v-if="!selectOrderList.includes($route.name)"
         >
-          <el-option v-for="item in orderList" :key="item.serviceid" :label="item.servicename" :value="item">
+          <el-option
+            v-for="item in orderList"
+            :key="item.serviceid"
+            :label="item.servicename"
+            :value="item"
+          >
           </el-option>
         </el-select>
       </span>
     </div>
     <!--行政区域选择组件-->
-    <div class="citySelects" >
-      <DistrictSelects v-if="citySelectList.includes($route.name)"></DistrictSelects>
-      <div v-if="!!this.managePerms & !selectOrderList.includes($route.name) " class="manageText" @click="gotoManange">
-        <span><img src="../../../src/assets/images/icon_datamanagement@2x.png" />数据管理</span>
+    <div class="citySelects">
+      <DistrictSelects
+        v-if="citySelectList.includes($route.name)"
+      ></DistrictSelects>
+      <div
+        v-if="!!this.managePerms & !selectOrderList.includes($route.name)"
+        class="manageText"
+        @click="gotoManange"
+      >
+        <span
+          ><img
+            src="../../../src/assets/images/icon_datamanagement@2x.png"
+          />数据管理</span
+        >
       </div>
     </div>
   </div>
 </template>
 <script>
-import { mapState, mapGetters } from 'vuex';
-import DistrictSelects from './DistrictSelects';
-import { backRouterWhiteList, citySelectList, orderSelectList,selectOrderList } from '../../router/whiteList';
+import { mapState, mapGetters } from "vuex";
+import DistrictSelects from "./DistrictSelects";
+import {
+  backRouterWhiteList,
+  citySelectList,
+  orderSelectList,
+  selectOrderList,
+} from "../../router/whiteList";
 
 export default {
   components: {
@@ -43,10 +65,10 @@ export default {
       citySelectList,
       orderSelectList,
       selectOrderList,
-      defaultPage: '首页',
-      value: '北京市',
-      cityValue: '北京市',
-      countyValue: '东城区',
+      defaultPage: "首页",
+      value: "北京市",
+      cityValue: "北京市",
+      countyValue: "东城区",
       options: [],
       cityOptions: [],
       countyOptions: [],
@@ -59,22 +81,21 @@ export default {
       allPagePermission: (state) => state.auth.allPagePermission,
     }),
     ...mapGetters({
-      managePerms: 'auth/managePerms',
+      managePerms: "auth/managePerms",
     }),
     currentOrder: {
       get() {
         return this.$store.state.multiOrder.currentOrder;
       },
       set(val) {
-        console.log('val', val);
+        console.log("val", val);
         // let tmpOrder = this.orderTestUrl.find(item => item.service)
-        this.$store.commit('multiOrder/setCurrentOrder', val);
+        this.$store.commit("multiOrder/setCurrentOrder", val);
       },
     },
   },
   mounted() {
     console.log(this.$route, this.$router, backRouterWhiteList);
-
   },
   watch: {
     $route(to) {
@@ -83,12 +104,11 @@ export default {
   },
   methods: {
     gotoManange() {
-      this.$router.push('/example/dataManage');
+      this.$router.push("/example/dataManage");
     },
     goRouterBack() {
-
       // this.$router.push({name: 'multiOrder'});
-      this.$router.push({name: 'select'});
+      this.$router.push({ name: "select" });
       // this.$store.state.tagNav.activePage = '首页';
     },
   },
@@ -96,7 +116,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .icon-back {
-  background: url('../../assets/images/ic_back@3x.png');
+  background: url("../../assets/images/ic_back@3x.png");
   background-size: 100% 100%;
 }
 
@@ -110,14 +130,13 @@ export default {
   // box-shadow: 0 4px 10px 0 rgba(0, 44, 102, 0.05);
   box-sizing: border-box;
   background-color: #1c2430;
-  color: #ACBACD;
+  color: #acbacd;
   .back-nav-router {
     float: left;
     height: 50px;
     line-height: 50px;
     display: flex;
     align-items: center;
-
     .back-nav-img {
       width: 14px;
       height: 14px;
@@ -138,13 +157,16 @@ export default {
       }
       /deep/ .el-icon-arrow-up:before {
         color: black;
-        content: '\E78F';
+        content: "\E78F";
       }
     }
     .backText {
       margin-left: 5px;
       cursor: pointer;
     }
+  }
+  .back-nav-router :hover {
+    color: #00faff;
   }
 }
 .configText {
@@ -161,7 +183,7 @@ export default {
 
   /deep/ .el-icon-arrow-up:before {
     color: black;
-    content: '\E78F';
+    content: "\E78F";
   }
 }
 
