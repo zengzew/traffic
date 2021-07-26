@@ -1,9 +1,9 @@
 <template>
     <div class="aipp-select">
-        <div class="aipp-select-item" @click="$router.push('/home')" >
+        <!-- <div class="aipp-select-item" @click="$router.push('/home')" >
             <div class="diamond" :style="{height:height + 'px', width:height + 'px'}"></div>
             <span class="platName">重点车辆轨迹管理</span>
-        </div>
+        </div> -->
         <div class="aipp-select-item" @click="$router.push('/dangerAnalyze')" >
             <div class="diamond" :style="{height:height + 'px', width:height + 'px'}"></div>
             <span class="platName">交通安全分析</span>
@@ -17,6 +17,8 @@ export default {
       return{
         height:200
       }
+    },
+    created(){
     },
     methods: {
         getHeight() {

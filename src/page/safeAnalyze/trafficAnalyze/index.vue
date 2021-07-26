@@ -1,23 +1,37 @@
 <template>
-    <div style="height:100%">
-            <div id="container" v-show="!$store.state.safeAnalysis.ifEventDetail">
-        <map2></map2>
-        <div class="colorbar"></div>
-        <watch id="watch" ></watch>
-        <div style="clear: both"></div>
-    </div>
-    <div id="container" v-show="$store.state.safeAnalysis.ifEventDetail">
-        <detail></detail>
-    </div>
+    <div style="height: 100%">
+        <div id="container" v-show="!$store.state.safeAnalysis.ifEventDetail">
+            <map2></map2>
+            <!-- <div class="colorbar"></div> -->
+            <watch id="watch"></watch>
+            <div style="clear: both"></div>
+            <div
+                v-if="$store.state.safeAnalysis.isFromHistory"
+                class="toHistory"
+                @click="toHistory"
+            >
+                返回历史统计分析页面
+            </div>
+        </div>
+        <div id="container" v-show="$store.state.safeAnalysis.ifEventDetail">
+            <detail></detail>
+        </div>
     </div>
 </template>
 
 <script>
 import Map2 from "./map";
 import Watch from "../../components/safeAnalyze/watchTraffic";
-import Detail from "../../components/safeAnalyze/eventDetail.vue"
+import Detail from "../../components/safeAnalyze/eventDetail.vue";
 export default {
-    components: { Map2, Watch,Detail },
+    components: { Map2, Watch, Detail },
+    methods: {
+        toHistory() {
+            this.$store.state.safeAnalysis.eventIdFromHistory = "";
+            this.$store.state.safeAnalysis.isFromHistory = false;
+            this.$router.push("dangerHistory");
+        },
+    },
 };
 </script>
 
@@ -25,25 +39,41 @@ export default {
 #container {
     width: 100%;
     height: 100%;
-    background-color: #2D3C51;
+    background-color: #2d3c51;
     /* overflow-y: auto; */
 }
 
 #watch {
     /* transition: .3s; */
     position: absolute;
-    top: 48px;
+    top: 0px;
     bottom: 20px;
     transition: 0.3s;
 }
 
-.colorbar{
+.colorbar {
     position: absolute;
     width: 100%;
     height: 3px;
     top: 48px;
-    background-color: #1C2430;
+    background-color: #1c2430;
     z-index: 10000;
 }
 
+.toHistory {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 4%;
+    cursor: pointer;
+    border: 1px solid rgba(202, 215, 237, 0.24);
+    border-radius: 3px;
+    padding: 10px;
+    color: #e2e8f1;
+    background-color: #2d3c51;
+}
+
+.toHistory:hover {
+    background-color: #56739A;
+}
 </style>

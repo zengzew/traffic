@@ -47,7 +47,7 @@
                 <span class="region">区域</span>
                 <span class="detail-region">西青区</span>
             </div>
-            <div class="index-sum">区域事故严重指数: {{totalIndex}}</div>
+            <div class="index-sum">区域事故严重指数: {{ totalIndex }}</div>
             <el-table
                 class="eventAnalysis"
                 ref="safeAnalysis"
@@ -167,8 +167,9 @@ export default {
             activePointId: 0, //被选择的事故点的ID，当为0时表示未选择任何事故点
             eventPlace: "", //事故发生地点
             eventSum: "", //事故总数
-            totalIndex:"", //事故严重指数总数
-            segId:"" //被激活 事件点 所属路段的ID
+            totalIndex: "", //事故严重指数总数
+            segId: "", //被激活 事件点 所属路段的ID
+            time: "",
         };
     },
     computed: {
@@ -182,6 +183,9 @@ export default {
         },
     },
     methods: {
+        getTime() {
+            return Math.round(new Date().getTime() / 1000).toString();
+        },
         animate() {
             this.isActive = !this.isActive;
         },
@@ -200,7 +204,6 @@ export default {
             this.$API.safeAnalyze
                 .segLocation(seg_ids.join(","), type)
                 .then((res) => {
-                    console.log(res.data);
                     res.data.forEach((ele) => {
                         var row = seg_ids.indexOf(ele.segId);
                         var coords = (ele.coords + ";").split(";");
@@ -259,6 +262,7 @@ export default {
             this.loading = true;
             switch (this.tabIndex) {
                 case "1": {
+                    this.$store.state.safeAnalysis.isFromHistory = false;
                     this.$store.state.safeAnalysis.mark.setGeometries([]);
                     this.$store.state.safeAnalysis.activeMark.setGeometries([]);
                     this.$API.safeAnalyze
@@ -281,18 +285,32 @@ export default {
                     //         this.drawLine(res.data, "turn");
                     //     });
                     this.$store.state.safeAnalysis.loading_traffic = true;
-                    this.$API.safeAnalyze.allEventsPoints().then((res) => {
-                        this.$store.state.safeAnalysis.loading_traffic = false;
-                        let geo = [];
-                        res.data.forEach((ele) => {
-                            geo.push({
-                                id: ele.event_id,
-                                styleId: this.markType(String(ele.type)),
-                                position: new TMap.LatLng(ele.lat, ele.lng),
+                    if (this.$store.state.safeAnalysis.isFromHistory) {
+                        this.time =
+                            this.$store.state.safeAnalysis.timeFromHistory;
+                    } else {
+                        this.time = this.getTime();
+                    }
+                    console.log("请求时间",this.time)
+                    this.$API.safeAnalyze
+                        .allEventsPoints(this.time)
+                        .then((res) => {
+                            console.log("所有点",res);
+                            this.$store.state.safeAnalysis.loading_traffic = false;
+                            let geo = [];
+                            res.data.forEach((ele) => {
+                                geo.push({
+                                    id: ele.event_id,
+                                    styleId: this.markType(String(ele.type)),
+                                    position: new TMap.LatLng(ele.lat, ele.lng),
+                                });
                             });
+                            this.$store.state.safeAnalysis.mark.setGeometries(
+                                geo
+                            );
+                            // 如果是从历史统计分析页面跳转而来
+                            this.HistoryHandle();
                         });
-                        this.$store.state.safeAnalysis.mark.setGeometries(geo);
-                    });
                     break;
                 }
             }
@@ -300,14 +318,18 @@ export default {
         //请求事件详情数据
         questEvent(event_id) {
             this.loading = true;
-            this.$API.safeAnalyze.eventDetail(event_id).then((res) => {
-                console.log(res)
+            if (this.$store.state.safeAnalysis.isFromHistory) {
+                this.time = this.$store.state.safeAnalysis.timeFromHistory;
+            } else {
+                this.time = this.getTime();
+            }
+            this.$API.safeAnalyze.eventDetail(event_id,this.time).then((res) => {
                 this.loading = false;
-                var out_res = res
-                res = res.data[0]
-                this.segId = res.seg_id
-                this.eventPlace = res.seg_name;
+                var out_res = res;
                 this.eventSum = res.seg_event_count;
+                res = res.data[0];
+                this.segId = res.seg_id;
+                this.eventPlace = res.seg_name;
                 this.eventTableData = [
                     { type: "事故", count: out_res.accident_count },
                     { type: "施工", count: out_res.roadworks_count },
@@ -316,11 +338,14 @@ export default {
                 ];
                 this.eventInfoTableData = [
                     // { infoName: "事件编号", infoVal: res.event_id },
-                    { infoName: "事件编号", infoVal: event_id },
+                    { infoName: "事件编号", infoVal: res.origin_id },
                     { infoName: "事件标题", infoVal: res.title },
                     { infoName: "事件内容", infoVal: res.info },
                     { infoName: "事件来源", infoVal: res.source },
-                    {infoName:"事件类型",infoVal:this.markType(String(res.type),true)},
+                    {
+                        infoName: "事件类型",
+                        infoVal: this.markType(String(res.type), true),
+                    },
                     // { infoName: "事件类型", infoVal: res.type },
                     {
                         infoName: "事件状态",
@@ -432,8 +457,30 @@ export default {
             this.$store.state.safeAnalysis.ifEventDetail =
                 !this.$store.state.safeAnalysis.ifEventDetail;
             this.$store.state.safeAnalysis.activePointId = this.activePointId;
-            this.$store.state.safeAnalysis.activeSegId =  this.segId
+            this.$store.state.safeAnalysis.activeSegId = this.segId;
         },
+        //从历史统计分析页面跳转到本页面的处理函数
+        HistoryHandle() {
+            if (this.$store.state.safeAnalysis.isFromHistory) {
+                this.questEvent(
+                    this.$store.state.safeAnalysis.eventIdFromHistory
+                );
+                this.activePointId =
+                    this.$store.state.safeAnalysis.eventIdFromHistory;
+                this.$store.state.activePointId =
+                    this.$store.state.safeAnalysis.eventIdFromHistory;
+                let geo = this.$store.state.safeAnalysis.mark.getGeometryById(
+                    this.activePointId
+                );
+                this.$store.state.safeAnalysis.activeMark.setGeometries([geo]);
+                this.$store.state.safeAnalysis.map.setCenter(geo.position);
+            }
+        },
+    },
+    created() {
+        if (this.$store.state.safeAnalysis.isFromHistory) {
+            this.tabIndex = "2";
+        }
     },
     mounted() {
         this.questData();
@@ -455,7 +502,7 @@ export default {
                 this.$store.state.safeAnalysis.activePointId !==
                     this.activePointId
             ) {
-                this.questEvent(this.$store.state.safeAnalysis.activePointId)
+                this.questEvent(this.$store.state.safeAnalysis.activePointId);
                 this.activePointId =
                     this.$store.state.safeAnalysis.activePointId;
                 let geo = this.$store.state.safeAnalysis.mark.getGeometryById(

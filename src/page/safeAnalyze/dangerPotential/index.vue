@@ -1,7 +1,7 @@
 <template>
     <div id="container">
         <map2></map2>
-        <div class="colorbar"></div>
+        <!-- <div class="colorbar"></div> -->
         <watch id="watch" ></watch>
         <div style="clear: both"></div>
     </div>
@@ -24,7 +24,8 @@ export default {
 #watch {
     /* transition: .3s; */
     position: absolute;
-    top: 48px;
+    /* top: 48px; */
+    top: 0;
     bottom: 20px;
     transition: 0.3s;
 }

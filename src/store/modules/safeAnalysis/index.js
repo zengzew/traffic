@@ -14,6 +14,7 @@ const state = {
     activeSegId:"",          //交通事故分析页面 被激活点所属路段的ID
     loading_traffic:false,   //交通事故分析页面 覆盖事件点分析地图的 loading
     eventIdFromHistory: "", //历史事件点传入的event ID
+    timeFromHistory:"",     //历史事件点传入的事件发生时间
 }
 
 

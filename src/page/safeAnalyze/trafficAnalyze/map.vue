@@ -33,8 +33,7 @@
 import { GET_STYLE } from "../../../assets/mapStyle/style.js";
 import tmap from "@/util/amap";
 import "./map.scss";
-const api = "http://152.136.229.63/img"
-console.log("api",api)
+const api = "http://82.156.230.142/img"
 export default {
     data() {
         return {

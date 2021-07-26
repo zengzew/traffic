@@ -115,22 +115,31 @@ export default {
             event_sum: 10, //事故总数
             currentPage:1, //当前页码
             seg_id:"", //当前表格所属路段的ID
+            time:"",
         };
     },
     methods: {
+                getTime() {
+            return Math.round(new Date().getTime() / 1000).toString();
+        },
         questData(seg_id, page_index, page_size) {
+                        if (this.$store.state.safeAnalysis.isFromHistory) {
+                this.time = this.$store.state.safeAnalysis.timeFromHistory;
+            } else {
+                this.time = this.getTime();
+            }
             this.$API.safeAnalyze
-                .segEvent(seg_id, page_index, page_size)
+                .segEvent(seg_id, page_index, page_size,this.time)
                 .then((res) => {
                     this.event_sum = res.seg_event_count
                     this.seg_name = res.seg_name;
                     this.eventTableData = res.data;
-                    this.eventTableData = this.eventTableData.concat(res.data);
-                    this.eventTableData = this.eventTableData.concat(res.data);
-                    this.eventTableData = this.eventTableData.concat(res.data);
-                    this.eventTableData = this.eventTableData.concat(res.data);
-                    this.eventTableData = this.eventTableData.concat(res.data);
-                    this.eventTableData = this.eventTableData.concat(res.data);
+                    // this.eventTableData = this.eventTableData.concat(res.data);
+                    // this.eventTableData = this.eventTableData.concat(res.data);
+                    // this.eventTableData = this.eventTableData.concat(res.data);
+                    // this.eventTableData = this.eventTableData.concat(res.data);
+                    // this.eventTableData = this.eventTableData.concat(res.data);
+                    // this.eventTableData = this.eventTableData.concat(res.data);
                 });
         },
         //事件点的类型判断
@@ -244,7 +253,7 @@ div {
     position: absolute;
     width: 40px;
     right: -5px;
-    top: 48px;
+    top: 4px;
     cursor: pointer;
 }
 

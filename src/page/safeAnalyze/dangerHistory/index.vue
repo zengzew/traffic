@@ -19,6 +19,7 @@
 import HistoryEvents from "./HistoryEvents.vue";
 import HistorySituation from "./HistorySituation.vue";
 export default {
+  name:"dangerHistory",
   components: { HistorySituation, HistoryEvents },
   data() {
     return {

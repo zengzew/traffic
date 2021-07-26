@@ -190,7 +190,6 @@ export default {
             this.$API.safeAnalyze
                 .segLocation(seg_ids.join(","), type)
                 .then((res) => {
-                    console.log(res.data);
                     res.data.forEach((ele) => {
                         var row = seg_ids.indexOf(ele.segId);
                         var coords = (ele.coords + ";").split(";");
@@ -239,7 +238,6 @@ export default {
                     this.$API.safeAnalyze
                         .brakeDataGet(this.rank_num)
                         .then((res) => {
-                            console.log(res.data);
                             this.tableData = res.data;
                             this.loading = false;
                             this.drawLine(res.data, "brake");
@@ -320,7 +318,6 @@ export default {
         lineClick() {
             this.$store.state.safeAnalysis.line.on("click", (evt) => {
                 try {
-                    console.log(evt.geometry);
                     this.$refs.safeAnalysis.setCurrentRow(
                         this.tableData[evt.geometry.row]
                     );

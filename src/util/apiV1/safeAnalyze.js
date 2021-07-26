@@ -167,33 +167,33 @@ const safeAnalyze = {
     // }
 
     //全城事件点实时查询接口
-    allEventsPoints: () =>
+    allEventsPoints: (time) =>
     promiseAxios(
         axios({
             // url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/allPoint`,
-            url:`http://82.156.230.142:10900/track/v1/event/gets?current_time=${getTime()}`,
+            url:`http://82.156.230.142:10900/track/v1/event/gets?current_time=${time}`,
             type: "get",
             withCredentials: false,
         })
     ),
 
     //某一事件点详细数据接口
-    eventDetail: (event_id) =>
+    eventDetail: (event_id,time) =>
     promiseAxios(
         axios({
             // url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/eventDetail/${event_id}`,
-            url:`http://82.156.230.142:10900/track/v1/event/get?event_id=${event_id}&current_time=${getTime()}`,
+            url:`http://82.156.230.142:10900/track/v1/event/get?event_id=${event_id}&current_time=${time}`,
             type: "get",
             withCredentials: false,
         })
     ),
 
     //路段事件查看详情接口
-    segEvent: (seg_id,page_index,page_size) =>
+    segEvent: (seg_id,page_index,page_size,time) =>
     promiseAxios(
         axios({
             // url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/segEvent/${seg_id}`,
-            url:`http://82.156.230.142:10900/track/v1/event/getseg?seg_id=${seg_id}&current_time=${getTime()}&pageindex=${page_index}&pagesize=${page_size}`,
+            url:`http://82.156.230.142:10900/track/v1/event/getseg?seg_id=${seg_id}&current_time=${time}&pageindex=${page_index}&pagesize=${page_size}`,
             type: "get",
             withCredentials: false,
         })

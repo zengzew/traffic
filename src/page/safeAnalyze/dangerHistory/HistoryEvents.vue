@@ -61,7 +61,7 @@
 
       <el-table-column prop="event_id" label="事件发生位置" width="105">
         <template slot-scope="scope">
-          <el-button size="mini" @click="goMap(scope.row.event_id)"
+          <el-button size="mini" @click="goMap(scope.row.event_id,scope.row.start_time)"
             >查看位置</el-button
           >
         </template></el-table-column
@@ -139,11 +139,11 @@ export default {
     },
   },
   methods: {
-    goMap(e) {
-      console.log("eventID", e);
-      this.$sotre.safeAnalysis.eventIdFromHistory = e;
-      this.$sotre.safeAnalysis.isFromHistory = true;
-      // this.$router.push({ name: "trafficAnalyze" });
+    goMap(e,time) {
+      this.$store.state.safeAnalysis.eventIdFromHistory = e;
+      this.$store.state.safeAnalysis.timeFromHistory = String(Date.parse(new Date(time))/1000);
+      this.$store.state.safeAnalysis.isFromHistory = true;
+      this.$router.push( "trafficAnalyze" );
     },
     // 日期选择约束
     beginDate() {

@@ -139,14 +139,14 @@ const staticRoute = [
     name: "",
     component: Layout,
     meta: {
-        keepAlive: false,       
+        keepAlive: false,
     },
     children: [
         {
             path: "",
             name: "dangerHistory",
             component: () => import("../page/safeAnalyze/dangerHistory"),
-            meta: { keepAlive: false },
+            meta: { keepAlive: true },
         },
     ],
 },
