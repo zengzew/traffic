@@ -560,9 +560,9 @@ export default {
     //所有数字后加上百分号
     percent: function (value) {
       if (isNaN(value)) {
-        return "暂无数据";
+        return "——";
       } else if (value == Infinity) {
-        return "暂无数据";
+        return "——";
       } else return (value * 100).toFixed(1) + "%";
     },
     //格式化日期
@@ -1337,7 +1337,7 @@ export default {
 }
 .timepickerFake {
   visibility: hidden;
-  padding-top: 2rem;
+  padding-top: 3rem;
 }
 
 .main {
@@ -1381,6 +1381,10 @@ export default {
 }
 .el-icon-caret-bottom {
   color: #25ff25;
+}
+.el-icon-minus {
+  color: #00faff;
+  padding-right: 5px;
 }
 
 .el-row {
