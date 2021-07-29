@@ -268,11 +268,11 @@ export default {
             switch (type) {
                 case "1":
                     return chinese ? "事故" : "accident";
-                case "2":
-                    return chinese ? "施工" : "construction";
-                case "3":
-                    return chinese ? "封路" : "close";
                 case "4":
+                    return chinese ? "施工" : "construction";
+                case "2":
+                    return chinese ? "封路" : "close";
+                case "3":
                     return chinese ? "拥堵" : "jam";
             }
         },
@@ -314,6 +314,7 @@ export default {
                     this.$API.safeAnalyze
                         .allEventsPoints(...this.time)
                         .then((res) => {
+                            console.log("所有点",res)
                             this.$store.state.safeAnalysis.loading_traffic = false;
                             let geo = [];
                             res.data.forEach((ele) => {
@@ -337,7 +338,13 @@ export default {
         questEvent(event_id) {
             this.loading = true;
             this.time = [];
-            let timePicker_time = this.getCurrentZeroClockTime(this.$store.state.safeAnalysis.timePicker.getTime()/1000 - 86400);
+            if (typeof this.$store.state.safeAnalysis.timePicker === "object"){
+                // 这里由于设置失误:初始化vuex里的timePicker时候是new Date，但后面修改其值的时候其值类型为Number
+                 var timePicker_time = String(this.getCurrentZeroClockTime(this.$store.state.safeAnalysis.timePicker.getTime()/1000 - 86400));
+            }else{
+                var timePicker_time = this.getCurrentZeroClockTime(this.$store.state.safeAnalysis.timePicker)
+            }
+
             let current_time = this.getCurrentZeroClockTime(new Date().getTime()/1000 - 86400);
             if (this.$store.state.safeAnalysis.isFromHistory) {
                 // 如果是从历史统计分析页面跳转而来
@@ -353,6 +360,7 @@ export default {
             }
 
             this.$API.safeAnalyze.eventDetail(event_id,...this.time).then((res) => {
+                console.log("res",res)
                 this.loading = false;
                 var out_res = res;
                 this.eventSum = res.seg_event_count;
@@ -382,7 +390,7 @@ export default {
                     },
                     {
                         infoName: "地理空间所属区域",
-                        infoVal: res.region == 0 ? "城区" : "高速",
+                        infoVal: res.region == 0 ? "城内" : "高速",
                     },
                     { infoName: "开始时间", infoVal: res.start_time },
                     { infoName: "结束时间", infoVal: res.end_time },

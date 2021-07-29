@@ -520,8 +520,9 @@ export default {
   },
   //默认读取当前数据，并渲染
   created() {
-    this.updateChart(this.timestamp).then(() => {
-      this.calculateData(this.timestamp);
+     let initTime = this.timestamp.setHours(0, 0, 0, 0);
+    this.updateChart(initTime).then(() => {
+      this.calculateData(initTime);
     });
   },
   mounted() {

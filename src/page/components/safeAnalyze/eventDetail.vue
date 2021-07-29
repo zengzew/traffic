@@ -133,8 +133,15 @@ export default {
         },
         questData(seg_id, page_index, page_size) {
             this.time = []
-            let timePicker_time = String(this.$store.state.safeAnalysis.timePicker);
+            // let timePicker_time = String(this.$store.state.safeAnalysis.timePicker);
             let current_time = this.getCurrentZeroClockTime(new Date().getTime()/1000 - 86400);
+            
+            if (typeof this.$store.state.safeAnalysis.timePicker === "object"){
+                // 这里由于设置失误:初始化vuex里的timePicker时候是new Date，但后面修改其值的时候其值类型为Number
+                 var timePicker_time = String(this.getCurrentZeroClockTime(this.$store.state.safeAnalysis.timePicker.getTime()/1000 - 86400));
+            }else{
+                var timePicker_time = this.getCurrentZeroClockTime(this.$store.state.safeAnalysis.timePicker)
+            }
             if (this.$store.state.safeAnalysis.isFromHistory) {
                 var historyTime = this.$store.state.safeAnalysis.timeFromHistory;
                 this.time.push(this.getTime(),this.getCurrentZeroClockTime(historyTime),this.getNextZeroClockTime(historyTime))
@@ -217,7 +224,7 @@ export default {
         regionBelong(row, col, type, index) {
             switch (type) {
                 case 0:
-                    return "城区";
+                    return "城内";
                 case 1:
                     return "高速";
             }
