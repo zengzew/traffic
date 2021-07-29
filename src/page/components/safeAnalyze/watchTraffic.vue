@@ -88,6 +88,7 @@
             <template v-if="activePointId">
                 <div class="point-analysis" :style="{ height: '80%' }">
                     <div class="part1">
+                                    <time-picker class="timePicker"></time-picker>
                         <p class="accident-location">
                             事故发生位置:{{ eventPlace }}
                         </p>
@@ -141,7 +142,11 @@
             </template>
             <template v-else>
                 <div class="please-select-point">
-                    请<span>选择</span>事件点查询事件详情
+                    <time-picker class="timePicker"></time-picker>
+                    <div class="select-content">请<span>选择</span>事件点查询事件详情</div>
+                    目前只有7月14-7月28有数据
+                    <br>
+                    时间选择器初始化默认为当日
                 </div>
             </template>
         </template>
@@ -150,7 +155,9 @@
 
 <script>
 import tmap from "@/util/amap";
+import timePicker from "../../components/safeAnalyze/timePicker.vue"
 export default {
+    components:{timePicker},
     data() {
         return {
             isActive: true,
@@ -169,7 +176,7 @@ export default {
             eventSum: "", //事故总数
             totalIndex: "", //事故严重指数总数
             segId: "", //被激活 事件点 所属路段的ID
-            time: [], // 当前时间
+            time: [], // 请求的时间参数
             start_datetime:"", //历史统计分析跳转过来的开始时间
             end_datetime:"",  //历史统计分析跳转过来的结束时间
         };
@@ -190,12 +197,13 @@ export default {
         },
         // 获取当天凌晨00:00:00的时间戳
         getCurrentZeroClockTime(time){
-            return (new Date(Number(time) * 1000 + 28800000 - 86400000).setHours(0,0,0,0) / 1000).toString();
+            // return (new Date(Number(time) * 1000 + 28800000 - 86400000).setHours(0,0,0,0) / 1000).toString();
+            return (new Date(Number(time) * 1000 + 28800000).setHours(0,0,0,0) / 1000).toString();
         },
         // 获取当天23:59:59 或者说是 第二天凌晨00:00:00的时间戳
         getNextZeroClockTime(time){
-            return (new Date(Number(time) * 1000 + 28800000).setHours(0,0,0,0) / 1000).toString();
-        },        
+            return (new Date(Number(time) * 1000 + 28800000 + 86400000).setHours(0,0,0,0) / 1000).toString();
+        },
         animate() {
             this.isActive = !this.isActive;
         },
@@ -287,6 +295,7 @@ export default {
                 }
                 case "2": {
                     this.$store.state.safeAnalysis.line.setGeometries([]);
+                    this.time = []
                     // this.$API.safeAnalyze
                     //     .turnDataGet(this.rank_num)
                     //     .then((res) => {
@@ -298,15 +307,13 @@ export default {
                     if (this.$store.state.safeAnalysis.isFromHistory) {
                         var historyTime = this.$store.state.safeAnalysis.timeFromHistory;
                         this.time.push(this.getTime(),this.getCurrentZeroClockTime(historyTime),this.getNextZeroClockTime(historyTime))
-                            
-                    } else {
+                    } 
+                    else {
                         this.time.push(this.getTime());
                     }
-                    console.log("请求时间",...this.time)
                     this.$API.safeAnalyze
                         .allEventsPoints(...this.time)
                         .then((res) => {
-                            console.log("所有点",res);
                             this.$store.state.safeAnalysis.loading_traffic = false;
                             let geo = [];
                             res.data.forEach((ele) => {
@@ -329,12 +336,23 @@ export default {
         //请求事件详情数据
         questEvent(event_id) {
             this.loading = true;
+            this.time = [];
+            let timePicker_time = String(this.$store.state.safeAnalysis.timePicker);
+            let current_time = this.getCurrentZeroClockTime(new Date().getTime()/1000 - 86400);
             if (this.$store.state.safeAnalysis.isFromHistory) {
-                this.time = this.$store.state.safeAnalysis.timeFromHistory;
-            } else {
-                this.time = this.getTime();
+                // 如果是从历史统计分析页面跳转而来
+                var historyTime = this.$store.state.safeAnalysis.timeFromHistory;
+                this.time.push(this.getTime(),this.getCurrentZeroClockTime(historyTime),this.getNextZeroClockTime(historyTime))
+            }else if (timePicker_time !== current_time){
+                // 如果时间选择器选择的是以往的时间
+                this.time.push(this.getTime(),this.getCurrentZeroClockTime(timePicker_time),this.getNextZeroClockTime(timePicker_time))
+            } 
+            else {
+                // 如果时间选择器选择的是当日的时间
+                this.time.push(this.getTime());
             }
-            this.$API.safeAnalyze.eventDetail(event_id,this.time).then((res) => {
+
+            this.$API.safeAnalyze.eventDetail(event_id,...this.time).then((res) => {
                 this.loading = false;
                 var out_res = res;
                 this.eventSum = res.seg_event_count;
@@ -476,9 +494,9 @@ export default {
                 this.questEvent(
                     this.$store.state.safeAnalysis.eventIdFromHistory
                 );
+
                 this.activePointId =
                     this.$store.state.safeAnalysis.eventIdFromHistory;
-                console.log("事件编号为944402615的event_id：",this.activePointId)
                 this.$store.state.activePointId =
                     this.$store.state.safeAnalysis.eventIdFromHistory;
                 let geo = this.$store.state.safeAnalysis.mark.getGeometryById(
@@ -504,7 +522,10 @@ export default {
         window.addEventListener("resize", this.getHeight);
     },
     destroyed() {
-        window.removeEventListener("resize", this.getHeight);
+      window.removeEventListener("resize", this.getHeight);
+      this.$store.state.safeAnalysis.timePickerStr = 0;
+      this.$store.state.safeAnalysis.timePicker = new Date();
+    
     },
     watch: {
         //从交通事故事件详情返回地图的情况
@@ -524,6 +545,32 @@ export default {
                 this.$store.state.safeAnalysis.map.setCenter(geo.position);
             }
         },
+        //监听时间选择器
+        "$store.state.safeAnalysis.timePicker":function(newVal){
+            this.$store.state.safeAnalysis.line.setGeometries([]);
+            this.$store.state.safeAnalysis.activeMark.setGeometries([]);
+            this.$store.state.activePointId =  0;
+            this.activePointId = 0;
+            this.time = [];
+            this.$store.state.safeAnalysis.loading_traffic = true;
+            this.time.push(this.getTime(),this.getCurrentZeroClockTime(newVal),this.getNextZeroClockTime(newVal));
+            this.$API.safeAnalyze
+                .allEventsPoints(...this.time)
+                .then((res) => {
+                    this.$store.state.safeAnalysis.loading_traffic = false;
+                    let geo = [];
+                    res.data.forEach((ele) => {
+                        geo.push({
+                            id: ele.event_id,
+                            styleId: this.markType(String(ele.type)),
+                            position: new TMap.LatLng(ele.lat, ele.lng),
+                        });
+                    });
+                    this.$store.state.safeAnalysis.mark.setGeometries(
+                        geo
+                    );
+                });
+        }
     },
 };
 </script>
@@ -613,19 +660,25 @@ export default {
 }
 
 .please-select-point {
+    margin-left: 2px;
     background-color: #2d3c51;
     color: #e2e8f1;
     height: 90%;
     width: 370px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
     box-sizing: border-box;
     padding-bottom: 25%;
     font-size: 1rem;
     span {
         color: #00faff;
         padding: 0 2%;
+    }
+    div{
+        flex: 1;
+        width: 100%;
+        text-align: center;
     }
 }
 
@@ -745,4 +798,13 @@ export default {
     /*滚动条轨道的样式*/
     background: #727c8a;
 }
+
+.timePicker{
+    margin-bottom: 10px;
+}
+
+/deep/ .el-date-editor.el-input, .el-date-editor.el-input__inner {
+    width: 100%;
+}
+
 </style>

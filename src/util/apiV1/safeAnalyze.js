@@ -171,29 +171,29 @@ const safeAnalyze = {
     promiseAxios(
         axios({
             // url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/allPoint`,
-            url: start_datetime? `http://82.156.230.142:10900/track/v1/event/gets?current_time=${time}&start_datetime=${start_datetime}&end_datetime=${end_datetime}`: `http://82.156.230.142:10900/track/v1/event/gets?current_time=${time}`,
+            url: start_datetime? `http://82.156.230.142:10900/track/v1/event/gets2?start_datetime=${start_datetime}&end_datetime=${end_datetime}`: `http://82.156.230.142:10900/track/v1/event/gets?current_time=${time}`,
             type: "get",
             withCredentials: false,
         })
     ),
 
     //某一事件点详细数据接口
-    eventDetail: (event_id,time) =>
+    eventDetail: (event_id,time,start_datetime=null,end_datetime=null) =>
     promiseAxios(
         axios({
             // url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/eventDetail/${event_id}`,
-            url:`http://82.156.230.142:10900/track/v1/event/get?event_id=${event_id}&current_time=${time}`,
+            url: start_datetime ? `http://82.156.230.142:10900/track/v1/event/get2?event_id=${event_id}&start_datetime=${start_datetime}&end_datetime=${end_datetime}` :`http://82.156.230.142:10900/track/v1/event/get?event_id=${event_id}&current_time=${time}`,
             type: "get",
             withCredentials: false,
         })
     ),
 
     //路段事件查看详情接口
-    segEvent: (seg_id,page_index,page_size,time) =>
+    segEvent: (seg_id,page_index,page_size,time,start_datetime=null,end_datetime=null) =>
     promiseAxios(
         axios({
             // url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/segEvent/${seg_id}`,
-            url:`http://82.156.230.142:10900/track/v1/event/getseg?seg_id=${seg_id}&current_time=${time}&pageindex=${page_index}&pagesize=${page_size}`,
+            url:start_datetime ? `http://82.156.230.142:10900/track/v1/event/getseg2?seg_id=${seg_id}&start_datetime=${start_datetime}&end_datetime=${end_datetime}&pageindex=${page_index}&pagesize=${page_size}`: `http://82.156.230.142:10900/track/v1/event/getseg?seg_id=${seg_id}&current_time=${time}&pageindex=${page_index}&pagesize=${page_size}`,
             type: "get",
             withCredentials: false,
         })

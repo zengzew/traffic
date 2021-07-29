@@ -115,22 +115,40 @@ export default {
             event_sum: 10, //事故总数
             currentPage:1, //当前页码
             seg_id:"", //当前表格所属路段的ID
-            time:"",
+            time:[],
         };
     },
     methods: {
-                getTime() {
+        getTime() {
             return Math.round(new Date().getTime() / 1000).toString();
         },
+        // 获取当天凌晨00:00:00的时间戳
+        getCurrentZeroClockTime(time){
+            // return (new Date(Number(time) * 1000 + 28800000 - 86400000).setHours(0,0,0,0) / 1000).toString();
+            return (new Date(Number(time) * 1000 + 28800000).setHours(0,0,0,0) / 1000).toString();
+        },
+        // 获取当天23:59:59 或者说是 第二天凌晨00:00:00的时间戳
+        getNextZeroClockTime(time){
+            return (new Date(Number(time) * 1000 + 28800000 + 86400000).setHours(0,0,0,0) / 1000).toString();
+        },
         questData(seg_id, page_index, page_size) {
-                        if (this.$store.state.safeAnalysis.isFromHistory) {
-                this.time = this.$store.state.safeAnalysis.timeFromHistory;
-            } else {
-                this.time = this.getTime();
+            this.time = []
+            let timePicker_time = String(this.$store.state.safeAnalysis.timePicker);
+            let current_time = this.getCurrentZeroClockTime(new Date().getTime()/1000 - 86400);
+            if (this.$store.state.safeAnalysis.isFromHistory) {
+                var historyTime = this.$store.state.safeAnalysis.timeFromHistory;
+                this.time.push(this.getTime(),this.getCurrentZeroClockTime(historyTime),this.getNextZeroClockTime(historyTime))
+            }else if (timePicker_time !== current_time){
+                // 如果时间选择器选择的是以往的时间
+                this.time.push(this.getTime(),this.getCurrentZeroClockTime(timePicker_time),this.getNextZeroClockTime(timePicker_time))
+            }  
+            else {
+                this.time.push(this.getTime());
             }
             this.$API.safeAnalyze
-                .segEvent(seg_id, page_index, page_size,this.time)
+                .segEvent(seg_id, page_index, page_size,...this.time)
                 .then((res) => {
+                    console.log(res)
                     this.event_sum = res.seg_event_count
                     this.seg_name = res.seg_name;
                     this.eventTableData = res.data;
@@ -145,22 +163,22 @@ export default {
         //事件点的类型判断
         markType(row, col, type, index) {
             switch (type) {
-                case 0:
-                    return "事故";
                 case 1:
-                    return "施工";
+                    return "事故";
                 case 2:
-                    return "封路";
+                    return "施工";
                 case 3:
+                    return "封路";
+                case 4:
                     return "拥堵";
             }
         },
         //事件状态
         eventStatus(row, col, type, index) {
             switch (type) {
-                case 0:
-                    return "处理中";
                 case 1:
+                    return "处理中";
+                case 2:
                     return "已完成";
             }
         },

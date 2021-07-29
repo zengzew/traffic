@@ -15,6 +15,8 @@ const state = {
     loading_traffic:false,   //交通事故分析页面 覆盖事件点分析地图的 loading
     eventIdFromHistory: "", //历史事件点传入的event ID
     timeFromHistory:"",     //历史事件点传入的事件发生时间
+    timePicker: new Date(), //时间选择器的unix时间戳
+    timePickerStr: 0 //时间选择器的字符串时间
 }
 
 

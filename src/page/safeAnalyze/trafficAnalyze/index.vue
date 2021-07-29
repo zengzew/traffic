@@ -76,4 +76,7 @@ export default {
 .toHistory:hover {
     background-color: #56739A;
 }
+
+
 </style>
+
