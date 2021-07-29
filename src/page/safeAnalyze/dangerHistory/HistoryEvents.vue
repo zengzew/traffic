@@ -67,7 +67,11 @@
         </template></el-table-column
       >
       <el-table-column prop="seg_name" label="路段名称"> </el-table-column>
-      <el-table-column prop="rc" label="道路等级"> </el-table-column>
+      <el-table-column prop="rc" label="道路等级"> 
+                <template slot-scope="scope">
+          {{ scope.row.rc | convertRc }}
+        </template>
+      </el-table-column>
       <el-table-column prop="region" label="地理空间所属范围">
         <template slot-scope="scope">
           {{ scope.row.region | convertRegion }}
@@ -114,8 +118,8 @@ export default {
   },
   filters: {
     convertStatus(val) {
-      if (val == 0) return "处理中";
-      else if (val == 1) return "已完成";
+      if (val == 1) return "处理中";
+      else if (val == 2) return "已完成";
       else return "error";
     },
     convertRegion(val) {
@@ -123,6 +127,35 @@ export default {
       else if (val == 1) return "高速";
       else return "error";
     },
+    convertRc(val) {
+      switch (val){
+        case 0:
+          return "高速路"
+        case 1:
+          return "都市高速路"
+        case 2:
+          return "国道"
+        case 3:
+          return "省道"
+        case 4:
+          return "县道"
+        case 6:
+          return "乡镇村道"
+        case 8:
+          return "其它道路"
+        case 9:
+          return "非引导道路"
+        case 10:
+          return "轮渡"
+        case 11:
+          return "行人道路"
+        case 12:
+          return "人渡"
+        default:
+          return "error"
+
+      }
+    }
   },
   mounted() {
     //this.currentChangePage(this.pageList, 1);

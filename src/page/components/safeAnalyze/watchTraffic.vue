@@ -144,7 +144,7 @@
                 <div class="please-select-point">
                     <time-picker class="timePicker"></time-picker>
                     <div class="select-content">请<span>选择</span>事件点查询事件详情</div>
-                    目前只有7月14-7月28有数据
+                    目前只有7月14以后的数据
                     <br>
                     时间选择器初始化默认为当日
                 </div>
@@ -337,7 +337,7 @@ export default {
         questEvent(event_id) {
             this.loading = true;
             this.time = [];
-            let timePicker_time = String(this.$store.state.safeAnalysis.timePicker);
+            let timePicker_time = this.getCurrentZeroClockTime(this.$store.state.safeAnalysis.timePicker.getTime()/1000 - 86400);
             let current_time = this.getCurrentZeroClockTime(new Date().getTime()/1000 - 86400);
             if (this.$store.state.safeAnalysis.isFromHistory) {
                 // 如果是从历史统计分析页面跳转而来
