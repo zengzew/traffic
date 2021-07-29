@@ -4,12 +4,10 @@
     <el-form :inline="true" :model="form" class="form">
       <el-form-item label="事件类型">
         <el-select v-model="form.type" clearable placeholder="请选择事件类型">
-          <el-option label="事故" value="0"></el-option>
-          <el-option label="封路" value="1"></el-option>
-          <el-option label="拥堵" value="2"></el-option>
-          <el-option label="施工" value="3"></el-option>
-          <el-option label="城内" value="4"></el-option>
-          <el-option label="高速" value="5"></el-option>
+          <el-option label="事故" value="1"></el-option>
+          <el-option label="封路" value="2"></el-option>
+          <el-option label="拥堵" value="3"></el-option>
+          <el-option label="施工" value="4"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="时间范围">
@@ -61,7 +59,9 @@
 
       <el-table-column prop="event_id" label="事件发生位置" width="105">
         <template slot-scope="scope">
-          <el-button size="mini" @click="goMap(scope.row.event_id,scope.row.start_time)"
+          <el-button
+            size="mini"
+            @click="goMap(scope.row.event_id, scope.row.start_time)"
             >查看位置</el-button
           >
         </template></el-table-column
@@ -119,7 +119,7 @@ export default {
       else return "error";
     },
     convertRegion(val) {
-      if (val == 0) return "城区";
+      if (val == 0) return "城内";
       else if (val == 1) return "高速";
       else return "error";
     },
@@ -139,11 +139,13 @@ export default {
     },
   },
   methods: {
-    goMap(e,time) {
+    goMap(e, time) {
       this.$store.state.safeAnalysis.eventIdFromHistory = e;
-      this.$store.state.safeAnalysis.timeFromHistory = String(Date.parse(new Date(time))/1000);
+      this.$store.state.safeAnalysis.timeFromHistory = String(
+        Date.parse(new Date(time)) / 1000
+      );
       this.$store.state.safeAnalysis.isFromHistory = true;
-      this.$router.push( "trafficAnalyze" );
+      this.$router.push("trafficAnalyze");
     },
     // 日期选择约束
     beginDate() {
@@ -267,7 +269,7 @@ export default {
 <style lang="less">
 .eventsContainer {
   margin: 0 10%;
-  min-height: 88.4vh;
+  min-height: 92.1vh;
   .eventsTitle {
     color: #fff;
     font-size: 2rem;

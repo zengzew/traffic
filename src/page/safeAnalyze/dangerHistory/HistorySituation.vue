@@ -65,7 +65,7 @@
                 日同比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(brakeover > 0) & (brakeover !== Infinity)"
+                  v-if="(brakeover > 0) & (brakeover != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="brakeover < 0"></i>
                 <i class="el-icon-minus" v-if="brakeover == 0"> </i
@@ -75,7 +75,7 @@
                 日环比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(brakeon > 0) & (brakeon !== Infinity)"
+                  v-if="(brakeon > 0) & (brakeon != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="brakeon < 0"></i>
                 <i class="el-icon-minus" v-if="brakeon == 0"> </i
@@ -96,7 +96,7 @@
                 日同比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(turnover > 0) & (turnover !== Infinity)"
+                  v-if="(turnover > 0) & (turnover != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="turnover < 0"></i>
                 <i class="el-icon-minus" v-if="turnover == 0"> </i
@@ -106,7 +106,7 @@
                 日环比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(turnon > 0) & (turnon !== Infinity)"
+                  v-if="(turnon > 0) & (turnon != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="turnon < 0"></i>
                 <i class="el-icon-minus" v-if="turnon == 0"> </i
@@ -127,7 +127,7 @@
                 日同比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(accelerateover > 0) & (accelerateover !== Infinity)"
+                  v-if="(accelerateover > 0) & (accelerateover != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="accelerateover < 0"></i>
                 <i class="el-icon-minus" v-if="accelerateover == 0"> </i
@@ -137,7 +137,7 @@
                 日环比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(accelerateon > 0) & (accelerateon !== Infinity)"
+                  v-if="(accelerateon > 0) & (accelerateon != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="accelerateon < 0"></i>
                 <i class="el-icon-minus" v-if="accelerateon == 0"> </i
@@ -158,7 +158,7 @@
                 日同比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(overspeedover > 0) & (overspeedover !== Infinity)"
+                  v-if="(overspeedover > 0) & (overspeedover != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="overspeedover < 0"></i>
                 <i class="el-icon-minus" v-if="overspeedover == 0"> </i
@@ -168,7 +168,7 @@
                 日环比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(overspeedon > 0) & (overspeedon !== Infinity)"
+                  v-if="(overspeedon > 0) & (overspeedon != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="overspeedon < 0"></i>
                 <i class="el-icon-minus" v-if="overspeedon == 0"> </i
@@ -240,7 +240,7 @@
                 日同比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(accidentover > 0) & (accidentover !== Infinity)"
+                  v-if="(accidentover > 0) & (accidentover != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="accidentover < 0"></i>
                 <i class="el-icon-minus" v-if="accidentover == 0"> </i
@@ -250,7 +250,7 @@
                 日环比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(accidenton > 0) & (accidenton !== Infinity)"
+                  v-if="(accidenton > 0) & (accidenton != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="accidenton < 0"></i>
                 <i class="el-icon-minus" v-if="accidenton == 0"> </i
@@ -271,7 +271,7 @@
                 日同比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(closeover > 0) & (closeover !== Infinity)"
+                  v-if="(closeover > 0) & (closeover != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="closeover < 0"></i>
                 <i class="el-icon-minus" v-if="closeover == 0"> </i
@@ -281,7 +281,7 @@
                 日环比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(closeon > 0) & (closeon !== Infinity)"
+                  v-if="(closeon > 0) & (closeon != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="closeon < 0"></i>
                 <i class="el-icon-minus" v-if="closeon == 0"> </i
@@ -302,7 +302,7 @@
                 日同比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(jamover > 0) & (jamover !== Infinity)"
+                  v-if="(jamover > 0) & (jamover != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="jamover < 0"></i>
                 <i class="el-icon-minus" v-if="jamover == 0"> </i
@@ -312,7 +312,7 @@
                 日环比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(jamon > 0) & (jamon !== Infinity)"
+                  v-if="(jamon > 0) & (jamon != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="jamon < 0"></i>
                 <i class="el-icon-minus" v-if="jamon == 0"> </i
@@ -334,7 +334,7 @@
                   日同比
                   <i
                     class="el-icon-caret-top"
-                    v-if="(roadworkover > 0) & (roadworkover !== Infinity)"
+                    v-if="(roadworkover > 0) & (roadworkover != Infinity)"
                   ></i>
                   <i class="el-icon-caret-bottom" v-if="roadworkover < 0"></i>
                   <i class="el-icon-minus" v-if="roadworkover == 0"> </i
@@ -344,7 +344,7 @@
                   日环比
                   <i
                     class="el-icon-caret-top"
-                    v-if="(roadworkon > 0) & (roadworkon !== Infinity)"
+                    v-if="(roadworkon > 0) & (roadworkon != Infinity)"
                   ></i>
                   <i class="el-icon-caret-bottom" v-if="roadworkon < 0"></i>
                   <i class="el-icon-minus" v-if="roadworkon == 0"> </i
@@ -368,7 +368,7 @@
                 日同比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(cityover > 0) & (cityover !== Infinity)"
+                  v-if="(cityover > 0) & (cityover != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="cityover < 0"></i>
                 <i class="el-icon-minus" v-if="cityover == 0"> </i
@@ -378,7 +378,7 @@
                 日环比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(cityon > 0) & (cityon !== Infinity)"
+                  v-if="(cityon > 0) & (cityon != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="cityon < 0"></i>
                 <i class="el-icon-minus" v-if="cityon == 0"> </i
@@ -399,7 +399,7 @@
                 日同比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(highwayover > 0) & (highwayover !== Infinity)"
+                  v-if="(highwayover > 0) & (highwayover != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="highwayover < 0"></i>
                 <i class="el-icon-minus" v-if="highwayover == 0"> </i
@@ -409,7 +409,7 @@
                 日环比
                 <i
                   class="el-icon-caret-top"
-                  v-if="(highwayon > 0) & (highwayon !== Infinity)"
+                  v-if="(highwayon > 0) & (highwayon != Infinity)"
                 ></i>
                 <i class="el-icon-caret-bottom" v-if="highwayon < 0"></i>
                 <i class="el-icon-minus" v-if="highwayon == 0"> </i
@@ -560,10 +560,10 @@ export default {
     //所有数字后加上百分号
     percent: function (value) {
       if (isNaN(value)) {
-        return "暂无数据";
-      } else if (value === Infinity) {
-        return "暂无数据";
-      } else return value.toFixed(2) + "%";
+        return "——";
+      } else if (value == Infinity) {
+        return "——";
+      } else return (value * 100).toFixed(1) + "%";
     },
     //格式化日期
     dateformat: function (value) {
@@ -992,28 +992,28 @@ export default {
       let dateEnd = dateStart + 86400;
       var eventsSituation = new Array();
       //查询刹车路段
-      for (let type = 0; type < 6; type++) {
+      for (let type = 1; type <= 6; type++) {
         await API.safeAnalyze
           .eventsNumGet(dateStart, dateEnd, type)
           .then((res) => {
             if (res.status === 0) {
               switch (type) {
-                case 0:
+                case 1:
                   eventsSituation[0] = res.event_num; //事故
                   break;
-                case 1:
+                case 2:
                   eventsSituation[1] = res.event_num; //封路
                   break;
-                case 2:
+                case 3:
                   eventsSituation[2] = res.event_num; //拥堵
                   break;
-                case 3:
+                case 4:
                   eventsSituation[3] = res.event_num; //施工
                   break;
-                case 4:
+                case 5:
                   eventsSituation[4] = res.event_num; //城内
                   break;
-                case 5:
+                case 6:
                   eventsSituation[5] = res.event_num; //高速
                   break;
                 default:
@@ -1040,7 +1040,7 @@ export default {
     //事件累计数量
     eventsSumGet() {
       let promises = [];
-      for (let type = 0; type < 6; type++) {
+      for (let type = 1; type <= 6; type++) {
         promises.push(
           new Promise((resolve, reject) => {
             API.safeAnalyze
@@ -1049,22 +1049,22 @@ export default {
                 if (res.status === 0) {
                   this.eventsdeadlinedate = res.update_time;
                   switch (type) {
-                    case 0:
+                    case 1:
                       this.accidentsum = res.event_num;
                       break;
-                    case 1:
+                    case 2:
                       this.closesum = res.event_num;
                       break;
-                    case 2:
+                    case 3:
                       this.jamsum = res.event_num;
                       break;
-                    case 3:
+                    case 4:
                       this.roadworksum = res.event_num;
                       break;
-                    case 4:
+                    case 5:
                       this.citysum = res.event_num;
                       break;
-                    case 5:
+                    case 6:
                       this.highwaysum = res.event_num;
                       break;
                     default:
@@ -1110,34 +1110,6 @@ export default {
           volume: this.overspeedsum,
         }
       );
-      this.tableHistoryEvents1.push(
-        {
-          eventsType: "事故",
-          eventsVolume: this.accidentsum,
-        },
-        {
-          eventsType: "封路",
-          eventsVolume: this.closesum,
-        },
-        {
-          eventsType: "拥堵",
-          eventsVolume: this.jamsum,
-        },
-        {
-          eventsType: "施工",
-          eventsVolume: this.roadworksum,
-        }
-      );
-      this.tableHistoryEvents2.push(
-        {
-          eventsScope: "城内",
-          eventsScopeVolume: this.citysum,
-        },
-        {
-          eventsScope: "城外",
-          eventsScopeVolume: this.highwaysum,
-        }
-      );
     },
     updateDataEvents() {
       this.tableHistoryEvents1.push(
@@ -1164,7 +1136,7 @@ export default {
           eventsScopeVolume: this.citysum,
         },
         {
-          eventsScope: "城外",
+          eventsScope: "高速",
           eventsScopeVolume: this.highwaysum,
         }
       );
@@ -1178,27 +1150,21 @@ export default {
         let yesterdayturn = yesterdayData[1];
         let yesterdayaccelerate = yesterdayData[2];
         let yesterdayoverspeed = yesterdayData[3];
-        let yesterdayaccident = yesterdayData[4];
-        let yesterdayclose = yesterdayData[5];
-        let yesterdayjam = yesterdayData[6];
-        let yesterdayraodwork = yesterdayData[7];
-        let yesterdaycity = yesterdayData[8];
-        let yesterdayhighway = yesterdayData[9];
-        this.brakeon = (this.brakenum - yesterdaybrake) / yesterdaybrake;
-        this.turnon = (this.turnnum - yesterdayturn) / yesterdayturn;
-        this.accelerateon =
-          (this.acceleratenum - yesterdayaccelerate) / yesterdayaccelerate;
-        this.overspeedon =
-          (this.overspeednum - yesterdayoverspeed) / yesterdayoverspeed;
-        this.accidenton =
-          (this.overspeednum - yesterdayaccident) / yesterdayaccident;
-        this.closeon = (this.overspeednum - yesterdayclose) / yesterdayclose;
-        this.jamon = (this.overspeednum - yesterdayjam) / yesterdayjam;
-        this.roadworkon =
-          (this.overspeednum - yesterdayraodwork) / yesterdayraodwork;
-        this.cityon = (this.overspeednum - yesterdaycity) / yesterdaycity;
-        this.highwayon =
-          (this.overspeednum - yesterdayhighway) / yesterdayhighway;
+        this.brakeon = (
+          (this.brakenum - yesterdaybrake) /
+          yesterdaybrake
+        ).toFixed(3);
+        this.turnon = ((this.turnnum - yesterdayturn) / yesterdayturn).toFixed(
+          3
+        );
+        this.accelerateon = (
+          (this.acceleratenum - yesterdayaccelerate) /
+          yesterdayaccelerate
+        ).toFixed(3);
+        this.overspeedon = (
+          (this.overspeednum - yesterdayoverspeed) /
+          yesterdayoverspeed
+        ).toFixed(3);
       });
       this.eventsSituationGet(timestamp - 86400000).then((res) => {
         let yesterdayData = res;
@@ -1208,15 +1174,26 @@ export default {
         let yesterdayraodwork = yesterdayData[3];
         let yesterdaycity = yesterdayData[4];
         let yesterdayhighway = yesterdayData[5];
-        this.accidenton =
-          (this.accidentnum - yesterdayaccident) / yesterdayaccident;
-        this.closeon = (this.closenum - yesterdayclose) / yesterdayclose;
-        this.jamon = (this.jamnum - yesterdayjam) / yesterdayjam;
-        this.roadworkon =
-          (this.roadworknum - yesterdayraodwork) / yesterdayraodwork;
-        this.cityon = (this.citynum - yesterdaycity) / yesterdaycity;
-        this.highwayon =
-          (this.highwaynum - yesterdayhighway) / yesterdayhighway;
+        this.accidenton = (
+          (this.accidentnum - yesterdayaccident) /
+          yesterdayaccident
+        ).toFixed(3);
+        this.closeon = (
+          (this.closenum - yesterdayclose) /
+          yesterdayclose
+        ).toFixed(3);
+        this.jamon = ((this.jamnum - yesterdayjam) / yesterdayjam).toFixed(3);
+        this.roadworkon = (
+          (this.roadworknum - yesterdayraodwork) /
+          yesterdayraodwork
+        ).toFixed(3);
+        this.cityon = ((this.citynum - yesterdaycity) / yesterdaycity).toFixed(
+          3
+        );
+        this.highwayon = (
+          (this.highwaynum - yesterdayhighway) /
+          yesterdayhighway
+        ).toFixed(3);
       });
 
       //同比
@@ -1226,41 +1203,41 @@ export default {
         let weekturn = weekData[1];
         let weekaccelerate = weekData[2];
         let weekoverspeed = weekData[3];
-        let weekaccident = weekData[4];
-        let weekclose = weekData[5];
-        let weekjam = weekData[6];
-        let weekroadwork = weekData[7];
-        let weekcity = weekData[8];
-        let weekhighway = weekData[9];
-        this.brakeover = (this.brakenum - weekbrake) / weekbrake;
-        this.turnover = (this.turnnum - weekturn) / weekturn;
-        this.accelerateover =
-          (this.acceleratenum - weekaccelerate) / weekaccelerate;
-        this.overspeedover =
-          (this.overspeednum - weekoverspeed) / weekoverspeed;
-
-        this.accidentover = (this.accidentnum - weekaccident) / weekaccident;
-        this.closeover = (this.closenum - weekclose) / weekclose;
-        this.jamover = (this.jamnum - weekjam) / weekjam;
-        this.roadworkover = (this.roadworknum - weekroadwork) / weekroadwork;
-        this.cityover = (this.citynum - weekcity) / weekcity;
-        this.highwayover = (this.highwaynum - weekhighway) / weekhighway;
+        this.brakeover = ((this.brakenum - weekbrake) / weekbrake).toFixed(3);
+        this.turnover = ((this.turnnum - weekturn) / weekturn).toFixed(3);
+        this.accelerateover = (
+          (this.acceleratenum - weekaccelerate) /
+          weekaccelerate
+        ).toFixed(3);
+        this.overspeedover = (
+          (this.overspeednum - weekoverspeed) /
+          weekoverspeed
+        ).toFixed(3);
       });
       //同比
       this.eventsSituationGet(timestamp - 604800000).then((res) => {
         let weekData = res;
         let weekaccident = weekData[0];
-        let weekclose = weekData[2];
-        let weekjam = weekData[3];
-        let weekroadwork = weekData[4];
-        let weekcity = weekData[5];
-        let weekhighway = weekData[6];
-        this.accidentover = (this.accidentnum - weekaccident) / weekaccident;
-        this.closeover = (this.closenum - weekclose) / weekclose;
-        this.jamover = (this.jamnum - weekjam) / weekjam;
-        this.roadworkover = (this.roadworknum - weekroadwork) / weekroadwork;
-        this.cityover = (this.citynum - weekcity) / weekcity;
-        this.highwayover = (this.highwaynum - weekhighway) / weekhighway;
+        let weekclose = weekData[1];
+        let weekjam = weekData[2];
+        let weekroadwork = weekData[3];
+        let weekcity = weekData[4];
+        let weekhighway = weekData[5];
+        this.accidentover = (
+          (this.accidentnum - weekaccident) /
+          weekaccident
+        ).toFixed(3);
+        this.closeover = ((this.closenum - weekclose) / weekclose).toFixed(3);
+        this.jamover = ((this.jamnum - weekjam) / weekjam).toFixed(3);
+        this.roadworkover = (
+          (this.roadworknum - weekroadwork) /
+          weekroadwork
+        ).toFixed(3);
+        this.cityover = ((this.citynum - weekcity) / weekcity).toFixed(3);
+        this.highwayover = (
+          (this.highwaynum - weekhighway) /
+          weekhighway
+        ).toFixed(3);
       });
     },
     // 时间戳转为yyyy-mm-dd的格式
@@ -1360,7 +1337,7 @@ export default {
 }
 .timepickerFake {
   visibility: hidden;
-  padding-top: 2rem;
+  padding-top: 3rem;
 }
 
 .main {
@@ -1404,6 +1381,10 @@ export default {
 }
 .el-icon-caret-bottom {
   color: #25ff25;
+}
+.el-icon-minus {
+  color: #00faff;
+  padding-right: 5px;
 }
 
 .el-row {
