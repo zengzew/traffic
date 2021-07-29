@@ -167,11 +167,11 @@ const safeAnalyze = {
     // }
 
     //全城事件点实时查询接口
-    allEventsPoints: (time) =>
+    allEventsPoints: (time,start_datetime=null,end_datetime=null) =>
     promiseAxios(
         axios({
             // url:`https://www.fastmock.site/mock/44dd9bf02a176f3ecf27a84f88e28a2b/api/allPoint`,
-            url:`http://82.156.230.142:10900/track/v1/event/gets?current_time=${time}`,
+            url: start_datetime? `http://82.156.230.142:10900/track/v1/event/gets?current_time=${time}&start_datetime=${start_datetime}&end_datetime=${end_datetime}`: `http://82.156.230.142:10900/track/v1/event/gets?current_time=${time}`,
             type: "get",
             withCredentials: false,
         })

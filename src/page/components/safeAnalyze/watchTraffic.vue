@@ -169,7 +169,9 @@ export default {
             eventSum: "", //事故总数
             totalIndex: "", //事故严重指数总数
             segId: "", //被激活 事件点 所属路段的ID
-            time: "",
+            time: [], // 当前时间
+            start_datetime:"", //历史统计分析跳转过来的开始时间
+            end_datetime:"",  //历史统计分析跳转过来的结束时间
         };
     },
     computed: {
@@ -186,6 +188,14 @@ export default {
         getTime() {
             return Math.round(new Date().getTime() / 1000).toString();
         },
+        // 获取当天凌晨00:00:00的时间戳
+        getCurrentZeroClockTime(time){
+            return (new Date(Number(time) * 1000 + 28800000 - 86400000).setHours(0,0,0,0) / 1000).toString();
+        },
+        // 获取当天23:59:59 或者说是 第二天凌晨00:00:00的时间戳
+        getNextZeroClockTime(time){
+            return (new Date(Number(time) * 1000 + 28800000).setHours(0,0,0,0) / 1000).toString();
+        },        
         animate() {
             this.isActive = !this.isActive;
         },
@@ -248,13 +258,13 @@ export default {
         //事件点的类型判断
         markType(type, chinese = null) {
             switch (type) {
-                case "0":
-                    return chinese ? "事故" : "accident";
                 case "1":
-                    return chinese ? "施工" : "construction";
+                    return chinese ? "事故" : "accident";
                 case "2":
-                    return chinese ? "封路" : "close";
+                    return chinese ? "施工" : "construction";
                 case "3":
+                    return chinese ? "封路" : "close";
+                case "4":
                     return chinese ? "拥堵" : "jam";
             }
         },
@@ -286,14 +296,15 @@ export default {
                     //     });
                     this.$store.state.safeAnalysis.loading_traffic = true;
                     if (this.$store.state.safeAnalysis.isFromHistory) {
-                        this.time =
-                            this.$store.state.safeAnalysis.timeFromHistory;
+                        var historyTime = this.$store.state.safeAnalysis.timeFromHistory;
+                        this.time.push(this.getTime(),this.getCurrentZeroClockTime(historyTime),this.getNextZeroClockTime(historyTime))
+                            
                     } else {
-                        this.time = this.getTime();
+                        this.time.push(this.getTime());
                     }
-                    console.log("请求时间",this.time)
+                    console.log("请求时间",...this.time)
                     this.$API.safeAnalyze
-                        .allEventsPoints(this.time)
+                        .allEventsPoints(...this.time)
                         .then((res) => {
                             console.log("所有点",res);
                             this.$store.state.safeAnalysis.loading_traffic = false;
@@ -467,6 +478,7 @@ export default {
                 );
                 this.activePointId =
                     this.$store.state.safeAnalysis.eventIdFromHistory;
+                console.log("事件编号为944402615的event_id：",this.activePointId)
                 this.$store.state.activePointId =
                     this.$store.state.safeAnalysis.eventIdFromHistory;
                 let geo = this.$store.state.safeAnalysis.mark.getGeometryById(
