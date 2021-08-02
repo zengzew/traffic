@@ -32,6 +32,9 @@ export default {
             this.$router.push("dangerHistory");
         },
     },
+    destroyed(){
+        this.$store.state.safeAnalysis.ifEventDetail = false;
+    }
 };
 </script>
 
