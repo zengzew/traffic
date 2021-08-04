@@ -19,20 +19,15 @@
 import HistoryEvents from "./HistoryEvents.vue";
 import HistorySituation from "./HistorySituation.vue";
 export default {
-  name:"dangerHistory",
+  name: "dangerHistory",
   components: { HistorySituation, HistoryEvents },
   data() {
     return {
+      //默认显示的标签页
       activeName: "first",
     };
   },
-  methods: {
-    //当切换到历史点事件标签页时，设置页面高不滚动
-    handleClick(tab, event) {},
-    goBack() {
-      this.$router.push({ name: "select" });
-    },
-  },
+  methods: {},
 };
 </script>
 <style lang="less" scoped>
@@ -53,6 +48,7 @@ export default {
   background-color: rgb(33, 45, 61);
 }
 
+//修改滚动条样式
 /deep/ .el-tabs__nav-scroll {
   background-color: rgb(33, 45, 61);
 }

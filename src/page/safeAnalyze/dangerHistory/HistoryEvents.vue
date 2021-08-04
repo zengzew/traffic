@@ -5,9 +5,9 @@
       <el-form-item label="事件类型">
         <el-select v-model="form.type" clearable placeholder="请选择事件类型">
           <el-option label="事故" value="1"></el-option>
-          <el-option label="封路" value="2"></el-option>
-          <el-option label="拥堵" value="3"></el-option>
-          <el-option label="施工" value="4"></el-option>
+          <el-option label="施工" value="2"></el-option>
+          <el-option label="封路" value="3"></el-option>
+          <el-option label="拥堵" value="4"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="时间范围">
@@ -67,8 +67,8 @@
         </template></el-table-column
       >
       <el-table-column prop="seg_name" label="路段名称"> </el-table-column>
-      <el-table-column prop="rc" label="道路等级"> 
-                <template slot-scope="scope">
+      <el-table-column prop="rc" label="道路等级">
+        <template slot-scope="scope">
           {{ scope.row.rc | convertRc }}
         </template>
       </el-table-column>
@@ -117,48 +117,49 @@ export default {
     };
   },
   filters: {
+    //事件状态
     convertStatus(val) {
       if (val == 1) return "处理中";
       else if (val == 2) return "已完成";
       else return "error";
     },
+    //地理空间所属范围
     convertRegion(val) {
       if (val == 0) return "城内";
       else if (val == 1) return "高速";
       else return "error";
     },
+    // 道路等级
     convertRc(val) {
-      switch (val){
+      switch (val) {
         case 0:
-          return "高速路"
+          return "高速路";
         case 1:
-          return "都市高速路"
+          return "都市高速路";
         case 2:
-          return "国道"
+          return "国道";
         case 3:
-          return "省道"
+          return "省道";
         case 4:
-          return "县道"
+          return "县道";
         case 6:
-          return "乡镇村道"
+          return "乡镇村道";
         case 8:
-          return "其它道路"
+          return "其它道路";
         case 9:
-          return "非引导道路"
+          return "非引导道路";
         case 10:
-          return "轮渡"
+          return "轮渡";
         case 11:
-          return "行人道路"
+          return "行人道路";
         case 12:
-          return "人渡"
+          return "人渡";
         default:
-          return "error"
-
+          return "error";
       }
-    }
+    },
   },
   mounted() {
-    //this.currentChangePage(this.pageList, 1);
     // 窗口或页面被调整大小时触发事件
     window.onresize = () => {
       // 获取body的高度
@@ -172,6 +173,7 @@ export default {
     },
   },
   methods: {
+    //将 event_id 传入到 vuex 中，用来在 交通事故分析 检索对应的事件
     goMap(e, time) {
       this.$store.state.safeAnalysis.eventIdFromHistory = e;
       this.$store.state.safeAnalysis.timeFromHistory = String(
@@ -213,7 +215,7 @@ export default {
       };
     },
     onSubmit() {
-      //从毫秒单位转换为秒单位
+      //事件选择器传出的timestamp做出以下转换，从毫秒单位转换为秒单位
       let dateStartTimestamp = Number(
         this.form.projectStartDate.toString().slice(0, 10)
       );
@@ -223,7 +225,7 @@ export default {
       //当前时刻转化为当日零时零分零秒，东八区时间
       this.dateStart =
         dateStartTimestamp - (dateStartTimestamp % 86400) + 57600;
-      //加到下一天零时
+      //结束时刻取到下一天零时
       this.dateEnd =
         dateEndTimpestamp - (dateEndTimpestamp % 86400) + 57600 + 86400;
       this.type = this.form.type;
@@ -235,6 +237,7 @@ export default {
         this.pageSize
       );
     },
+    //获取事件table的接口方法
     getEvents(dateStart, dateEnd, type, pageIndex, pageSize) {
       API.safeAnalyze
         .eventsGet(dateStart, dateEnd, type, pageIndex, pageSize)
@@ -256,7 +259,7 @@ export default {
           });
         });
     },
-    //处理单页的尺寸
+    //处理单页的尺寸，每当改变一次单页的表格size，重新读取一次数据
     handleSizeChange: function (pageSize) {
       this.pageSize = pageSize;
       this.handleCurrentChange(this.currentPage1);
@@ -268,7 +271,7 @@ export default {
         this.pageSize
       );
     },
-    //处理当前页
+    //处理当前页，跳转到指定页码，
     handleCurrentChange: function (currentPage) {
       this.pageIndex = currentPage;
       this.getEvents(
@@ -278,20 +281,9 @@ export default {
         this.pageIndex,
         this.pageSize
       );
-      //this.currentChangePage(this.rawList, currentPage);
     },
-    // currentChangePage(list, currentPage) {
-    //   let from = (currentPage - 1) * this.pageSize;
-    //   let to = currentPage * this.pageSize;
-    //   this.pageList = [];
-    //   for (; from < to; from++) {
-    //     if (list[from]) {
-    //       this.pageList.push(list[from]);
-    //     }
-    //   }
-    // },
 
-    //计算每页的index
+    //计算每页的index，否则表格index将会在新的一页重新计数
     indexMethod(index) {
       index = index + 1 + (this.pageIndex - 1) * this.pageSize;
       return index;

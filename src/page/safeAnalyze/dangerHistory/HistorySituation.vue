@@ -482,9 +482,11 @@ export default {
       highwayon: 0,
       highwayover: 0,
       pickerOptions: {
+        // 只能选择之前的日期
         disabledDate(time) {
           return time.getTime() > Date.now();
         },
+        // 时间选择器快捷
         shortcuts: [
           {
             text: "昨天",
@@ -512,6 +514,7 @@ export default {
           },
         ],
       },
+      // 默认选择当天日期
       timestamp: new Date(),
       tableHistorySituation: [],
       tableHistoryEvents1: [],
@@ -520,7 +523,8 @@ export default {
   },
   //默认读取当前数据，并渲染
   created() {
-     let initTime = this.timestamp.setHours(0, 0, 0, 0);
+    // 将当前时间戳精确到day
+    let initTime = this.timestamp.setHours(0, 0, 0, 0);
     this.updateChart(initTime).then(() => {
       this.calculateData(initTime);
     });
@@ -566,7 +570,7 @@ export default {
         return "——";
       } else return (value * 100).toFixed(1) + "%";
     },
-    //格式化日期
+    //格式化截止日期时间
     dateformat: function (value) {
       return (
         value.substr(0, 4) +
@@ -580,11 +584,12 @@ export default {
   },
 
   methods: {
-    //绘制饼图，自定义饼图格式
+    //绘制事件情况的饼图，自定义饼图格式
     drawChart() {
       var chartDom = document.getElementById("roadChart");
       var myChart = echarts.init(chartDom);
       var option = {
+        //饼图底部的总数统计
         title: {
           zlevel: 0,
           text: ["路段数（条): " + this.totalnum],
@@ -596,7 +601,9 @@ export default {
         tooltip: {
           trigger: "item",
         },
+        // 图例的显示样式
         legend: {
+          // 竖行
           orient: "vertical",
           right: 0,
           top: "center",
@@ -611,6 +618,7 @@ export default {
             center: ["50%", "50%"],
             avoidLabelOverlap: false,
             label: {
+              //默认不显示label，鼠标hover才显示
               show: false,
               position: "center",
             },
@@ -654,6 +662,7 @@ export default {
         myChart.resize();
       });
     },
+    //事件类型数量饼图
     drawChartEvents1() {
       var chartDom1 = document.getElementById("eventsChart1");
       var myChart1 = echarts.init(chartDom1);
@@ -727,6 +736,7 @@ export default {
         myChart1.resize();
       });
     },
+    //私立空间数量饼图
     drawChartEvents2() {
       var chartDom = document.getElementById("eventsChart2");
       var myChart2 = echarts.init(chartDom);
@@ -1041,6 +1051,7 @@ export default {
     //事件累计数量
     eventsSumGet() {
       let promises = [];
+      // 循环type请求
       for (let type = 1; type <= 6; type++) {
         promises.push(
           new Promise((resolve, reject) => {
@@ -1255,6 +1266,7 @@ export default {
         return Y + M + D;
       }
     },
+    // 更新饼图
     updateChart(timestamp) {
       return new Promise((resolve, reject) => {
         this.historySituationGet(timestamp).then((res) => {
@@ -1266,7 +1278,6 @@ export default {
           this.overspeednum = historyNumber[3];
           resolve();
         });
-
         this.eventsSituationGet(timestamp).then((res) => {
           let eventsNumber;
           eventsNumber = res;
@@ -1337,6 +1348,7 @@ export default {
   color: #fff;
 }
 .timepickerFake {
+  // 不显示右侧fake时间选择器
   visibility: hidden;
   padding-top: 3rem;
 }
